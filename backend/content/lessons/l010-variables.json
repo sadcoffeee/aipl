@@ -1,0 +1,47 @@
+{
+  "id": "l010-variables",
+  "order": 10,
+  "title": "Variables and values",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "assignment"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "PLACEHOLDER CONTENT for layout testing.\n\nA **variable** is a name that points at a value. You create one by writing the name, an `=` sign, and the value you want it to hold."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Once a name exists, you can use it anywhere you would have written the value itself. Assigning a new value to the same name replaces what it holds; the old value is simply forgotten."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "sampling_rate = 1000\nduration = 2.5\n\nn_samples = sampling_rate * duration\nprint(n_samples)",
+            "caption": "Two variables used to compute a third."
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-assign",
+    "h-print"
+  ]
+}

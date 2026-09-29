@@ -1,0 +1,40 @@
+{
+  "id": "l030-completion-threshold",
+  "order": 30,
+  "title": "Add two variables",
+  "type": "completion",
+  "concepts": [
+    "arithmetic",
+    "variable"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": true,
+  "content": {
+    "description": "PLACEHOLDER CONTENT for layout testing only.\n\n Fill in the two gaps.",
+    "language": "python",
+    "starterCode": "a = 5\n\nb = 10\n\nc = {{gap}}\n\nprint({{gap}})"
+  },
+  "private": {
+    "referenceSolution": "c = 15\n\nprint(c)",
+    "validation": {
+      "note": "Not functional in this skeleton. Sketch of the intended checks.",
+      "behaviour": [
+        {
+          "variable": "c",
+          "expect": "number",
+          "allShouldSatisfy": "15"
+        }
+      ],
+      "structure": [
+        {
+          "astCheck": "uses a comparison operator",
+          "onFail": "h-addition"
+        }
+      ]
+    }
+  },
+  "version": 1,
+  "unlocks": [
+    "h-addition"
+  ]
+}

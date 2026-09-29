@@ -1,0 +1,32 @@
+Backend, first time:
+```
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python -m app.seed_admin yourname
+uvicorn app.main:app --reload --port 8000
+```
+
+Backend, subsequent:
+```
+cd backend
+.venv\Scripts\activate
+uvicorn app.main:app --reload --port 8000
+```
+
+
+
+
+Frontend, first time:
+```
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend, subsequent: 
+```
+cd frontend
+npm run dev
+```

@@ -1,0 +1,39 @@
+{
+  "_comment": "The shared reference library. Lessons do not carry their own hints; each lesson names the ids it unlocks. Order here is the order entries appear within a group in the panel.",
+  "entries": [
+    {
+      "id": "h-assign",
+      "title": "Assigning a variable",
+      "markdown": "Name on the left, value on the right.",
+      "code": "age = 42",
+      "tags": ["variable"]
+    },
+    {
+      "id": "h-print",
+      "title": "Showing a value in the console",
+      "markdown": "`print()` writes a value to the output area.",
+      "code": "print(age)",
+      "tags": ["output"]
+    },
+    {
+      "id": "h-np-mean",
+      "title": "Averaging an array",
+      "markdown": "Functions from numpy are written with the `np.` prefix.",
+      "code": "np.mean(values)",
+      "tags": ["numpy", "function-call"]
+    },
+    {
+      "id": "h-quotes",
+      "title": "Quotes",
+      "markdown": "`signal` is a variable. `\"signal\"` is the word as plain text. They are not the same thing.",
+      "tags": ["strings", "variable"]
+    },
+    {
+      "id": "h-addition",
+      "title": "Adding variables",
+      "markdown": "Python supports standard mathematical operations such as addition, subtraction and multiplication with variables. The result can be stored in a new variable.",
+      "code": "z = x + y",
+      "tags": ["arithmetic"]
+    }
+  ]
+}

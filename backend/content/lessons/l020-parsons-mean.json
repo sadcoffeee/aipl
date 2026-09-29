@@ -1,0 +1,80 @@
+{
+  "id": "l020-parsons-mean",
+  "order": 20,
+  "title": "Assign a value to a variable",
+  "type": "parsons",
+  "concepts": [
+    "import",
+    "function-call",
+    "variable"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "PLACEHOLDER CONTENT for layout testing only.\n\nThe script below should load a recording and print its average value. Drag one option into each empty box. Not every option belongs somewhere.",
+    "language": "python",
+    "shuffleOptions": true,
+    "lines": [
+      {
+        "kind": "fixed",
+        "code": "import numpy as np"
+      },
+      {
+        "kind": "fixed",
+        "code": ""
+      },
+      {
+        "kind": "fixed",
+        "code": "signal = np.load(\"data_recording.csv\")"
+      },
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s2",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "average = np.mean(signal)"
+      },
+      {
+        "id": "o2",
+        "code": "print(average)"
+      },
+      {
+        "id": "o3",
+        "code": "average = mean(signal)"
+      },
+      {
+        "id": "o4",
+        "code": "average = np.mean(\"signal\")"
+      },
+      {
+        "id": "o5",
+        "code": "print(\"average\")"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o1",
+      "s2": "o2"
+    },
+    "distractorNotes": {
+      "o3": "Missing the np. prefix.",
+      "o4": "Passes the variable name as text instead of the variable.",
+      "o5": "Prints the word rather than the computed value."
+    }
+  },
+  "version": 1,
+  "unlocks": [
+    "h-np-mean",
+    "h-quotes"
+  ]
+}
