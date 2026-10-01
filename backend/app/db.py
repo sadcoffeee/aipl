@@ -1,11 +1,12 @@
 
 from __future__ import annotations
 
-import pathlib
 import sqlite3
 
-DATA_DIR = pathlib.Path(__file__).resolve().parents[1] / "data"
-DB_PATH = DATA_DIR / "study.db"
+from . import config
+
+DB_PATH = config.DB_PATH
+DATA_DIR = DB_PATH.parent
 
 SCHEMA = """
 -- One row per person who can log in: students (identified by a printed code) and admins (username + password)

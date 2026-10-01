@@ -1,3 +1,13 @@
+## 6.43.13 (2026-09-22)
+
+### Bug fixes
+
+Make `coordsAtPos` (and thus also the drawn cursor) return the outside of the line when the queried side points out of the line and there is non-dominant-direction text at that side.
+
+`visualLineSide`, which is now deprecated because it doesn't do anything non-trivial, now just returns the logical line side, since that is actually the more correct thing to do when moving to the start or end of line.
+
+`moveVisually` now uses positions at the logical start/end of the line to represent the first/last position in the line when the text at that side isn't int he line's dominant text direction.
+
 ## 6.43.12 (2026-09-15)
 
 ### Bug fixes

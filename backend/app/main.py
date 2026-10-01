@@ -8,9 +8,10 @@ from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import auth, config, content, db
+from . import auth, config, content, db, llm
 
 
 @asynccontextmanager
@@ -30,7 +31,7 @@ app = FastAPI(
 # The Vite dev server runs on a different port than this API, so the browser treats it as a different origin and blocks requests unless we allow it here.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=config.ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -499,3 +500,18 @@ def export_everything(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[s
 def health() -> dict[str, Any]:
     # Unauthenticated on purpose; it is how I check the server is up
     return {"ok": True, "lessons": len(LESSONS), "hints": len(HINTS)}
+
+@app.get("/api/admin/llm-check")
+def admin_llm_check(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[str, Any]:
+    """Browser check to see if the backend can reach the LLM server."""
+    return llm.check_connection()
+
+
+# --------------------------------------------------------------------------
+# The pre-built frontend is served from the dist folder. When running locally, the Vite dev server runs on a different port and serves the frontend instead
+# --------------------------------------------------------------------------
+
+if config.FRONTEND_DIST.is_dir():
+    app.mount(
+        "/", StaticFiles(directory=config.FRONTEND_DIST, html=True), name="frontend"
+    )

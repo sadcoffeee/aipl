@@ -1,0 +1,37 @@
+# systemd unit for the study backend.
+#
+# systemd is what Linux uses to start things at boot and restart them when they die. 
+#
+#
+# Remember to adjust User and the three paths below to match. 
+# The values here assume the repo is at /home/aipl/aipl and the virtualenv at /home/aipl/aipl/backend/.venv.
+
+[Unit]
+Description=AIPL study backend (FastAPI)
+# Start after the network is up. If the inference server is also a systemd service on this machine, add it here: After=network-online.target vllm.service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aipl
+Group=aipl
+WorkingDirectory=/home/aipl/aipl/backend
+
+# Settings live in backend/.env
+# Values set by systemd here win over that file. The leading '-' means "move on if the file is missing".
+EnvironmentFile=-/home/aipl/aipl/backend/.env
+
+ExecStart=/home/aipl/aipl/backend/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8001
+
+Restart=on-failure
+RestartSec=5
+
+# Modest hardening. ProtectHome commented out for now in case it becomes problematic. 
+NoNewPrivileges=true
+PrivateTmp=true
+# ProtectHome=read-only
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

@@ -8,7 +8,7 @@ export default defineConfig({
     // Requests to /api are forwarded to the FastAPI server, so the frontend code can just call fetch('/api/lessons') with no host name in it.
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000',
+        target: process.env.AIPL_API_TARGET ?? 'http://127.0.0.1:8001',
         changeOrigin: true,
       },
     },
