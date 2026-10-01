@@ -3,7 +3,7 @@
 # systemd is what Linux uses to start things at boot and restart them when they die. 
 #
 #
-# Remember to adjust User and the three paths below to match. 
+# Remember to adjust User, group and the three paths below to match. 
 # The values here assume the repo is at /home/aipl/aipl and the virtualenv at /home/aipl/aipl/backend/.venv.
 
 [Unit]
@@ -27,7 +27,7 @@ ExecStart=/home/aipl/aipl/backend/.venv/bin/uvicorn app.main:app --host 0.0.0.0 
 Restart=on-failure
 RestartSec=5
 
-# Modest hardening. ProtectHome commented out for now in case it becomes problematic. 
+# Modest hardening. ProtectHome commented out for now because it will most likely be problematic. 
 NoNewPrivileges=true
 PrivateTmp=true
 # ProtectHome=read-only
