@@ -199,6 +199,7 @@ export default function AdminView() {
                   <th>Lesson</th>
                   <th>v</th>
                   <th>Attempt</th>
+                  <th>Result</th>
                   <th>Confidence</th>
                   <th>Time</th>
                   <th>Submitted</th>
@@ -212,6 +213,11 @@ export default function AdminView() {
                     </td>
                     <td>{row.lesson_version ?? '-'}</td>
                     <td>{row.attempt_no}</td>
+                    <td>
+                      <span className={`status status-${row.status ?? 'none'}`}>
+                        {row.status?.replace('_', ' ') ?? '-'}
+                      </span>
+                    </td>
                     <td>{row.confidence ?? '-'}</td>
                     <td>
                       {row.duration_ms ? `${Math.round(row.duration_ms / 1000)}s` : '-'}

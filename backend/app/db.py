@@ -52,6 +52,16 @@ CREATE TABLE IF NOT EXISTS self_assessments (
     created_at    TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS evaluations (
+    id             TEXT PRIMARY KEY,
+    submission_id  TEXT NOT NULL REFERENCES submissions(id),
+    grader_version TEXT NOT NULL,
+    status         TEXT NOT NULL,
+    solved         INTEGER,
+    result_json    TEXT NOT NULL,
+    created_at     TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS feedback (
     id            TEXT PRIMARY KEY,
     submission_id TEXT NOT NULL REFERENCES submissions(id),
@@ -75,6 +85,8 @@ CREATE INDEX IF NOT EXISTS idx_events_user
     ON events(user_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_sessions_user
     ON sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_evaluations_submission
+    ON evaluations(submission_id, created_at);
 """
 
 

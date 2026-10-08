@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import auth, config, content, db, llm
+from . import auth, config, content, db, llm, grader
 
 
 @asynccontextmanager
@@ -262,12 +262,42 @@ def create_submission(
             ),
         )
 
-    # NOTE: this is where the deterministic grader will run later; execute the student's code, compare results, run the AST checks, and store a verdict
+    # grader runs now but does not send the vercict back, so student can rate their confidence before the result becomes available to them. 
+    store_evaluation(submission_id, grader.grade(lesson, payload))
+
     return {
         "submissionId": submission_id,
         "attemptNo": attempt_no,
         "nextStep": "self-assessment",
     }
+
+def store_evaluation(submission_id: str, evaluation: dict[str, Any] | None) -> None:
+    if evaluation is None:
+        return
+    with db.connect() as conn:
+        conn.execute(
+            """INSERT INTO evaluations
+               (id, submission_id, grader_version, status, solved, result_json, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (
+                new_id("e"),
+                submission_id,
+                evaluation["graderVersion"],
+                evaluation["status"],
+                None if evaluation["solved"] is None else int(evaluation["solved"]),
+                json.dumps(evaluation),
+                now(),
+            ),
+        )
+
+
+def latest_evaluation(conn, submission_id: str) -> dict[str, Any] | None:
+    row = conn.execute(
+        """SELECT result_json FROM evaluations WHERE submission_id = ?
+           ORDER BY created_at DESC LIMIT 1""",
+        (submission_id,),
+    ).fetchone()
+    return json.loads(row["result_json"]) if row else None
 
 
 @app.post("/api/submissions/{submission_id}/self-assessment")
@@ -299,7 +329,9 @@ def create_self_assessment(
             (new_id("a"), submission_id, body.confidence, body.notes, now()),
         )
 
-        feedback_body = placeholder_feedback(dict(submission), body)
+        evaluation = latest_evaluation(conn, submission_id)
+        feedback_body = rule_based_feedback(evaluation, body)
+
         conn.execute(
             """INSERT INTO feedback (id, submission_id, source, body_json, created_at)
                VALUES (?, ?, ?, ?, ?)""",
@@ -314,49 +346,104 @@ def create_self_assessment(
     return feedback_body
 
 
-def placeholder_feedback(
-    submission: dict[str, Any], assessment: SelfAssessmentIn
-) -> dict[str, Any]:
-    #Stand-in for the model-generated feedback. The shape here is the contract the frontend renders
+SUMMARIES = {
+    "passed": "Your solution works.",
+    "failed": "Your code runs, but the result is not right yet.",
+    "incomplete": "Some of the task was left unfinished.",
+    "syntax_error": "Python could not read the code, so it did not run.",
+    "runtime_error": "The code started running but stopped with an error.",
+    "timeout": "The code took too long to finish. Is there a loop that never ends?",
+    "grader_error": "Something went wrong on our side while checking this — it is not your mistake.",
+}
 
-    payload = json.loads(submission["payload_json"])
-    line_count = len(payload.get("code", "").splitlines()) if "code" in payload else None
-    points = [
-        {
-            "line": 1 if line_count else None,
-            "text": "Placeholder remark - a model-written point could be anchored here.",
-        },
-        {
-            "line": None,
-            "text": (
-                f"You rated your confidence {assessment.confidence}/5. "
-                "Calibration between this rating and the actual result helps us give good feedback. "
-            ),
-        },
-    ]
+
+def rule_based_feedback(
+    evaluation: dict[str, Any] | None, assessment: SelfAssessmentIn
+) -> dict[str, Any]:
+    if evaluation is None:
+        return {
+            "source": "rules", "solved": None,
+            "summary": "Your answer has been recorded.",
+            "points": [], "revisitLessonId": None,
+        }
+
+    status = evaluation["status"]
+    points: list[dict[str, Any]] = []
+
+    error = evaluation.get("error")
+    if status in ("syntax_error", "runtime_error") and error:
+        points.append({
+            "line": error.get("line"),
+            "text": f"{error['type']}: {error['message']}",
+            "hintId": None,
+        })
+
+    if status == "incomplete":
+        empty = [g["index"] for g in evaluation.get("gaps") or [] if g["empty"]]
+        empty += evaluation.get("emptySlots") or []
+        if empty:
+            points.append({
+                "line": None,
+                "text": "Not filled in yet: " + ", ".join(f"gap {i}" if isinstance(i, int) else f"box {i}" for i in empty),
+                "hintId": None,
+            })
+
+    # Failed checks, required ones first, using the author's own wording.
+    failed = [c for c in evaluation.get("checks", []) if c["passed"] is False]
+    failed.sort(key=lambda c: not c["required"])
+    for check in failed:
+        if check.get("message"):
+            points.append({"line": None, "text": check["message"], "hintId": check.get("hint")})
+
+    # Parson's: name the misconception a chosen distractor suggests.
+    for slot in evaluation.get("slots") or []:
+        if not slot["correct"] and slot.get("note"):
+            points.append({"line": None, "text": slot["note"], "hintId": None})
+        elif slot.get("misplaced"):
+            points.append({"line": None, "text": "A correct line is in the wrong place.", "hintId": None})
+
+    # Calibration: how the confidence rating compares with the result.
+    solved = evaluation["solved"]
+    if solved is not None:
+        confident = assessment.confidence >= 4
+        if solved and not confident:
+            remark = "You were unsure, but it works. Well done!"
+        elif not solved and confident:
+            remark = "You felt sure about this one. It is worth looking again at what you expected to happen."
+        else:
+            remark = None
+        if remark:
+            points.append({"line": None, "text": remark, "hintId": None})
+    
     return {
-        "source": "placeholder",
-        "solved": None,
-        "summary": (
-            "Feedback is not generated yet. Your submission and self-assessment have been recorded."
-        ),
+        "source": "rules",
+        "solved": solved,
+        "summary": SUMMARIES.get(status, "Your answer has been recorded."),
         "points": points,
         "revisitLessonId": None,
     }
 
-
 @app.get("/api/me/submissions")
 def my_submissions(user: dict[str, Any] = Depends(auth.current_user)) -> list[dict[str, Any]]:
-    return submissions_for(user["id"])
-
+    rows = submissions_for(user["id"])
+    for row in rows:
+        if row["confidence"] is None:
+            row["status"] = row["solved"] = None
+    return rows
 
 def submissions_for(user_id: str) -> list[dict[str, Any]]:
     with db.connect() as conn:
         rows = conn.execute(
             """SELECT s.id, s.lesson_id, s.lesson_type, s.lesson_version, s.attempt_no,
-                      s.submitted_at, s.duration_ms, a.confidence, a.notes
+                      s.submitted_at, s.duration_ms, a.confidence, a.notes,
+                      e.status, e.solved
                FROM submissions s
                LEFT JOIN self_assessments a ON a.submission_id = s.id
+               LEFT JOIN evaluations e ON e.id = (
+               SELECT id FROM evaluations
+               WHERE submission_id = s.id
+               ORDER BY created_at DESC LIMIT 1
+               )
                WHERE s.user_id = ?
                ORDER BY s.submitted_at""",
             (user_id,),
@@ -437,6 +524,33 @@ def list_participants(_: dict[str, Any] = Depends(auth.require_admin)) -> list[d
         ).fetchall()
     return [dict(row) for row in rows]
 
+@app.get("/api/admin/submissions/{submission_id}")
+def admin_submission_detail(
+    submission_id: str, _: dict[str, Any] = Depends(auth.require_admin)
+) -> dict[str, Any]:
+    """Everything about one submission: the code, every evaluation, feedback."""
+    with db.connect() as conn:
+        submission = conn.execute(
+            "SELECT * FROM submissions WHERE id = ?", (submission_id,)
+        ).fetchone()
+        if submission is None:
+            raise HTTPException(status_code=404, detail="Unknown submission")
+        evaluations = conn.execute(
+            "SELECT * FROM evaluations WHERE submission_id = ? ORDER BY created_at",
+            (submission_id,),
+        ).fetchall()
+        feedback = conn.execute(
+            "SELECT * FROM feedback WHERE submission_id = ? ORDER BY created_at",
+            (submission_id,),
+        ).fetchall()
+    return {
+        "submission": {**dict(submission), "payload": json.loads(submission["payload_json"])},
+        "evaluations": [
+            {**dict(row), "result": json.loads(row["result_json"])} for row in evaluations
+        ],
+        "feedback": [{**dict(row), "body": json.loads(row["body_json"])} for row in feedback],
+    }
+
 
 @app.patch("/api/admin/participants/{user_id}")
 def update_participant(
@@ -491,6 +605,7 @@ def export_everything(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[s
             ),
             "submissions": rows("SELECT * FROM submissions"),
             "selfAssessments": rows("SELECT * FROM self_assessments"),
+            "evaluations": rows("SELECT * FROM evaluations"),
             "feedback": rows("SELECT * FROM feedback"),
             "events": rows("SELECT * FROM events"),
         }

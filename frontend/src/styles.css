@@ -701,3 +701,38 @@ button.primary:disabled {
 .admin .panel {
   margin-top: 1rem;
 }
+
+/* Grader verdicts in admin view--------------------------------------------------------- */
+
+
+.status {
+  font-size: 0.75rem;
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  background: #eef0f3;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.status-passed {
+  background: #e6f6ee;
+  color: #16794c;
+}
+
+.status-failed,
+.status-runtime_error,
+.status-syntax_error,
+.status-timeout {
+  background: #fdf3f2;
+  color: var(--warn);
+}
+
+.status-incomplete {
+  background: #fff4e5;
+  color: #92400e;
+}
+
+.status-grader_error {
+  background: #f3e8ff;
+  color: #6b21a8;
+}

@@ -5,10 +5,15 @@ import json
 import pathlib
 from typing import Any
 
+from .grader import checks as check_spec
+from .grader import gaps
+
 CONTENT_DIR = pathlib.Path(__file__).resolve().parents[1] / "content"
 LESSON_DIR = CONTENT_DIR / "lessons"
 HINTS_FILE = CONTENT_DIR / "hints.json"
+DATASET_DIR = CONTENT_DIR / "datasets"
 
+NEEDS_REFERENCE = {"variable_matches_reference", "value_matches_reference", "stdout_matches_reference",}
 REQUIRED_FIELDS = ("id", "order", "title", "type")
 KNOWN_TYPES = ("instruction", "completion", "parsons")
 
@@ -59,6 +64,12 @@ def _validate(lesson: dict[str, Any], path: pathlib.Path, hints: dict[str, Any])
             f"{', '.join(unknown_hints)}"
         )
 
+    missing_data = [name for name in lesson.get("datasets", []) if not (DATASET_DIR / name).is_file()]
+    if missing_data:
+        raise ContentError(
+            f"{path.name}: datasets not found in content/datasets/: {', '.join(missing_data)}"
+        )
+
     if lesson["type"] == "parsons":
         content = lesson.get("content", {})
         slot_ids = {
@@ -66,16 +77,57 @@ def _validate(lesson: dict[str, Any], path: pathlib.Path, hints: dict[str, Any])
         }
         option_ids = {opt["id"] for opt in content.get("options", [])}
         solution = lesson.get("private", {}).get("solution", {})
-        unknown_slots = set(solution) - slot_ids
-        if unknown_slots:
+        # One correct arrangement, or a list of acceptable alternatives.
+        for alternative in solution if isinstance(solution, list) else [solution]:
+            unknown_slots = set(alternative) - slot_ids
+            if unknown_slots:
+                raise ContentError(
+                    f"{path.name}: solution refers to unknown slot(s) {sorted(unknown_slots)}"
+                )
+            unknown_options = set(alternative.values()) - option_ids
+            if unknown_options:
+                raise ContentError(
+                    f"{path.name}: solution refers to unknown option(s) {sorted(unknown_options)}"
+                )
+
+    if lesson["type"] == "completion":
+        _validate_completion(lesson, path, hints)
+
+
+def _validate_completion(lesson: dict[str, Any], path: pathlib.Path, hints: dict[str, Any]) -> None:
+    private = lesson.get("private", {})
+    starter = lesson.get("content", {}).get("starterCode", "")
+
+    if "validation" in private:
+        raise ContentError(
+            f"{path.name}: 'validation' was the old sketch format - replace it with a 'checks' list"
+        )
+
+    if "gapSolutions" in private:
+        expected = gaps.count(starter)
+        if len(private["gapSolutions"]) != expected:
             raise ContentError(
-                f"{path.name}: solution refers to unknown slot(s) {sorted(unknown_slots)}"
+                f"{path.name}: starterCode has {expected} gap(s) but gapSolutions has "
+                f"{len(private['gapSolutions'])} answer(s)"
             )
-        unknown_options = set(solution.values()) - option_ids
-        if unknown_options:
+    has_reference = "gapSolutions" in private or "referenceSolution" in private
+
+    seen: set[str] = set()
+    for check in private.get("checks", []):
+        try:
+            check_spec.validate(check)
+        except check_spec.CheckError as exc:
+            raise ContentError(f"{path.name}: {exc}") from exc
+        if check["id"] in seen:
+            raise ContentError(f"{path.name}: duplicate check id '{check['id']}'")
+        seen.add(check["id"])
+        if check["type"] in NEEDS_REFERENCE and not has_reference:
             raise ContentError(
-                f"{path.name}: solution refers to unknown option(s) {sorted(unknown_options)}"
-            )
+                f"{path.name}: check '{check['id']}' compares with the reference solution, but the lesson has neither gapSolutions nor referenceSolution"            )
+        if check.get("hint") and check["hint"] not in hints:
+
+            raise ContentError(
+                f"{path.name}: check '{check['id']}' points at hint '{check['hint']}', which is not in hints.json")
 
 
 def _content_hash(raw: str) -> str:

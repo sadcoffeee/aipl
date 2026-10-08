@@ -9,6 +9,9 @@ export default function FeedbackPanel({ feedback }: { feedback: Feedback }) {
       {feedback.source === 'placeholder' && (
         <p className="badge">placeholder - no model connected yet</p>
       )}
+      {feedback.source === 'rules' && (
+        <p className="badge">automatic check - written feedback comes later</p>
+      )}
 
       {feedback.solved !== null && (
         <p className={feedback.solved ? 'verdict solved' : 'verdict unsolved'}>

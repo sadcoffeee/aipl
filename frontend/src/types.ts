@@ -155,10 +155,11 @@ export interface SubmissionResult {
 export interface FeedbackPoint {
   line: number | null
   text: string
+  hintId?: string | null
 }
 
 export interface Feedback {
-  source: 'placeholder' | 'llm'
+  source: 'placeholder' | 'rules' | 'llm'
   solved: boolean | null
   summary: string
   points: FeedbackPoint[]
@@ -188,4 +189,6 @@ export interface SubmissionRow {
   duration_ms: number | null
   confidence: number | null
   notes: string | null
+  status: string | null
+  solved: number | null
 }

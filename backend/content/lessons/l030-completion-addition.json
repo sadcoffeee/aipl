@@ -1,0 +1,41 @@
+{
+  "id": "l030-completion-addition",
+  "order": 30,
+  "title": "Add two variables",
+  "type": "completion",
+  "concepts": [
+    "arithmetic",
+    "variable"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": true,
+  "content": {
+    "description": "PLACEHOLDER CONTENT for layout testing only.\n\n Fill in the two gaps.",
+    "language": "python",
+    "starterCode": "a = 5\n\nb = 10\n\nc = {{gap}}\n\nprint({{gap}})"
+  },
+  "private": {
+   "gapSolutions": [
+      "a + b",
+      "c"
+    ],
+    "checks": [
+      {
+        "id": "c-holds-sum",
+        "type": "variable_matches_reference",
+        "variable": "c",
+        "message": "c should hold the sum of a and b.",
+        "hint": "h-addition"
+      },
+      {
+        "id": "prints-final-value",
+        "type": "stdout_matches_reference",
+        "message": "The number printed at the end should be 15."
+      }
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-addition"
+  ]
+}

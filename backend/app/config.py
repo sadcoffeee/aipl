@@ -41,6 +41,13 @@ SESSION_HOURS = int(os.getenv("AIPL_SESSION_HOURS", "12"))
 # Prefix for generated participant codes, e.g. KVT-4F7QH2.
 CODE_PREFIX = os.getenv("AIPL_CODE_PREFIX", "KVT")
 
+# --- the grader ------------------------------------------------------------
+GRADER_TIMEOUT_SECONDS = float(os.getenv("AIPL_GRADER_TIMEOUT", "10"))
+GRADER_CPU_SECONDS = int(os.getenv("AIPL_GRADER_CPU_SECONDS", "5"))
+GRADER_MEMORY_MB = int(os.getenv("AIPL_GRADER_MEMORY_MB", "2048"))
+GRADER_STDOUT_LIMIT = int(os.getenv("AIPL_GRADER_STDOUT_LIMIT", "20000"))
+
+
 # --- model server ----------------------------------------------------------
 
 #endpoint, placeholder for now. remember to include the /v1 part
