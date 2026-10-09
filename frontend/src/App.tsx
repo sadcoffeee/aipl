@@ -22,6 +22,7 @@ export default function App() {
   const [openLessonId, setOpenLessonId] = useState<string | null>(null)
   const [adminTab, setAdminTab] = useState<AdminTab>('participants')
   const [error, setError] = useState<string | null>(null)
+  const [goalsOpen, setGoalsOpen] = useState(false) //.
 
   const signOut = useCallback(() => {
     setUser(null)
@@ -122,7 +123,7 @@ export default function App() {
             <LessonList
               lessons={lessons}
               isAdmin={user.role === 'admin'}
-              onOpen={(lessonId) => {
+              onOpen={(lessonId) => { 
                 api.logEvent({ lessonId, type: 'lesson_opened' })
                 setOpenLessonId(lessonId)
               }}
@@ -130,7 +131,16 @@ export default function App() {
           )
         ) : (
           <LessonView
-            lessonId={openLessonId}
+          key={openLessonId}
+          lessons={lessons ?? []} //. denne og ned
+          goalsOpen={goalsOpen}
+          onToggleGoals={() => setGoalsOpen((open) => !open)}
+          lessonId={openLessonId}
+          onOpen={(lessonId)=> {
+              api.logEvent({ lessonId: openLessonId, type: 'lesson_closed'})
+              api.logEvent({ lessonId, type: 'lesson_opened'})
+              setOpenLessonId(lessonId)
+          }}
             onBack={() => {
               api.logEvent({ lessonId: openLessonId, type: 'lesson_closed' })
               setOpenLessonId(null)
