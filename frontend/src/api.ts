@@ -1,8 +1,8 @@
 import type {
+  Course,
   Feedback,
   Lesson,
   LessonHints,
-  LessonSummary,
   ParticipantRow,
   SubmissionResult,
   SubmissionRow,
@@ -96,8 +96,8 @@ export async function logout(): Promise<void> {
 
 /** Content ---------------------------------------------------------------- */
 
-export function fetchLessons(): Promise<LessonSummary[]> {
-  return request<LessonSummary[]>('/api/lessons')
+export function fetchCourse(): Promise<Course> {
+  return request<Course>('/api/course')
 }
 
 export function fetchLesson(lessonId: string): Promise<Lesson> {
@@ -121,6 +121,10 @@ export function submit(body: {
     method: 'POST',
     body: JSON.stringify(body),
   })
+}
+
+export function completeLesson(lessonId: string): Promise<SubmissionResult> {
+  return submit({ lessonId })
 }
 
 export function submitSelfAssessment(

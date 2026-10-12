@@ -1,0 +1,21 @@
+{
+  "collections": [
+    {
+      "id": "c010-first-steps",
+      "title": "First steps",
+      "description": "PLACEHOLDER 1",
+      "lessons": [
+        "l010-variables",
+        "l020-parsons-mean"
+      ]
+    },
+    {
+      "id": "c020-second-steps",
+      "title": "Second steps",
+      "description": "PLACEHOLDER 2",
+      "lessons": [
+        "l030-completion-addition"
+      ]
+    }
+  ]
+}

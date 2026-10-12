@@ -11,10 +11,11 @@ from .grader import gaps
 CONTENT_DIR = pathlib.Path(__file__).resolve().parents[1] / "content"
 LESSON_DIR = CONTENT_DIR / "lessons"
 HINTS_FILE = CONTENT_DIR / "hints.json"
+COLLECTIONS_FILE = CONTENT_DIR / "collections.json"
 DATASET_DIR = CONTENT_DIR / "datasets"
 
 NEEDS_REFERENCE = {"variable_matches_reference", "value_matches_reference", "stdout_matches_reference",}
-REQUIRED_FIELDS = ("id", "order", "title", "type")
+REQUIRED_FIELDS = ("id", "title", "type")
 KNOWN_TYPES = ("instruction", "completion", "parsons")
 
 
@@ -51,6 +52,13 @@ def _validate(lesson: dict[str, Any], path: pathlib.Path, hints: dict[str, Any])
     for field in REQUIRED_FIELDS:
         if field not in lesson:
             raise ContentError(f"{path.name}: missing required field '{field}'")
+
+    if "order" in lesson:
+    # Not harmful by itself, but an author editing it would expect the course to reorder, and it would not, so it's better to say so.
+        raise ContentError(
+        f"{path.name}: 'order' is no longer used - a lesson's place in the course comes from collections.json. Delete the field."
+        )
+    
     if lesson["type"] not in KNOWN_TYPES:
         raise ContentError(
             f"{path.name}: unknown type '{lesson['type']}' "
@@ -135,7 +143,10 @@ def _content_hash(raw: str) -> str:
 
 
 def load_all(hints: dict[str, Any]) -> list[dict[str, Any]]:
-    # Read every lesson file, validate it, and return them in order.
+    return load_course(hints)[0]
+
+def load_course(hints: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Read every lesson file and collections.json and validate both."""
     lessons: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
     unlocked_by: dict[str, str] = {}
@@ -145,7 +156,7 @@ def load_all(hints: dict[str, Any]) -> list[dict[str, Any]]:
         try:
             lesson = json.loads(raw)
         except json.JSONDecodeError as exc:
-            raise ContentError(f"{path.name}: invalid JSON — {exc}") from exc
+            raise ContentError(f"{path.name}: invalid JSON - {exc}") from exc
         _validate(lesson, path, hints)
         if lesson["id"] in seen_ids:
             raise ContentError(f"{path.name}: duplicate lesson id '{lesson['id']}'")
@@ -154,7 +165,8 @@ def load_all(hints: dict[str, Any]) -> list[dict[str, Any]]:
         lesson["contentHash"] = _content_hash(raw)
         lessons.append(lesson)
 
-    lessons.sort(key=lambda item: item["order"])
+    collections = load_collections({lesson["id"]: lesson for lesson in lessons})
+    lessons.sort(key=lambda item: item["position"])
 
     # A hint should be unlocked by exactly one lesson
     # Unlocking it twice is almost certainly an authoring error, so it gets reported.
@@ -167,7 +179,51 @@ def load_all(hints: dict[str, Any]) -> list[dict[str, Any]]:
                 )
             unlocked_by[hint_id] = lesson["id"]
 
-    return lessons
+    return lessons, collections
+
+def load_collections(lessons_by_id: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    if not COLLECTIONS_FILE.exists():
+        raise ContentError(
+            "collections.json is missing - the course needs it to know which lessons exist and in what order"
+        )
+    try:
+        data = json.loads(COLLECTIONS_FILE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ContentError(f"collections.json: invalid JSON - {exc}") from exc
+
+    collections = data.get("collections", [])
+    seen_collections: set[str] = set()
+    placed: dict[str, str] = {}
+    position = 0
+    for collection in collections:
+        if "id" not in collection or "title" not in collection:
+            raise ContentError("collections.json: every collection needs an 'id' and a 'title'")
+        if collection["id"] in seen_collections:
+            raise ContentError(f"collections.json: duplicate collection id '{collection['id']}'")
+        seen_collections.add(collection["id"])
+        if not collection.get("lessons"):
+            raise ContentError(f"collections.json: collection '{collection['id']}' has no lessons")
+
+        for lesson_id in collection["lessons"]:
+            if lesson_id not in lessons_by_id:
+                raise ContentError(
+                    f"collections.json: collection '{collection['id']}' lists '{lesson_id}', but no lesson file has that id"
+                )
+            if lesson_id in placed:
+                raise ContentError(
+                    f"collections.json: lesson '{lesson_id}' is listed in both '{placed[lesson_id]}' and '{collection['id']}'"
+                )
+            placed[lesson_id] = collection["id"]
+            lessons_by_id[lesson_id]["collectionId"] = collection["id"]
+            lessons_by_id[lesson_id]["position"] = position
+            position += 1
+
+    unplaced = sorted(set(lessons_by_id) - set(placed))
+    if unplaced:
+        raise ContentError(
+            f"collections.json: these lessons are not in any collection, so no student could reach them: {', '.join(unplaced)}"
+        )
+    return collections
 
 
 def public_view(lesson: dict[str, Any]) -> dict[str, Any]:
@@ -179,7 +235,8 @@ def summary(lesson: dict[str, Any]) -> dict[str, Any]:
     # The short form used by the lesson list.
     return {
         "id": lesson["id"],
-        "order": lesson["order"],
+        "collectionId": lesson["collectionId"],
+        "position": lesson["position"],
         "title": lesson["title"],
         "type": lesson["type"],
         "version": lesson.get("version", 1),
@@ -199,8 +256,8 @@ def hints_for_lesson(
 
     earlier: list[dict[str, Any]] = []
     for other in reversed(lessons):  # walk backwards: most recent first
-        if other["order"] >= lesson["order"]:
-            continue
+        if other["position"] >= lesson["position"]:
+                        continue
         earlier.extend(
             hints[hint_id] for hint_id in other.get("unlocks", []) if hint_id in hints
         )
@@ -208,7 +265,7 @@ def hints_for_lesson(
     if include_all:
         later: list[dict[str, Any]] = []
         for other in lessons:
-            if other["order"] <= lesson["order"]:
+            if other["position"] <= lesson["position"]:
                 continue
             later.extend(
                 hints[hint_id] for hint_id in other.get("unlocks", []) if hint_id in hints

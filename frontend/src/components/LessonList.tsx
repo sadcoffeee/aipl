@@ -1,4 +1,4 @@
-import type { LessonSummary, LessonType } from '../types'
+import type { CourseLesson, LessonType } from '../types'
 
 const TYPE_ICON: Record<LessonType, string> = {
   instruction: '📖',
@@ -17,7 +17,7 @@ export default function LessonList({
   isAdmin,
   onOpen,
 }: {
-  lessons: LessonSummary[]
+  lessons: CourseLesson[]
   isAdmin: boolean
   onOpen: (lessonId: string) => void
 }) {
@@ -33,12 +33,12 @@ export default function LessonList({
           <li key={lesson.id}>
             <button
               className="lesson-button"
-              disabled={lesson.locked}
+              disabled={lesson.status === 'locked'}
               onClick={() => onOpen(lesson.id)}
-              title={lesson.locked ? 'Finish the previous task first' : undefined}
+              title={lesson.status === 'locked' ? 'Finish the previous task first' : undefined}
             >
               <span className="lesson-icon" aria-hidden="true">
-                {lesson.locked ? '🔒' : TYPE_ICON[lesson.type]}
+                {lesson.status === 'locked' ? '🔒' : TYPE_ICON[lesson.type]}
               </span>
               <span className="lesson-button-text">
                 <span className="lesson-name">{lesson.title}</span>

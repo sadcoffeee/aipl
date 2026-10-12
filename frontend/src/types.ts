@@ -14,14 +14,42 @@ export interface User {
 
 export interface LessonSummary {
   id: string
-  order: number
   title: string
+  collectionId: string
+  position: number
   type: LessonType
   version: number
   concepts: string[]
   estimatedMinutes: number | null
-  locked: boolean
 }
+
+export type LessonStatus = 'completed' | 'attempted' | 'available' | 'locked'
+
+export type CollectionState = 'completed' | 'in_progress' | 'not_started' | 'locked'
+
+export interface CourseLesson extends LessonSummary {
+  status: LessonStatus
+  attempts: number
+}
+
+export interface Collection {
+  id: string
+  title: string
+  description: string | null
+  state: CollectionState
+  progress: {
+    completed: number
+    attempted: number
+    total: number
+  }
+  resumeLessonId: string | null
+  lessons: CourseLesson[]
+}
+
+export interface Course {
+  collections: Collection[]
+}
+
 
 /** Reference library ------------------------------------------------------ */
 
@@ -116,7 +144,8 @@ export interface ParsonsContent {
 
 interface LessonBase {
   id: string
-  order: number
+  collectionId: string
+  position: number
   title: string
   version: number
   contentHash: string
@@ -149,7 +178,7 @@ export type Lesson = InstructionLesson | CompletionLesson | ParsonsLesson
 export interface SubmissionResult {
   submissionId: string
   attemptNo: number
-  nextStep: string
+  nextStep: 'self-assessment' | 'done'
 }
 
 export interface FeedbackPoint {

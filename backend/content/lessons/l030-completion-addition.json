@@ -1,6 +1,5 @@
 {
   "id": "l030-completion-addition",
-  "order": 30,
   "title": "Add two variables",
   "type": "completion",
   "concepts": [

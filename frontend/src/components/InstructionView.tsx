@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import * as api from '../api'
 import { Markdown } from '../markdown'
 import type { ContentItem, InstructionLesson } from '../types'
 
@@ -34,7 +36,27 @@ function Item({ item }: { item: ContentItem }) {
   }
 }
 
-export default function InstructionView({ lesson }: { lesson: InstructionLesson }) {
+export default function InstructionView({
+  lesson,
+  onCompleted,
+}: {
+  lesson: InstructionLesson
+  onCompleted: () => void
+}) {
+  const [done, setDone] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  async function markRead() {
+    setBusy(true)
+    try {
+      await api.completeLesson(lesson.id)
+      setDone(true)
+      onCompleted()
+    } finally {
+      setBusy(false)
+    }
+  }
+
   return (
     <article className="instruction">
       {lesson.content.rows.map((row, rowIndex) => (
@@ -57,6 +79,11 @@ export default function InstructionView({ lesson }: { lesson: InstructionLesson 
           ))}
         </div>
       ))}
+      <div className="task-actions">
+        <button className="primary" disabled={busy || done} onClick={() => void markRead()}>
+          {done ? 'Done' : busy ? 'Saving...' : 'Continue'}
+        </button>
+      </div>
     </article>
   )
 }

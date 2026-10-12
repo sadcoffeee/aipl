@@ -114,8 +114,7 @@ export default function ParsonsView({
         <div className="option-bank">
           <h2>Available lines</h2>
           <p className="muted">
-            Drag a line into a box, or click it and then click a box. Not all lines
-            are needed.
+            Drag a line into a box, or click it and then click a box. Not all lines are needed.
           </p>
           <ul>
             {orderedOptions.map((option: ParsonsOption) => {

@@ -11,22 +11,29 @@ import AdminView from './components/AdminView'
 import LessonList from './components/LessonList'
 import LessonView from './components/LessonView'
 import LoginView from './components/LoginView'
-import type { LessonSummary, User } from './types'
+import type { Course, User } from './types'
 
 type AdminTab = 'participants' | 'lessons'
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null)
   const [checkingSession, setCheckingSession] = useState(true)
-  const [lessons, setLessons] = useState<LessonSummary[] | null>(null)
+  const [course, setCourse] = useState<Course | null>(null)
   const [openLessonId, setOpenLessonId] = useState<string | null>(null)
   const [adminTab, setAdminTab] = useState<AdminTab>('participants')
   const [error, setError] = useState<string | null>(null)
 
   const signOut = useCallback(() => {
     setUser(null)
-    setLessons(null)
+    setCourse(null)
     setOpenLessonId(null)
+  }, [])
+
+  const refreshCourse = useCallback(() => {
+    api
+      .fetchCourse()
+      .then(setCourse)
+      .catch((err) => setError(String(err)))
   }, [])
 
   // If the backend rejects the browser token at any point, drop back to the login screen rather than leaving a half-working session on screen.
@@ -53,12 +60,8 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!user) return
-    api
-      .fetchLessons()
-      .then(setLessons)
-      .catch((err) => setError(String(err)))
-  }, [user])
+    if (user) refreshCourse()
+  }, [user, refreshCourse])
 
   if (checkingSession) {
     return (
@@ -116,11 +119,11 @@ export default function App() {
 
       {showLessons &&
         (openLessonId === null ? (
-          lessons === null ? (
-            <div className="panel">Loading lessons…</div>
+          course === null ? (
+            <div className="panel">Loading course...</div>
           ) : (
             <LessonList
-              lessons={lessons}
+              lessons={course.collections.flatMap((collection) => collection.lessons)}
               isAdmin={user.role === 'admin'}
               onOpen={(lessonId) => {
                 api.logEvent({ lessonId, type: 'lesson_opened' })
@@ -131,11 +134,12 @@ export default function App() {
         ) : (
           <LessonView
             lessonId={openLessonId}
+            onProgressChanged={refreshCourse}
             onBack={() => {
               api.logEvent({ lessonId: openLessonId, type: 'lesson_closed' })
               setOpenLessonId(null)
               // Re-fetch so a newly unlocked lesson appears without a reload.
-              api.fetchLessons().then(setLessons).catch(() => undefined)
+              refreshCourse()
             }}
           />
         ))}

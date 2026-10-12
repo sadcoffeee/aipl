@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import auth, config, content, db, llm, grader
+from . import auth, config, content, db, llm, grader, progress
 
 
 @asynccontextmanager
@@ -39,13 +39,14 @@ app.add_middleware(
 # Content is read once at startup. Restart the server, or call the reload endpoint, after editing the files.
 LESSONS: list[dict[str, Any]] = []
 LESSONS_BY_ID: dict[str, dict[str, Any]] = {}
+COLLECTIONS: list[dict[str, Any]] = []
 HINTS: dict[str, dict[str, Any]] = {}
 
 
 def reload_content() -> None:
-    global LESSONS, LESSONS_BY_ID, HINTS
+    global LESSONS, LESSONS_BY_ID, COLLECTIONS, HINTS
     HINTS = content.load_hints()
-    LESSONS = content.load_all(HINTS)
+    LESSONS, COLLECTIONS = content.load_course(HINTS)
     LESSONS_BY_ID = {lesson["id"]: lesson for lesson in LESSONS}
 
 
@@ -155,33 +156,20 @@ def logout(user: dict[str, Any] = Depends(auth.current_user)) -> dict[str, Any]:
 # --------------------------------------------------------------------------
 
 
+def course_for(user: dict[str, Any]) -> dict[str, Any]:
+    return progress.build_course(
+        COLLECTIONS,
+        LESSONS_BY_ID,
+        progress.attempts_by_lesson(user["id"], LESSONS_BY_ID),
+        gating=config.GATING_ENABLED and user["role"] != "admin",
+    )    
+
 def locked_lesson_ids(user: dict[str, Any]) -> set[str]:
-    if not config.GATING_ENABLED or user["role"] == "admin":
-        return set()
+    return progress.locked_lesson_ids(course_for(user))
 
-    with db.connect() as conn:
-        rows = conn.execute("SELECT DISTINCT lesson_id FROM submissions WHERE user_id = ?", (user["id"],),).fetchall()
-    attempted = {row["lesson_id"] for row in rows}
-
-    locked: set[str] = set()
-    blocked = False
-    for lesson in LESSONS:  # already in course order
-        if blocked:
-            locked.add(lesson["id"])
-            continue
-        if lesson["type"] != "instruction" and lesson["id"] not in attempted:
-            blocked = True
-    return locked
-
-
-@app.get("/api/lessons")
-def list_lessons(user: dict[str, Any] = Depends(auth.current_user)) -> list[dict[str, Any]]:
-    locked = locked_lesson_ids(user)
-    return [
-        {**content.summary(lesson), "locked": lesson["id"] in locked}
-        for lesson in LESSONS
-    ]
-
+@app.get("/api/course")
+def get_course(user: dict[str, Any] = Depends(auth.current_user)) -> dict[str, Any]:
+    return course_for(user)
 
 @app.get("/api/lessons/{lesson_id}")
 def get_lesson(
@@ -213,7 +201,7 @@ def get_lesson_hints(
 def admin_reload_content(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[str, Any]:
     # Convenience during authoring: re-reads the content files without a restart
     reload_content()
-    return {"lessons": len(LESSONS), "hints": len(HINTS)}
+    return {"lessons": len(LESSONS), "collections": len(COLLECTIONS), "hints": len(HINTS)}
 
 
 # --------------------------------------------------------------------------
@@ -228,6 +216,8 @@ def create_submission(
     lesson = LESSONS_BY_ID.get(body.lessonId)
     if lesson is None:
         raise HTTPException(status_code=404, detail="Unknown lesson")
+    if body.lessonId in locked_lesson_ids(user):
+        raise HTTPException(status_code=403, detail="This lesson is not unlocked yet")    
 
     with db.connect() as conn:
         attempt_no = conn.execute(
@@ -268,7 +258,7 @@ def create_submission(
     return {
         "submissionId": submission_id,
         "attemptNo": attempt_no,
-        "nextStep": "self-assessment",
+        "nextStep": "self-assessment" if progress.needs_self_assessment(lesson) else "done",
     }
 
 def store_evaluation(submission_id: str, evaluation: dict[str, Any] | None) -> None:

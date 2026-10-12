@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import * as api from '../api'
 import type { Feedback, Lesson, LessonHints } from '../types'
 import CompletionView from './CompletionView'
@@ -10,14 +10,24 @@ import ParsonsView from './ParsonsView'
 export default function LessonView({
   lessonId,
   onBack,
+  onProgressChanged,
 }: {
   lessonId: string
   onBack: () => void
+  onProgressChanged: () => void
 }) {
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [hints, setHints] = useState<LessonHints | null>(null)
   const [feedback, setFeedback] = useState<Feedback | null>(null)
   const [error, setError] = useState<string | null>(null)
+
+  const receiveFeedback = useCallback(
+    (next: Feedback | null) => {
+      setFeedback(next)
+      if (next) onProgressChanged()
+    },
+    [onProgressChanged],
+  )
 
   useEffect(() => {
     setLesson(null)
@@ -56,12 +66,14 @@ export default function LessonView({
 
       <div className={hasSideColumn ? 'lesson-body with-side' : 'lesson-body'}>
         <div className="lesson-main">
-          {lesson.type === 'instruction' && <InstructionView lesson={lesson} />}
+          {lesson.type === 'instruction' && (
+            <InstructionView key={lesson.id} lesson={lesson} onCompleted={onProgressChanged} />
+          )}
           {lesson.type === 'completion' && (
-            <CompletionView lesson={lesson} onFeedback={setFeedback} />
+            <CompletionView key={lesson.id} lesson={lesson} onFeedback={receiveFeedback} />
           )}
           {lesson.type === 'parsons' && (
-            <ParsonsView lesson={lesson} onFeedback={setFeedback} />
+            <ParsonsView key={lesson.id} lesson={lesson} onFeedback={receiveFeedback} />
           )}
         </div>
 
