@@ -33,17 +33,17 @@ export interface CourseLesson extends LessonSummary {
 }
 
 export interface Collection {
-  id: string
-  title: string
-  description: string | null
-  state: CollectionState
+  id: string //identify collection 
+  title: string 
+  description: string | null // explain what it covers
+  state: CollectionState //show current state
   progress: {
-    completed: number
-    attempted: number
-    total: number
+    completed: number //number of completed lessons
+    attempted: number 
+    total: number //total number of lessons
   }
-  resumeLessonId: string | null
-  lessons: CourseLesson[]
+  resumeLessonId: string | null //identify a lessons that can be resumes
+  lessons: CourseLesson[] //display lessons belonging to that collection
 }
 
 export interface Course {
