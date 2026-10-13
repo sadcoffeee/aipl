@@ -12,6 +12,7 @@ import LessonList from './components/LessonList'
 import LessonView from './components/LessonView'
 import LoginView from './components/LoginView'
 import type { Course, User } from './types'
+import CollectionList from './components/LessonList'
 
 type AdminTab = 'participants' | 'lessons'
 
@@ -122,8 +123,11 @@ export default function App() {
           course === null ? (
             <div className="panel">Loading course...</div>
           ) : (
-            <LessonList
-              lessons={course.collections.flatMap((collection) => collection.lessons)}
+               <CollectionList
+                     //course.collrection -> retrives all collections
+                     //.flatmap takes lessons from each collection and combine into one array
+                     //lessonList recives the array, no longer know
+              collections={course.collections}
               isAdmin={user.role === 'admin'}
               onOpen={(lessonId) => {
                 api.logEvent({ lessonId, type: 'lesson_opened' })
