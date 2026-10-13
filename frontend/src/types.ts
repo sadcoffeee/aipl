@@ -189,3 +189,5 @@ export interface SubmissionRow {
   confidence: number | null
   notes: string | null
 }
+
+

@@ -6,6 +6,7 @@ import FeedbackPanel from './FeedbackPanel'
 import HintPanel from './HintPanel'
 import InstructionView from './InstructionView'
 import ParsonsView from './ParsonsView'
+import '../styles_goals-bar.css'
 
 export default function LessonView({
   lessonId,
@@ -54,22 +55,9 @@ export default function LessonView({
   const hasSideColumn = lesson.type !== 'instruction' || hintCount > 0
 
   return (
-    <main className="lesson-view">
-      <div className="lesson-header">
-        <button className="back-button" onClick={onBack}>
-          ← Back
-        </button>
-        <h1>{lesson.title}</h1>
-      </div>
+    <main className={goalsOpen ? 'lesson-view goals-open' : 'lesson-view'}>
 
-        
-      <div className={['lesson-body with-goals', 
-        hasSideColumn ? 'with-side' : '',
-        goalsOpen ? '' : 'goals-collapsed',
-      ].join(' ')}
-      >
-        
-          <div className="goals-wrapper">
+              <div className="goals-wrapper" hidden={!goalsOpen}>
             <nav
               id='goals-navigation'
               className='goals-bar'
@@ -80,6 +68,7 @@ export default function LessonView({
               <summary className="goals-heading">
                Arbejd med EKG-data
               </summary>
+              
               <ol className="goals-list">
                 {[...lessons]
                   .sort((a,b)=> a.order - b.order)
@@ -107,7 +96,10 @@ export default function LessonView({
                </ol>
            </details>
           </nav>
+          </div>
 
+      <div className="lesson-header">
+        
           <button
             type='button'
             className='goals-toggle'
@@ -115,9 +107,19 @@ export default function LessonView({
           >
           <span aria-hidden="true">☰</span>
           </button>
-          </div>
+        
+        <button className="back-button" onClick={onBack}>
+          ← Back
+        </button>
 
-        <div className="lesson-main">
+        <h1>{lesson.title}</h1>
+      </div>
+
+        
+<div className={hasSideColumn ? 'lesson-body with-side' : 'lesson-body'}>
+        
+
+       <div className="lesson-main">
           {lesson.type === 'instruction' && <InstructionView lesson={lesson} />}
           {lesson.type === 'completion' && (
             <CompletionView lesson={lesson} onFeedback={setFeedback} />
