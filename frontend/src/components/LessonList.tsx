@@ -1,6 +1,7 @@
 import type { CourseLesson, LessonType, LessonSummary } from '../types'
 //import three TypeScript "CourseLesson, LessonSummary and LessonType" from a file called "types"
 import '../styles_lessonList.css'
+import '../styles_goals-bar.css'
 
 //defines emoji correspinding to each lessons type
 //When a lesson is shown the icon is selected based on TYPE_ICON[lesson.type]
