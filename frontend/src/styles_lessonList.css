@@ -1,0 +1,127 @@
+/* Plain CSS, no framework. */
+
+:root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --ink: #1c2024;
+    --muted: #667085;
+    --line: #dfe3e8;
+    --accent: #2f5bea;
+    --accent-soft: #eaefff;
+    --warn: #b42318;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.55;
+}
+
+.app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.25rem 4rem;
+}
+
+.app-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 1.5rem;
+}
+
+.app-title {
+    font-weight: 600;
+}
+
+.participant {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin: 0 0 0.25rem;
+}
+
+h2 {
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.error {
+    border-color: #f3c6c2;
+    background: #fdf3f2;
+    color: var(--warn);
+    white-space: pre-wrap;
+}
+
+/* Lesson list ------------------------------------------------------------ */
+
+.lesson-list ul {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.lesson-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-align: left;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    font: inherit;
+}
+
+    .lesson-button:hover {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+.lesson-icon {
+    font-size: 1.35rem;
+}
+
+.lesson-button-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.lesson-name {
+    font-weight: 600;
+}
+
+.lesson-meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
