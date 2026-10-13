@@ -79,52 +79,6 @@ h2 {
   white-space: pre-wrap;
 }
 
-/* Lesson list ------------------------------------------------------------ */
-
-.lesson-list ul {
-  list-style: none;
-  margin: 1rem 0 0;
-  padding: 0;
-  display: grid;
-  gap: 0.5rem;
-}
-
-.lesson-button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  text-align: left;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 0.85rem 1rem;
-  cursor: pointer;
-  font: inherit;
-}
-
-.lesson-button:hover {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-
-.lesson-icon {
-  font-size: 1.35rem;
-}
-
-.lesson-button-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.lesson-name {
-  font-weight: 600;
-}
-
-.lesson-meta {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
 
 /* Lesson view ------------------------------------------------------------ */
 
