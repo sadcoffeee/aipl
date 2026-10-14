@@ -57,8 +57,14 @@ export default function CollectionList({
                         <button
                             className="lesson-button"
                             disabled={collection.state === 'locked'}
-                            onClick={() => onOpen(collection.id)}
-                            title={
+                            onClick={() => {
+                                const lessonId =
+                                    collection.resumeLessonId ?? collection.lessons[0]?.id
+                                    // get recume id lesson stored in current collection ?? = use the left if not null
+                                if (lessonId) {
+                                    onOpen(lessonId)
+                                }
+                            }}                            title={
                                 collection.state === 'locked'
                                     ? 'Finish the previous collection first'
                                     : undefined
