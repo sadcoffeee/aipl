@@ -134,9 +134,9 @@ export default function App() {
           )
         ) : (
           <LessonView
-            onProgressChanged={refreshCourse}
+          onProgressChanged={refreshCourse}
           key={openLessonId}
-          lessons={lessons ?? []} //. denne og ned
+          lessons={course.collections.flatMap((collection) => collection.lessons)} //. denne og ned
           goalsOpen={goalsOpen}
           onToggleGoals={() => setGoalsOpen((open) => !open)}
           lessonId={openLessonId}

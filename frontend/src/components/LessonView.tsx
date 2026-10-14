@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import * as api from '../api'
-import type { Feedback, Lesson, LessonHints, LessonSummary } from '../types'
+import type { Feedback, Lesson, LessonHints, LessonSummary, CourseLesson } from '../types'
 import CompletionView from './CompletionView'
 import FeedbackPanel from './FeedbackPanel'
 import HintPanel from './HintPanel'
@@ -18,7 +18,7 @@ export default function LessonView({
   onToggleGoals, //:
 }: {
   lessonId: string
-  lessons: LessonSummary[] 
+  lessons: CourseLesson[] 
   onOpen: (lessonId: string) => void
   onBack: () => void
   onProgressChanged: () => void
@@ -81,7 +81,6 @@ export default function LessonView({
               
               <ol className="goals-list">
                 {[...lessons]
-                  .sort((a,b)=> a.order - b.order)
                   .map((step, index) => (
                     <li key={step.id}>
                       <button
@@ -89,14 +88,14 @@ export default function LessonView({
                         className={
                           step.id === lessonId ? 'goal-step active' : 'goal-step'
                         }
-                        disabled={step.locked}
+                        disabled={step.status === "locked"}
                         aria-current={step.id === lessonId ? 'step' : undefined}
                         onClick={() => { 
                           if (step.id !== lessonId) onOpen(step.id)
                         }}
                     >
                         <span className="goal-number">
-                          {step.locked ? '🔒' : index + 1}
+                          {step.status === "locked" ? '🔒' : index + 1}
                         </span>
                         
                         <span>{step.title}</span>
