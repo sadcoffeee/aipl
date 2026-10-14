@@ -16,6 +16,37 @@
       "lessons": [
         "l030-completion-addition"
       ]
+    },
+    {
+      "id": "c030-second-steps",
+      "title": "Third steps",
+      "description": "PLACEHOLDER 2",
+      "lessons": [
+        "l040-variable-ekg-intro",
+        "l041-parsons-ekg-variabler",
+        "l042-completion-threshold"
+      ]
+    },
+    {
+      "id": "c040-second-steps",
+      "title": "Fourth steps",
+      "description": "PLACEHOLDER 2",
+      "lessons": [
+        "l050-variable-open-file",
+        "l051-parsons-open-file-order",
+        "l052-parsons-syntex",
+        "l053-completion-ekg-syntax",
+        "l054-completion-ekg"
+      ]
+    },
+    {
+      "id": "c050-second-steps",
+      "title": "Fifth steps",
+      "description": "PLACEHOLDER 2",
+      "lessons": [
+        "l060-variable-open-file",
+        "l061-completion-open-file"
+      ]
     }
   ]
 }

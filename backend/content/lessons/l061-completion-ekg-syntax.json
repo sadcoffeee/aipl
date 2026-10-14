@@ -1,0 +1,36 @@
+{
+  "id": "l061-completion-open-file",
+  "title": "Åben filen",
+  "type": "completion",
+  "concepts": [
+    "file",
+    "variable",
+    "syntax"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": true,
+  "content": {
+    "description": "Udfyld den manglende dele af koden, vi skal igen åbne vores fil. Husk at Python er følsom overfor store og små bogstaver.\n Du skal bruge filen **EKG_data.txt**",
+    "language": "python",
+    "starterCode": "EKG_data = open(\"{{gap}}\", \"r\")"
+  },
+  "private": {
+    "referenceSolution": "EKG_data = open(\"EKG_data.txt\", \"r\")",
+
+      "behaviour": [
+        {
+          "variable": "EKG_data",
+          "expect": "number",
+          "allShouldSatisfy": "15",
+          "note": "Not functional in this skeleton. Sketch of the intended checks."
+        }
+      ],
+      "structure": [
+        {
+          "astCheck": "uses a comparison operator",
+          "onFail": "h-addition"
+        }
+      ]
+  },
+  "version": 1
+}

@@ -1,0 +1,42 @@
+{
+  "id": "l040-variable-ekg-intro",
+  "title": "EKG Variables",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "assignment"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "PLACEHOLDER CONTENT for layout testing.\n\nEn **variabel** er et navn, der kan gemme en værdi. Når vi arbejder med EKG-data, er det praktisk at gemme målinger i variabler, så vi kan bruge dem senere i programmet."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Her gemmes en EKG-måling i variablen `ekg`. Efterfølgende kan vi bruge variablen i stedet for at skrive værdien direkte. Når Python ser `print(ekg)`, finder den værdien, som er gemt i variablen, og viser den på skærmen."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "ekg = 0.8\nprint(ekg)",
+            "caption": "En EKG-måling gemmes i variablen ekg"
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1
+}

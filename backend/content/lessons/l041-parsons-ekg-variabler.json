@@ -1,0 +1,75 @@
+{
+  "id": "l041-parsons-ekg-variabler",
+  "title": "Vis EKG-målingerne",
+  "type": "parsons",
+  "concepts": [
+    "import",
+    "function-call",
+    "variable"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "PLACEHOLDER CONTENT for layout testing only.\n\n Du skal vælge de linjer der kan få programmet til at vælge EKG-kolonnen og vise EKG-målingerne.",
+    "language": "python",
+    "shuffleOptions": true,
+    "lines": [
+      {
+        "kind": "fixed",
+        "code": "import numpy as np"
+      },
+      {
+        "kind": "fixed",
+        "code": ""
+      },
+      {
+        "kind": "fixed",
+        "code": "signal = np.load(\"data_recording.csv\")"
+      },
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s2",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "print(ekg)"
+      },
+      {
+        "id": "o2",
+        "code": "ekg = data[:, 1]"
+      },
+      {
+        "id": "o3",
+        "code": "print(\"EKG-Målinger:\")"
+      }, 
+      {
+        "id": "o4",
+        "code": "ekg = data[:, 0]"
+      }, 
+      {
+        "id": "o5",
+        "code": "ekg = data[1,:]"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o2",
+      "s2": "o3"
+    },
+    "distractorNotes": {
+      "o3": "Denne linje printer en overskrift, den viser ikke selve EKG-målingerne",
+      "o4": "Kolonne 0 indeholder tid, ikke EKG",
+      "o5": "Dette vælger én række. opgaven skal vælge hele EKG-kolonnen"
+    }
+  },
+  "version": 1
+}
