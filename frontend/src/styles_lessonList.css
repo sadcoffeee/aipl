@@ -81,44 +81,47 @@ h2 {
 
 /* Lesson list ------------------------------------------------------------ */
 
+/* Styles the unordered list (<ul>) inside the lesson-list container */
 .lesson-list ul {
-  list-style: none;
-  margin: 1rem 0 0;
-  padding: 0;
-  display: grid;
-  gap: 0.5rem;
+    list-style: none; /* Removes  default bullet points*/
+    margin: 1rem 0 0; /*Adds space above the list*/
+    padding: 0; /* inner spacing around the list */
+
+    display: grid; /* CSS Grid to arrange the lesson items */
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* Creates x equal-width columns */
+    gap: 0.5rem; /* Sets the space between each lesson */
 }
 
 .lesson-button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  text-align: left;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 0.85rem 1rem;
-  cursor: pointer;
-  font: inherit;
+    width: 100%; /* button fill the available width of its container */
+    display: flex; /* Places icon and text side by side*/
+    align-items: center; /* Vertically centers the icon and text inside the button */
+    gap: 0.85rem; /* Sets the space between the icon and the text */
+    text-align: left; 
+    background: var(--panel); /* Sets the background using the --panel CSS variable */
+    border: 1px solid var(--line); /* Adds a 1px solid border using the --line variable */
+    border-radius: 10px; /* Rounds the corners of the button */
+    padding: 0.85rem 1rem; /* Adds inner spacing */
+    cursor: pointer; /* pointer cursor when hovering over the button */
+    font: inherit; /* Inherits the font family, size, weight and style from its parent */
 }
 
 .lesson-button:hover {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
+        border-color: var(--accent); /* Changes the border to the accent color */
+        background: var(--accent-soft); /* Changes the background to a softer accent color */
+    }
 
 .lesson-icon {
-  font-size: 1.35rem;
+    font-size: 1.35rem; /* Sets the size of the icon */
 }
 
 .lesson-button-text {
-  display: flex;
-  flex-direction: column;
+    display: flex; /* Uses Flexbox to arrange the text elements */
+    flex-direction: column; /* Stacks the title and metadata vertically */
 }
 
 .lesson-name {
-  font-weight: 600;
+    font-weight: 600; /* Makes the title semibold (slightly thicker than normal text) */
 }
 
 .lesson-meta {
