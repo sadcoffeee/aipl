@@ -1,11 +1,12 @@
 {
   "id": "l060-variable-open-file",
-  "title": "Open Variables",
+  "title": "Åben filen",
   "type": "instruction",
   "concepts": [
     "variable",
     "assignment",
-    "file"
+    "file",
+    "open"
   ],
   "estimatedMinutes": 3,
   "selfAssessment": false,

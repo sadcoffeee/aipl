@@ -1,12 +1,12 @@
 {
-  "id": "l052-parsons-syntex",
-  "title": "Gendkend korrekt syntax",
+  "id": "l066-parsons-order",
+  "title": "Korrekt rækkefølge",
   "type": "parsons",
   "concepts": [
     "file",
     "function-call",
     "variable",
-    "Syntax"
+    "order"
   ],
   "estimatedMinutes": 2,
   "selfAssessment": true,

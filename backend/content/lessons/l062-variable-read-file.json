@@ -1,10 +1,10 @@
 {
   "id": "l062-variable-read-file",
-  "title": "Open Variables",
+  "title": "Læs filen",
   "type": "instruction",
   "concepts": [
     "variable",
-    "assignment",
+    "read",
     "file"
   ],
   "estimatedMinutes": 3,

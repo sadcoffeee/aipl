@@ -42,10 +42,15 @@
     {
       "id": "c050-second-steps",
       "title": "Fifth steps",
-      "description": "PLACEHOLDER 2",
+      "description": "I denne lektion lærer vi om tre forskellige funktioner som kan bruges til at åbne, læse og printe en fil i Python",
       "lessons": [
         "l060-variable-open-file",
-        "l061-completion-open-file"
+        "l061-completion-ekg-syntax",
+        "l062-variable-read-file",
+        "l063-completion-read-file",
+        "l064-variable-print",
+        "l065-completion-print",
+        "l066-parsons-correct"
       ]
     }
   ]

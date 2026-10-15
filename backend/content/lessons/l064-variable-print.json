@@ -1,10 +1,10 @@
 {
-  "id": "l060-variable-open-file",
-  "title": "Open Variables",
+  "id": "l064-variable-print",
+  "title": "Print variablen",
   "type": "instruction",
   "concepts": [
     "variable",
-    "assignment",
+    "print",
     "file"
   ],
   "estimatedMinutes": 3,

@@ -1,11 +1,11 @@
 {
-  "id": "l061-completion-open-file",
-  "title": "Åben filen",
+  "id": "l065-completion-print",
+  "title": "Print filen",
   "type": "completion",
   "concepts": [
     "file",
     "variable",
-    "syntax"
+    "print"
   ],
   "estimatedMinutes": 3,
   "selfAssessment": true,

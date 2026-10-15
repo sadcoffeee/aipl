@@ -1,11 +1,11 @@
 {
-  "id": "l061-completion-open-file",
-  "title": "Åben filen",
+  "id": "l063-completion-read-file",
+  "title": "Læs filen",
   "type": "completion",
   "concepts": [
     "file",
     "variable",
-    "syntax"
+    "read"
   ],
   "estimatedMinutes": 3,
   "selfAssessment": true,
