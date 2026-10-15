@@ -165,15 +165,99 @@ h2 {
     line-height: 1.45;
 }
 
-/* Third row: progress */
+/* ----------------Third row: progress----------------- */
 .collection-progress {
-    font-size: 0.78rem;
-    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+
+    /*Line seperating desription and progress*/
     padding-top: 0.5rem;
     border-top: 1px solid var(--line);
 }
 
+/* Large circular progress icon */
+.progress-icon {
+    flex: 0 0 3.25rem;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #b9c0ca;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
 
+/* In-progress icon */
+.collection-progress--in_progress .progress-icon {
+background: #e8b547;
+}
+
+/* Completed icon */
+.collection-progress--completed .progress-icon {
+background: #48cf82;
+}
+
+/* Locked icon */
+.collection-progress--locked .progress-icon {
+background: #98a2b3;
+font-size: 1.3rem;
+}
+
+/* Progress label and bar */
+.progress-content {
+flex: 1;
+min-width: 0;
+display: flex;
+flex-direction: column;
+gap: 0.45rem;
+}
+
+/* Completion count */
+.progress-label {
+font-size: 0.95rem;
+font-weight: 700;
+line-height: 1.35;
+}
+
+/* Progress bar background */
+.progress-track {
+width: 100%;
+height: 9px;
+overflow: hidden;
+border-radius: 999px;
+background: #dfe3e8;
+}
+
+/* Filled progress */
+.progress-fill {
+height: 100%;
+border-radius: inherit;
+background: #70b765;
+transition: width 300ms ease;
+}
+
+/* State-specific bar colors */
+.collection-progress--in_progress .progress-fill {
+background: #2f5bea;
+}
+
+.collection-progress--locked .progress-fill {
+background: #98a2b3;
+}
+
+.collection-progress--completed .progress-fill {
+background: #70b765;
+}
+
+.progress-state {
+color: var(--muted);
+font-size: 0.75rem;
+}
 
 .lesson-button:hover {
         border-color: var(--accent); /* Changes the border to the accent color */

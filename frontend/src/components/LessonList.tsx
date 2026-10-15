@@ -77,10 +77,8 @@ export default function CollectionList({
                             }
                             <span className="lesson-icon" aria-hidden="true">
                                 {collection.state === 'locked'
-                                    ? '🔒'
-                                    : collection.state === 'completed'
-                                        ? '✅'
-                                        : '📚'}
+                                    ? '🔒' : '📚'} 
+                                   
                             </span>
 
                             {
@@ -112,12 +110,45 @@ export default function CollectionList({
                                 )}
 
                                 
-                                {/* Third row: progress */}
-                                <span className="collection-progress">
-                                    {collection.progress.completed} of{' '}
-                                    {collection.progress.total} lessons completed
-                                    {isAdmin ? ` · ${collection.state}` : ''}
-                                </span>
+                                {/* Third row: progress, add another class based on the collection state*/}
+                                <div className={`collection-progress collection-progress--${collection.state}`}>
+                                    {/*in progress icon      condition ? valueIfTrue : valueIfFalse*/}
+                                    <span className="progress-icon" aria-hidden="true">
+                                        {collection.state === 'completed'
+                                            ? '✓'
+                                            : collection.state === 'in_progress'
+                                                ? '▶'
+                                                : collection.state === 'locked'
+                                                    ? '🚫'
+                                                    : '▶'}
+                                    </span>
+                                    { /**/}
+                                    <div className="progress-content">
+                                        { /*display the compeltion count, compelted vs total*/}
+                                        <span className="progress-label">
+                                            {collection.progress.completed} / {collection.progress.total}
+                                            {' lektioner gennemført'}
+                                        </span>
+
+                                        {/*container for progress bar*/}
+                                        <div className="progress-track">
+                                            <div
+                                                className="progress-fill"
+
+                                                style={{
+                                                    width: `${collection.progress.total > 0 
+                                                            ? (collection.progress.completed /
+                                                                collection.progress.total) * 100
+                                                            : 0
+                                                        }%`,
+                                                }}
+                                            />
+                                        </div>
+
+                                       
+
+                                    </div>
+                                </div>
                             </span>
 
                         </button>
