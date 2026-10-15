@@ -1,25 +1,25 @@
 {
-  "id": "l061-completion-open-file",
-  "title": "Åben filen",
+  "id": "l071-completion-assign",
+  "title": "Assign filen",
   "type": "completion",
   "concepts": [
     "file",
     "variable",
-    "open"
+    "assign"
   ],
   "estimatedMinutes": 3,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende dele af koden, vi skal igen åbne vores fil. Husk at Python er følsom overfor store og små bogstaver.\n Du skal bruge filen **EKG_data.txt**",
+    "description": "Udfyld den manglende dele af koden, vi skal fortælle python at navnet på variablen ekg, skal indeholde 0.8",
     "language": "python",
-    "starterCode": "EKG_data = open(\"{{gap}}\", \"r\")"
+    "starterCode": "ekg {{gap}} 0.8\nprint(ekg)"
   },
   "private": {
-    "referenceSolution": "EKG_data = open(\"EKG_data.txt\", \"r\")",
+    "referenceSolution": "ekg = 0.8\nprint(ekg)",
 
       "behaviour": [
         {
-          "variable": "EKG_data.txt",
+          "variable": "=",
           "expect": "number",
           "allShouldSatisfy": "15",
           "note": "Not functional in this skeleton. Sketch of the intended checks."

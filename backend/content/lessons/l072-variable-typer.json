@@ -1,11 +1,10 @@
 {
-  "id": "l064-variable-print",
-  "title": "Print variablen",
+  "id": "l072-variable-typer",
+  "title": "Variabel typer",
   "type": "instruction",
   "concepts": [
     "variable",
-    "print",
-    "file"
+    "types"
   ],
   "estimatedMinutes": 3,
   "selfAssessment": false,
@@ -15,7 +14,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Nu har vi fået dataene ind i Python, det sidste vi mangler at gøre er at vise dem."
+            "markdown": "Variabler kan indeholde forskellige typer værdier. Hvilken type værdi en variabel indeholder, kaldes dens **datatype**."
           }
         ]
       },
@@ -27,13 +26,49 @@
         "items": [
           {
             "type": "text",
-            "markdown": "print () er en funktion, der bruges til at vise noget i konsollen."
+            "markdown": "Tal med decimaler bruges ofte til målinger. I eksemplet gemmes en EKG-måling i variablen **ekg**."
           },
           {
             "type": "code",
             "language": "python",
-            "code": "EKG_data = open(\"EKG_data.txt\",\"r\");\n print(EKG_data.read())",
-            "caption": "Tekstfilen åbnes og indholdet vises i konsollen"
+            "code": "ekg = 0.8\nprint(ekg)",
+            "caption": "Variablen indeholder et decimaltal."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Tekst gemmes mellem citationstegn. Python behandler tekst anderledes end tal. Dette kaldes en string"
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "filnavn = \"EKG_data.txt\"\nprint(filnavn)",
+            "caption": "Variablen indeholder tekst."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Variabler kan også indeholde mere komplekse objekter. Når vi åbner en fil med **open()**, gemmes den åbne fil i en variabel."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "EKG_data = open(\"EKG_data.txt\", \"r\")\nprint(EKG_data.read())",
+            "caption": "Variablen indeholder en åben fil."
           }
         ]
       },
@@ -41,15 +76,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Konsollen er det område, hvor Python viser resultaterne af programmet.​"
-          }
-        ]
-      },
-      {
-        "items": [
-          {
-            "type": "text",
-            "markdown": "`open()` er en funktion som bruges til at åbne en fil. Filen der skal bruges skal stå imellem to citations tegn. Filens navn skal være præcis som filen er navgivet på din computer. Hvis filen hedder EKG_10Hz.txt virker EKG10Hz.txt ikke. \n Det lille r imellem citations tegnene står for `read` og fortæller python vi gerne vil læse filen. \n Når programmet bliver kørt, vil indholdet af filen blive vist i konsollen.​ Konsollen bruges både til at vise resultater og fejlmeddelelser.​"
+            "markdown": "Det er vigtigt at huske at navnet på variablen er case sensitiv, derfor skal man skrive det præcise navn når man skal bruge variablen."
           }
         ]
       }

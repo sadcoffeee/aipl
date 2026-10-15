@@ -52,6 +52,17 @@
         "l065-completion-print",
         "l066-parsons-correct"
       ]
+    },
+    {
+      "id": "c040-second-steps",
+      "title": "Fourth steps",
+      "description": "I denne lektion lærer vi hvordan man kan assigne en variabel",
+      "lessons": [
+        "l070-variable-assign",
+        "l071-completion-assign",
+        "l072-variable-typer",
+        "l073-parsons-correct"
+      ]
     }
   ]
 }

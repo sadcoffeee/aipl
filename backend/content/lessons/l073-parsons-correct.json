@@ -1,5 +1,5 @@
 {
-  "id": "l066-parsons-order",
+  "id": "l073-parsons-order",
   "title": "Korrekt rækkefølge",
   "type": "parsons",
   "concepts": [
@@ -11,7 +11,7 @@
   "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
-    "description": "I denne opgave skal du sætte koden i den rigtige rækkefølge. Først skal vi lave en variable hvor vi åbner filen, dernæst skal den læses og til sidst printes til konsollen",
+    "description": "I denne opgave skal du først finde den linje kode der assigner en int til en variabel og i næste boks skal vi assigne en string til en variabel",
     "language": "python",
     "shuffleOptions": true,
     "lines": [
@@ -24,33 +24,35 @@
         "kind": "slot",
         "id": "s2",
         "indent": 0
-      },
-      {
-        "kind": "slot",
-        "id": "s3",
-        "indent": 0
       }
     ],
     "options": [
       {
         "id": "o1",
-        "code": "EKG_data = (\"EKG.txt\",\"r\")"
+        "code": "ekg = 0.8"
       },
       {
         "id": "o2",
-        "code": "indhold = EKG_data.read()"
+        "code": "ekg = \"EKG_data.txt\""
       },
       {
         "id": "o3",
-        "code": "print(indhold)"
+        "code": "ekg = \"0.8\""
+      },
+      {
+        "id": "o4",
+        "code": "ekg = EKG_data.txt"
       }
     ]
   },
   "private": {
     "solution": {
       "s1": "o1",
-      "s2": "o2",
-      "s3": "o3"
+      "s2": "o2"
+    },
+    "distractorNotes": {
+      "o3": "Værdien står i citationstegn og bliver derfor gemt som string i stedet for et tal.",
+      "o4": "Tekst skal stå i citationstegn. Uden citationstegn tror Python, at EKG_data.txt er et variabelnavn."
     }
   },
   "version": 1
