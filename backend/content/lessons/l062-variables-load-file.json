@@ -1,0 +1,59 @@
+{
+  "id": "l060-variable-open-file",
+  "title": "Open Variables",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "assignment",
+    "file"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Nu har vi fået dataene ind i Python, det sidste vi mangler at gøre er at vise dem."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "print () er en funktion, der bruges til at vise noget i konsollen."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "EKG_data = open(\"EKG_data.txt\",\"r\");\n print(EKG_data.read())",
+            "caption": "Tekstfilen åbnes og indholdet vises i konsollen"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Konsollen er det område, hvor Python viser resultaterne af programmet.​"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "`open()` er en funktion som bruges til at åbne en fil. Filen der skal bruges skal stå imellem to citations tegn. Filens navn skal være præcis som filen er navgivet på din computer. Hvis filen hedder EKG_10Hz.txt virker EKG10Hz.txt ikke. \n Det lille r imellem citations tegnene står for `read` og fortæller python vi gerne vil læse filen. \n Når programmet bliver kørt, vil indholdet af filen blive vist i konsollen.​ Konsollen bruges både til at vise resultater og fejlmeddelelser.​"
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1
+}

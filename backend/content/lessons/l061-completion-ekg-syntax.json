@@ -19,7 +19,7 @@
 
       "behaviour": [
         {
-          "variable": "EKG_data",
+          "variable": "EKG_data.txt",
           "expect": "number",
           "allShouldSatisfy": "15",
           "note": "Not functional in this skeleton. Sketch of the intended checks."

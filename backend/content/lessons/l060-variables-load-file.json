@@ -1,5 +1,5 @@
 {
-  "id": "l060-variable-open-file",
+  "id": "l062-variable-read-file",
   "title": "Open Variables",
   "type": "instruction",
   "concepts": [
@@ -15,7 +15,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "I denne lektion kigger vi på hvordan man i Python kan åbne en fil, som vi senere kan arbejde med.\n\n I dette program findes filen: `EKG_data.txt`. Filen indeholder to kolonner: \n Tid - Angivet i sekunder \n EKG - den målte spænding i milivolt(mV). Din opgave er at bruge Python til at åbne filen, læse dens indhold og vise målingerne i konsollen."
+            "markdown": "Nu har vi åbnet filen, men vi skal også fortælle Python, at vi gerne vil læse det, der står i den.​"
           }
         ]
       },
@@ -27,12 +27,12 @@
         "items": [
           {
             "type": "text",
-            "markdown": "For at fortælle Python hvilken fil der skal arbejdes med skal man skrive følgende som ses på højre side."
+            "markdown": "Igen bruger vi en variabel, som vi nu kalder Indhold, denne variabel skal gemme det, som står inde i filen..read() er en funktion der læser hele indholdet af filen. Punktummet er vigtigt og bruges til at fortælle at vi vil bruge read() på den fil som ligger i vores variabel EKGData​​"
           },
           {
             "type": "code",
             "language": "python",
-            "code": "EKG_data = open(\"EKG_data.txt\",\"r\");\n print(EKG_data.read())",
+            "code": "indhold = open(\"EKG_data.txt\",\"r\");\n print(EKG_data.read())",
             "caption": "Tekstfilen åbnes og indholdet vises i konsollen"
           }
         ]
@@ -41,15 +41,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "`EKG_data` er navnet på en variable. \nEn variabel er en boks hvor man kan gemme noget, som man gerne vil bruge igen senere\n Du bestemmer selv hvad din variabel skal hedde, det er dog vigtigt at skrive navnet på samme måde.​"
-          }
-        ]
-      },
-      {
-        "items": [
-          {
-            "type": "text",
-            "markdown": "`open()` er en funktion som bruges til at åbne en fil. Filen der skal bruges skal stå imellem to citations tegn. Filens navn skal være præcis som filen er navgivet på din computer. Hvis filen hedder EKG_10Hz.txt virker EKG10Hz.txt ikke. \n Det lille r imellem citations tegnene står for `read` og fortæller python vi gerne vil læse filen."
+            "markdown": "Efter denne linje kode indeholder variablen Indhold teksen fra EKG-filen​"
           }
         ]
       }
