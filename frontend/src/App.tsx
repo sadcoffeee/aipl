@@ -29,6 +29,7 @@ export default function App() {
     setUser(null)
     setCourse(null)
     setOpenLessonId(null)
+    setGoalsOpen(false) 
   }, [])
 
   const refreshCourse = useCallback(() => {
@@ -140,7 +141,7 @@ export default function App() {
           <LessonView
           onProgressChanged={refreshCourse}
           key={openLessonId}
-          lessons={course.collections.flatMap((collection) => collection.lessons)} //. denne og ned
+          collections={course?.collections ?? []} //. denne og ned
           goalsOpen={goalsOpen}
           onToggleGoals={() => setGoalsOpen((open) => !open)}
           lessonId={openLessonId}
@@ -151,6 +152,7 @@ export default function App() {
           }}
             onBack={() => {
               api.logEvent({ lessonId: openLessonId, type: 'lesson_closed' })
+              setGoalsOpen(false) //sørger for at goalsbaren lukker når de går til forsiden
               setOpenLessonId(null)
               // Re-fetch so a newly unlocked lesson appears without a reload.
               refreshCourse()

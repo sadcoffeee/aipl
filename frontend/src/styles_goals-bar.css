@@ -173,3 +173,63 @@
   align-items: center;
   justify-content: center;
 }
+
+.goals-progress {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.goals-bar details + details {
+  border-top: 1px solid var(--line);
+}
+
+
+.goal-step .goal-number[data-status='completed'] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.goal-step .goal-number[data-status='attempted'] {
+  background: #fff0d9;
+  color: #9a6725;
+  padding-bottom: 2.5px;
+}
+
+.goal-step .goal-number[data-status='locked'] {
+  background: #e5e7eb;
+}
+
+
+.collection-heading-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.collection-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #eef0f3;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.collection-status[data-state='completed'] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.collection-status[data-state='in_progress'] {
+  background: #fff0d9;
+  color: #9a6725;
+  padding-bottom: 3px;
+}

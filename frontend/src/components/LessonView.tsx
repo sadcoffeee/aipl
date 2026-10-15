@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import * as api from '../api'
-import type { Feedback, Lesson, LessonHints, LessonSummary, CourseLesson } from '../types'
+import type { Feedback, Lesson, LessonHints, Collection } from '../types'
 import CompletionView from './CompletionView'
 import FeedbackPanel from './FeedbackPanel'
 import HintPanel from './HintPanel'
@@ -10,20 +10,20 @@ import '../styles_goals-bar.css'
 
 export default function LessonView({
   lessonId,
-  lessons,
+  collections,
   onOpen,
   onBack,
   onProgressChanged,
-  goalsOpen, //:
-  onToggleGoals, //:
+  goalsOpen, 
+  onToggleGoals, 
 }: {
   lessonId: string
-  lessons: CourseLesson[] 
+  collections: Collection[] 
   onOpen: (lessonId: string) => void
   onBack: () => void
   onProgressChanged: () => void
-  goalsOpen: boolean //:
-  onToggleGoals: () => void //.
+  goalsOpen: boolean 
+  onToggleGoals: () => void 
 }) {
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [hints, setHints] = useState<LessonHints | null>(null)
@@ -74,36 +74,78 @@ export default function LessonView({
               hidden={!goalsOpen}
             >
             
-            <details open>
-              <summary className="goals-heading">
-               Arbejd med EKG-data
-              </summary>
-              
-              <ol className="goals-list">
-                {[...lessons]
-                  .map((step, index) => (
-                    <li key={step.id}>
-                      <button
-                        type="button"
-                        className={
-                          step.id === lessonId ? 'goal-step active' : 'goal-step'
-                        }
-                        disabled={step.status === "locked"}
-                        aria-current={step.id === lessonId ? 'step' : undefined}
-                        onClick={() => { 
-                          if (step.id !== lessonId) onOpen(step.id)
-                        }}
+              {collections.map((collection) => (
+                <details
+                  key={collection.id}
+                  open={collection.lessons.some((step) => step.id === lessonId)}
+                >
+                  
+                <summary className="goals-heading">
+                  <span className="collection-heading-text">
+                    <span
+                      className="collection-status"
+                      data-state={collection.state}
+                      aria-label={collection.state.replace('_', ' ')}
+                      title={collection.state.replace('_', ' ')}
                     >
-                        <span className="goal-number">
-                          {step.status === "locked" ? '🔒' : index + 1}
-                        </span>
-                        
-                        <span>{step.title}</span>
-                      </button>
-                    </li>
-                ))}
-               </ol>
-           </details>
+                      {collection.state === 'completed'
+                        ? '✓'
+                        : collection.state === 'in_progress'
+                          ? '↻'
+                          : collection.state === 'locked'
+                            ? '🔒'
+                            : '○'}
+                    </span>
+
+                    <span>{collection.title}</span>
+                  </span>
+                </summary>
+
+
+
+                  <p className="goals-progress">
+                    {collection.progress.completed} of {collection.progress.total} lessons completed
+                  </p>
+
+                  <ol className="goals-list">
+                    {[...collection.lessons]
+                      .sort((a, b) => a.position - b.position)
+                      .map((step, index) => (
+                        <li key={step.id}>
+                          <button
+                            type="button"
+                            className={
+                              step.id === lessonId ? 'goal-step active' : 'goal-step'
+                            }
+                            disabled={
+                              collection.state === 'locked' || step.status === 'locked'
+                            }
+                            aria-current={step.id === lessonId ? 'step' : undefined}
+                            onClick={() => {
+                              if (step.id !== lessonId) onOpen(step.id)
+                            }}
+                          >
+                            <span
+                              className="goal-number"
+                              data-status={collection.state === 'locked' ? 'locked' : step.status}
+                              title={collection.state === 'locked' ? 'locked' : step.status}
+                            >
+                              {collection.state === 'locked' || step.status === 'locked'
+                                ? '🔒'
+                                : step.status === 'completed'
+                                  ? '✓'
+                                  : step.status === 'attempted'
+                                    ? '↻'
+                                    : index + 1}
+                            </span>
+
+                            <span>{step.title}</span>
+                          </button>
+                        </li>
+                      ))}
+                  </ol>
+                </details>
+              ))}
           </nav>
           </div>
 
