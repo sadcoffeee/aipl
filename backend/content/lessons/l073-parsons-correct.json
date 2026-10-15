@@ -1,0 +1,57 @@
+{
+  "id": "l066-parsons-order",
+  "title": "Korrekt rækkefølge",
+  "type": "parsons",
+  "concepts": [
+    "file",
+    "function-call",
+    "variable",
+    "order"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "I denne opgave skal du sætte koden i den rigtige rækkefølge. Først skal vi lave en variable hvor vi åbner filen, dernæst skal den læses og til sidst printes til konsollen",
+    "language": "python",
+    "shuffleOptions": true,
+    "lines": [
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s2",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s3",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "EKG_data = (\"EKG.txt\",\"r\")"
+      },
+      {
+        "id": "o2",
+        "code": "indhold = EKG_data.read()"
+      },
+      {
+        "id": "o3",
+        "code": "print(indhold)"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o1",
+      "s2": "o2",
+      "s3": "o3"
+    }
+  },
+  "version": 1
+}
