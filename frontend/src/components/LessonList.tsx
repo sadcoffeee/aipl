@@ -60,11 +60,13 @@ export default function CollectionList({
                             onClick={() => {
                                 const lessonId =
                                     collection.resumeLessonId ?? collection.lessons[0]?.id
-                                    // get recume id lesson stored in current collection ?? = use the left if not null
+                                {/*get recume id lesson stored in current collection ?? = use the left if not null*/}
                                 if (lessonId) {
                                     onOpen(lessonId)
                                 }
-                            }}                            title={
+                            }}
+
+                            title={
                                 collection.state === 'locked'
                                     ? 'Finish the previous collection first'
                                     : undefined
@@ -73,10 +75,7 @@ export default function CollectionList({
                                 //choose which icon to display, if locked = lock
                                 //aria-hidden="true" -> tell screen reader to ignore icons
                             }
-                            <span
-                                className="lesson-icon"
-                                aria-hidden="true"
-                            >
+                            <span className="lesson-icon" aria-hidden="true">
                                 {collection.state === 'locked'
                                     ? '🔒'
                                     : collection.state === 'completed'
@@ -88,23 +87,39 @@ export default function CollectionList({
                                 //display lesson title and meta data
                                 //read lesson type, estimated duration, version number
                             }
+                            
                             <span className="lesson-button-text">
-                                <span className="lesson-name">
-                                    {collection.title}
+                                {/* First row: title and estimated time */}
+                                <span className="collection-heading">
+                                    <span className="collection-name">
+                                        {collection.title}
+                                    </span>
+
+                                    {/*display and calculate estimated time for entire collection, by adding all lessons estimated times*/}                                    
+                                    <span className="collection-time">
+                                        {collection.lessons.reduce(
+                                            (total, lesson) => total + (lesson.estimatedMinutes ?? 0),
+                                            0
+                                        )} min
+                                    </span>
                                 </span>
 
+                                {/* Second row: description */}
                                 {collection.description && (
-                                    <span className="lesson-meta">
+                                    <span className="collection-desription">
                                         {collection.description}
                                     </span>
                                 )}
 
-                                <span className="lesson-meta">
+                                
+                                {/* Third row: progress */}
+                                <span className="collection-progress">
                                     {collection.progress.completed} of{' '}
                                     {collection.progress.total} lessons completed
                                     {isAdmin ? ` · ${collection.state}` : ''}
                                 </span>
                             </span>
+
                         </button>
                     </li>
                 ))}

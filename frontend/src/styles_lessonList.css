@@ -79,7 +79,7 @@ h2 {
   white-space: pre-wrap;
 }
 
-/* Lesson list ------------------------------------------------------------ */
+/* collection list ------------------------------------------------------------ */
 
 /* Styles the unordered list (<ul>) inside the lesson-list container */
 .lesson-list ul {
@@ -88,44 +88,96 @@ h2 {
     padding: 0; /* inner spacing around the list */
 
     display: grid; /* CSS Grid to arrange the lesson items */
-    grid-template-columns: repeat(3, minmax(0, 1fr)); /* Creates x equal-width columns */
-    gap: 0.5rem; /* Sets the space between each lesson */
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Creates x equal-width columns */
+    gap: 0.75rem; /* Sets the space between each lesson */
 }
 
+/*each collection card*/
 .lesson-button {
     width: 100%; /* button fill the available width of its container */
+    min-width: 0;
     display: flex; /* Places icon and text side by side*/
-    align-items: center; /* Vertically centers the icon and text inside the button */
+    align-items: flex-start;
     gap: 0.85rem; /* Sets the space between the icon and the text */
-    text-align: left; 
+    min-height: 250px;
+    text-align: left;
+    font: inherit; /* Inherits the font family, size, weight and style from its parent */
+
+    color: var(--ink);
     background: var(--panel); /* Sets the background using the --panel CSS variable */
     border: 1px solid var(--line); /* Adds a 1px solid border using the --line variable */
     border-radius: 10px; /* Rounds the corners of the button */
-    padding: 0.85rem 1rem; /* Adds inner spacing */
+    padding: 1rem; /* Adds inner spacing */
     cursor: pointer; /* pointer cursor when hovering over the button */
-    font: inherit; /* Inherits the font family, size, weight and style from its parent */
+    transition: border-color 150ms ease, 
+                background-color 150ms ease,
+                box-shadow 150ms ease;
 }
+
+/* Icon on the left */
+.lesson-icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    font-size: 2rem; /* Sets the size of the icon */
+}
+
+/* Content to the right of the icon */
+.lesson-button-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* First row: title on the left, time on the right */
+.collection-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.collection-name {
+    min-width: 0;
+    font-weight: 650;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    font-size: 2.2rem;
+}
+
+/* Estimated duration */
+.collection-time {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 1rem;
+    white-space: nowrap;
+    line-height: 1.5;
+}
+
+/* Second row: description */
+.collection-description {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+/* Third row: progress */
+.collection-progress {
+    font-size: 0.78rem;
+    color: var(--muted);
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--line);
+}
+
+
 
 .lesson-button:hover {
         border-color: var(--accent); /* Changes the border to the accent color */
         background: var(--accent-soft); /* Changes the background to a softer accent color */
     }
 
-.lesson-icon {
-    font-size: 1.35rem; /* Sets the size of the icon */
-}
-
-.lesson-button-text {
-    display: flex; /* Uses Flexbox to arrange the text elements */
-    flex-direction: column; /* Stacks the title and metadata vertically */
-}
-
-.lesson-name {
-    font-weight: 600; /* Makes the title semibold (slightly thicker than normal text) */
-}
-
-.lesson-meta {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
 
