@@ -10,7 +10,7 @@
   "estimatedMinutes": 3,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende dele af koden, vi skal læse indeholdet af EKG_data. Husk at Python er følsom overfor store og små bogstaver.",
+    "description": "Udfyld den manglende del af koden. Vi skal **læse** indeholdet af EKG_data. Derfor skal vi bruge en funktion som kan læse indeholdet af en variabel. Husk at Python er case sensitiv.",
     "language": "python",
     "starterCode": "indhold = EKG_data.{{gap}}()"
   },

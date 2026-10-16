@@ -11,7 +11,7 @@
   "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
-    "description": "I denne opgave skal du først finde den linje kode der assigner en int til en variabel og i næste boks skal vi assigne en string til en variabel",
+    "description": "I denne opgave skal du først finde den linje kode der assigner et decimaltal til en variabel. I næste boks skal vi assigne tekst til en variabel",
     "language": "python",
     "shuffleOptions": true,
     "lines": [

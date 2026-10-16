@@ -27,7 +27,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Igen bruger vi en variabel, som vi nu kalder Indhold, denne variabel skal gemme det, som står inde i filen..read() er en funktion der læser hele indholdet af filen. Punktummet er vigtigt og bruges til at fortælle at vi vil bruge read() på den fil som ligger i vores variabel EKGData​​"
+            "markdown": "Igen bruger vi en variabel, som vi nu kalder `indhold`, denne variabel skal gemme det, som står inde i filen. `.read()` er en funktion der læser hele indholdet af filen. \n Punktummet før `read()` er vigtigt og bruges til at fortælle at vi vil bruge `.read()` på den fil som ligger i vores variabel `EKG_data`​​ (se anden linje af koden)"
           },
           {
             "type": "code",
@@ -41,7 +41,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Efter denne linje kode indeholder variablen Indhold teksen fra EKG-filen​"
+            "markdown": "Efter denne linje kode indeholder variablen `indhold` teksten fra EKG-filen​"
           }
         ]
       }

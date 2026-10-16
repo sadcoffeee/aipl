@@ -42,7 +42,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "`EKG_data` er navnet på en variable. \nEn variabel er en boks hvor man kan gemme noget, som man gerne vil bruge igen senere\n Du bestemmer selv hvad din variabel skal hedde, det er dog vigtigt at skrive navnet på samme måde.​"
+            "markdown": "`EKG_data` er navnet på en variable. \nEn variabel er en boks hvor man kan gemme noget, som man gerne vil bruge igen senere\n Du bestemmer selv hvad din variabel skal hedde, det er dog vigtigt at skrive navnet på samme måde da Python er case sensitiv.​"
           }
         ]
       },

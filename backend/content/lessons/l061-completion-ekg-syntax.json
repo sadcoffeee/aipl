@@ -10,7 +10,7 @@
   "estimatedMinutes": 3,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende dele af koden, vi skal igen åbne vores fil. Husk at Python er følsom overfor store og små bogstaver.\n Du skal bruge filen **EKG_data.txt**",
+    "description": "Udfyld den manglende dele af koden, vi skal **åbne** vores fil. Husk at Python er case sensitiv.\n Du skal bruge filen **EKG_data.txt**",
     "language": "python",
     "starterCode": "EKG_data = open(\"{{gap}}\", \"r\")"
   },

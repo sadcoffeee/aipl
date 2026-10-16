@@ -10,7 +10,7 @@
   "estimatedMinutes": 3,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende dele af koden, vi skal fortælle python at navnet på variablen ekg, skal indeholde 0.8",
+    "description": "Udfyld den manglende del af koden. Vi skal fortælle python at variablen med navnet ekg, skal indeholde 0.8",
     "language": "python",
     "starterCode": "ekg {{gap}} 0.8\nprint(ekg)"
   },

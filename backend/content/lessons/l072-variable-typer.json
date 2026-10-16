@@ -26,7 +26,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Tal med decimaler bruges ofte til målinger. I eksemplet gemmes en EKG-måling i variablen **ekg**."
+            "markdown": "Tal med decimaler bruges ofte til målinger. Decimal tal er altid i punktum når vi skriver kode. I eksemplet gemmes en EKG-måling i variablen **ekg**."
           },
           {
             "type": "code",
@@ -44,7 +44,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Tekst gemmes mellem citationstegn. Python behandler tekst anderledes end tal. Dette kaldes en string"
+            "markdown": "Tekst gemmes mellem citationstegn. Dette kaldes en string. Alt inde i citationstegnene kan behandles som tekst selv hvis det er tal. "
           },
           {
             "type": "code",
@@ -76,7 +76,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Det er vigtigt at huske at navnet på variablen er case sensitiv, derfor skal man skrive det præcise navn når man skal bruge variablen."
+            "markdown": "Det er vigtigt at huske at navnet på variablen er case sensitiv, derfor skal man skrive det præcise navn når man skal bruge variablen. Hvis variablen er kaldt EKG_data, kan man ikke bruge ekg_data til at kalde variablen. Dette vil give fejl."
           }
         ]
       }
