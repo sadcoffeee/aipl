@@ -109,9 +109,9 @@ h2 {
     border-radius: 10px; /* Rounds the corners of the button */
     padding: 1rem; /* Adds inner spacing */
     cursor: pointer; /* pointer cursor when hovering over the button */
-    transition: border-color 150ms ease, 
-                background-color 150ms ease,
-                box-shadow 150ms ease;
+    transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+    position:relative; /*needed for feedforward*/
+    padding-bottom:3rem; /*padding for feedforward*/
 }
 
 /* Icon on the left */
@@ -179,33 +179,42 @@ h2 {
 
 /* Large circular progress icon */
 .progress-icon {
-    flex: 0 0 3.25rem;
+    flex: 0 0 3.25rem; /*keep icon consistent size*/
     width: 3.25rem;
     height: 3.25rem;
-    border-radius: 50%;
+    border-radius: 50%; /*make round*/
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center; /*vertical center*/
+    justify-content: center; /*horixontally center*/
     background: #b9c0ca;
-    color: white;
-    font-size: 1.8rem;
-    font-weight: 700;
+    color: white; /*set color of icon to write*/
+    font-size: 1.8rem; /*control the size of the icon*/
+    font-weight: 700; /*how thick the icon is*/
+    
 }
 
 /* In-progress icon */
 .collection-progress--in_progress .progress-icon {
-background: #e8b547;
+    background: #e8b547; /*yellow*/
+    line-height: 1;
+    padding-bottom: 3px; /*moves a little up*/
 }
 
 /* Completed icon */
 .collection-progress--completed .progress-icon {
-background: #48cf82;
+    background: #70b765; /*green*/
 }
 
+/*not started icon*/
+.collection-progress--not_started .progress-icon {
+    background: #98a2b3;
+    line-height: 1;
+    padding-bottom: 3px; /*moves a little up*/
+}
 /* Locked icon */
 .collection-progress--locked .progress-icon {
-background: #98a2b3;
-font-size: 1.3rem;
+    background: #98a2b3;
+    font-size: 1.3rem;
 }
 
 /* Progress label and bar */
@@ -243,15 +252,25 @@ transition: width 300ms ease;
 
 /* State-specific bar colors */
 .collection-progress--in_progress .progress-fill {
-background: #2f5bea;
+    background: #e8b547; /*yellow*/
 }
 
 .collection-progress--locked .progress-fill {
-background: #98a2b3;
+background: #98a2b3; /*grey*/
 }
 
 .collection-progress--completed .progress-fill {
-background: #70b765;
+background: #70b765; /*green*/
+}
+
+/*feedforward*/
+.feedforward-container {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.75rem;
+    text-align: right;
+    color: var(--muted);
+    font-weight: 500;
 }
 
 .progress-state {
