@@ -77,7 +77,7 @@ export default function CollectionList({
                             }
                             <span className="lesson-icon" aria-hidden="true">
                                 {collection.state === 'locked'
-                                    ? '🔒' : '📚'} 
+                                    ? '🔒' : '📖'} 
                                    
                             </span>
 
@@ -104,7 +104,7 @@ export default function CollectionList({
 
                                 {/* Second row: description */}
                                 {collection.description && (
-                                    <span className="collection-desription">
+                                    <span className="collection-description">
                                         {collection.description}
                                     </span>
                                 )}
@@ -112,15 +112,18 @@ export default function CollectionList({
                                 
                                 {/* Third row: progress, add another class based on the collection state*/}
                                 <div className={`collection-progress collection-progress--${collection.state}`}>
+
                                     {/*in progress icon      condition ? valueIfTrue : valueIfFalse*/}
                                     <span className="progress-icon" aria-hidden="true">
                                         {collection.state === 'completed'
                                             ? '✓'
                                             : collection.state === 'in_progress'
-                                                ? '▶'
-                                                : collection.state === 'locked'
-                                                    ? '🚫'
-                                                    : '▶'}
+                                                ? '▶︎'
+                                                : collection.state === 'not_started'
+                                                    ? '▶︎'
+                                                        : collection.state === 'locked'
+                                                         ? '✖'
+                                                         : '▶︎'}
                                     </span>
                                     { /**/}
                                     <div className="progress-content">
@@ -143,12 +146,24 @@ export default function CollectionList({
                                                         }%`,
                                                 }}
                                             />
-                                        </div>
-
-                                       
-
+                                        </div>                
                                     </div>
                                 </div>
+                            </span>
+
+                            {/*feedforward -> what happens if i press*/}
+                            <span className="feedforward-container">
+                                <span className="feedforward" aria-hidden="true">
+                                    {collection.state === 'completed'
+                                        ? 'Lav opgaven igen ↻'
+                                        : collection.state === 'in_progress'
+                                            ? 'Fortsæt med nuværende opgave →'
+                                            : collection.state === 'not_started'
+                                                ? 'Påbegynd opgaven →'
+                                                : collection.state === 'locked'
+                                                    ? 'færdiggør tideligere opgaver'
+                                                    : 'Fortsæt med nuværende opgave →'}
+                                </span>
                             </span>
 
                         </button>
