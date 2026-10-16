@@ -54,8 +54,8 @@
       ]
     },
     {
-      "id": "c040-second-steps",
-      "title": "Fourth steps",
+      "id": "c060-second-steps",
+      "title": "Sitxh steps",
       "description": "I denne lektion lærer vi hvordan man kan assigne en variabel",
       "lessons": [
         "l070-variable-assign",
