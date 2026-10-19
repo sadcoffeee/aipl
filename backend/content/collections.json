@@ -1,67 +1,29 @@
 {
   "collections": [
+    
     {
-      "id": "c010-first-steps",
-      "title": "First steps",
-      "description": "PLACEHOLDER 1",
+      "id": "c010-variabler",
+      "title": "Variabler i Python",
+      "description": "I denne lektion bliver vi introdukseret til hvad en variabel er, hvad der er vigtigt når man skal lave en og hvilke forskellige typer der findes som vi kan bruge til de næste lektioner.",
       "lessons": [
-        "l010-variables",
-        "l020-parsons-mean"
+        "l010-variable-assign-introduction",
+        "l011-completion-assign",
+        "l012-variable-typer",
+        "l013-parsons-correct" 
       ]
     },
     {
-      "id": "c020-second-steps",
-      "title": "Second steps",
-      "description": "PLACEHOLDER 2",
+      "id": "c020-funktioner",
+      "title": "Funktioner",
+      "description": "I denne lektion bliver vi introdukseret til hvad en funktion er og derefter kigger vi på tre forskellige funktioner.",
       "lessons": [
-        "l030-completion-addition"
-      ]
-    },
-    {
-      "id": "c030-second-steps",
-      "title": "Third steps",
-      "description": "PLACEHOLDER 2",
-      "lessons": [
-        "l040-variable-ekg-intro",
-        "l041-parsons-ekg-variabler",
-        "l042-completion-threshold"
-      ]
-    },
-    {
-      "id": "c040-second-steps",
-      "title": "Fourth steps",
-      "description": "PLACEHOLDER 2",
-      "lessons": [
-        "l050-variable-open-file",
-        "l051-parsons-open-file-order",
-        "l052-parsons-syntex",
-        "l053-completion-ekg-syntax",
-        "l054-completion-ekg"
-      ]
-    },
-    {
-      "id": "c050-second-steps",
-      "title": "Fifth steps",
-      "description": "I denne lektion lærer vi om tre forskellige funktioner som kan bruges til at åbne, læse og printe en fil i Python",
-      "lessons": [
-        "l060-variable-open-file",
-        "l061-completion-ekg-syntax",
-        "l062-variable-read-file",
-        "l063-completion-read-file",
-        "l064-variable-print",
-        "l065-completion-print",
-        "l066-parsons-correct"
-      ]
-    },
-    {
-      "id": "c060-second-steps",
-      "title": "Sitxh steps",
-      "description": "I denne lektion lærer vi hvordan man kan assigne en variabel",
-      "lessons": [
-        "l070-variable-assign",
-        "l071-completion-assign",
-        "l072-variable-typer",
-        "l073-parsons-correct"
+        "l020-variable-open-file",
+        "l021-completion-ekg-syntax",
+        "l022-variable-read-file",
+        "l023-completion-read-file",
+        "l024-variable-print",
+        "l025-completion-print",
+        "l026-parsons-correct"
       ]
     }
   ]

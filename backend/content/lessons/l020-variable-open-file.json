@@ -1,10 +1,10 @@
 {
-  "id": "l060-variable-open-file",
-  "title": "Åben filen",
+  "id": "l020-variable-open-file",
+  "title": "Introduktion til open()",
   "type": "instruction",
   "concepts": [
     "variable",
-    "assignment",
+    "mode",
     "file",
     "open"
   ],
@@ -56,5 +56,9 @@
       }
     ]
   },
-  "version": 1
+  "version": 1,
+  "unlocks": [
+    "h-open",
+    "h-r"
+  ]
 }

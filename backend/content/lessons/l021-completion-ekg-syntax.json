@@ -1,25 +1,25 @@
 {
-  "id": "l063-completion-read-file",
-  "title": "Læs filen",
+  "id": "l021-completion-ekg-syntax",
+  "title": "Åben Filen",
   "type": "completion",
   "concepts": [
     "file",
     "variable",
-    "read"
+    "open"
   ],
   "estimatedMinutes": 3,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende del af koden. Vi skal **læse** indeholdet af EKG_data. Derfor skal vi bruge en funktion som kan læse indeholdet af en variabel. Husk at Python er case sensitiv.",
+    "description": "Udfyld den manglende dele af koden, vi skal **åbne** vores fil. Husk at Python er case sensitiv.\n Du skal bruge filen **EKG_data.txt**",
     "language": "python",
-    "starterCode": "indhold = EKG_data.{{gap}}()"
+    "starterCode": "EKG_data = open(\"{{gap}}\", \"r\")"
   },
   "private": {
-    "referenceSolution": "indhold = EKG_data.read()",
+    "referenceSolution": "EKG_data = open(\"EKG_data.txt\", \"r\")",
 
       "behaviour": [
         {
-          "variable": "read",
+          "variable": "EKG_data.txt",
           "expect": "number",
           "allShouldSatisfy": "15",
           "note": "Not functional in this skeleton. Sketch of the intended checks."

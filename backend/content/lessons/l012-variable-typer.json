@@ -1,6 +1,6 @@
 {
-  "id": "l072-variable-typer",
-  "title": "Variabel typer",
+  "id": "l012-variable-typer",
+  "title": "Variabel Typer",
   "type": "instruction",
   "concepts": [
     "variable",
@@ -82,5 +82,9 @@
       }
     ]
   },
-  "version": 1
+  "version": 1,
+  "unlocks": [
+    "h-quotes",
+    "h-decimal"
+  ]
 }

@@ -1,6 +1,6 @@
 {
-  "id": "l062-variable-read-file",
-  "title": "Læs filen",
+  "id": "l022-variable-read-file",
+  "title": "Introduktion til read()",
   "type": "instruction",
   "concepts": [
     "variable",
@@ -47,5 +47,8 @@
       }
     ]
   },
-  "version": 1
+  "version": 1,
+  "unlocks": [
+    "h-read"
+  ]
 }

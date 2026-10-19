@@ -3,37 +3,47 @@
   "entries": [
     {
       "id": "h-assign",
-      "title": "Assigning a variable",
-      "markdown": "Name on the left, value on the right.",
+      "title": "Assign en variabel",
+      "markdown": "Navnet til højre og værdien på venstre",
       "code": "age = 42",
       "tags": ["variable"]
     },
     {
       "id": "h-print",
-      "title": "Showing a value in the console",
-      "markdown": "`print()` writes a value to the output area.",
+      "title": "Vis værdien i konsollen",
+      "markdown": "`print()` viser værdien i konsollen.",
       "code": "print(age)",
       "tags": ["output"]
     },
     {
-      "id": "h-np-mean",
-      "title": "Averaging an array",
-      "markdown": "Functions from numpy are written with the `np.` prefix.",
-      "code": "np.mean(values)",
-      "tags": ["numpy", "function-call"]
-    },
-    {
       "id": "h-quotes",
-      "title": "Quotes",
-      "markdown": "`signal` is a variable. `\"signal\"` is the word as plain text. They are not the same thing.",
+      "title": "Citationstegn",
+      "markdown": "`signal` er en variabel. `\"signal\"` er ordet som tekst. Begge variabler er ikke det samme.",
       "tags": ["strings", "variable"]
     },
     {
-      "id": "h-addition",
-      "title": "Adding variables",
-      "markdown": "Python supports standard mathematical operations such as addition, subtraction and multiplication with variables. The result can be stored in a new variable.",
-      "code": "z = x + y",
-      "tags": ["arithmetic"]
+      "id": "h-decimal",
+      "title": "Decimal",
+      "markdown": "I kode bliver punktum brugt når man skriver decimel tal.",
+      "tags": ["decimal", "variable"]
+    },
+    {
+      "id": "h-open",
+      "title": "open() funktion",
+      "markdown": "Denne funktion kan åbne filen i programmet, som senere kan arbejdes med",
+      "tags": ["function-call"]
+    },
+    {
+      "id": "h-r",
+      "title": "Læsetilstand",
+      "markdown": "Ved et skrive r gør man det muligt for programmet at læse filens indhold uden at ændre dem",
+      "tags": ["mode"]
+    },
+    {
+      "id": "h-read",
+      "title": "read() funktion",
+      "markdown": "Denne funktion tager indeholdet og putter det i en variabel",
+      "tags": ["mode"]
     }
   ]
 }

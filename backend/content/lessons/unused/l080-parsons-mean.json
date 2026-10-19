@@ -1,5 +1,5 @@
 {
-  "id": "l020-parsons-mean",
+  "id": "l080-parsons-mean",
   "title": "Assign a value to a variable",
   "type": "parsons",
   "concepts": [
@@ -71,9 +71,5 @@
       "o5": "Prints the word rather than the computed value."
     }
   },
-  "version": 1,
-  "unlocks": [
-    "h-np-mean",
-    "h-quotes"
-  ]
+  "version": 1
 }

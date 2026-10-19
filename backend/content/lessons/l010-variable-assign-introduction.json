@@ -1,6 +1,6 @@
 {
-  "id": "l070-variable-assign",
-  "title": "Assign variabel",
+  "id": "l010-variable-assign-introduction",
+  "title": "Introduktion til Variabler",
   "type": "instruction",
   "concepts": [
     "variable",
@@ -54,5 +54,8 @@
       }
     ]
   },
-  "version": 1
+  "version": 1,
+  "unlocks": [
+    "h-assign"
+  ]
 }

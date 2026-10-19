@@ -1,6 +1,6 @@
 {
-  "id": "l064-variable-print",
-  "title": "Print variablen",
+  "id": "l024-variable-print",
+  "title": "Introduktion til print()",
   "type": "instruction",
   "concepts": [
     "variable",
@@ -55,5 +55,8 @@
       }
     ]
   },
-  "version": 1
+  "version": 1,
+  "unlocks": [
+    "h-print"
+  ]
 }

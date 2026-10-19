@@ -1,5 +1,5 @@
 {
-  "id": "l010-variables",
+  "id": "l060-variables",
   "title": "Variables and values",
   "type": "instruction",
   "concepts": [
@@ -38,9 +38,5 @@
       }
     ]
   },
-  "version": 1,
-  "unlocks": [
-    "h-assign",
-    "h-print"
-  ]
+  "version": 1
 }

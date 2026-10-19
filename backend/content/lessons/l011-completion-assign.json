@@ -1,25 +1,25 @@
 {
-  "id": "l065-completion-print",
-  "title": "Print filen",
+  "id": "l011-completion-assign",
+  "title": "Lav en Variabel",
   "type": "completion",
   "concepts": [
     "file",
     "variable",
-    "print"
+    "assign"
   ],
   "estimatedMinutes": 3,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende dele af koden, vi skal **printe** indeholdet af EKG_data.",
+    "description": "Udfyld den manglende del af koden. Vi skal fortælle python at variablen med navnet ekg, skal indeholde 0.8",
     "language": "python",
-    "starterCode": "{{gap}}(indhold)"
+    "starterCode": "ekg {{gap}} 0.8\nprint(ekg)"
   },
   "private": {
-    "referenceSolution": "print(indhold)",
+    "referenceSolution": "ekg = 0.8\nprint(ekg)",
 
       "behaviour": [
         {
-          "variable": "print",
+          "variable": "=",
           "expect": "number",
           "allShouldSatisfy": "15",
           "note": "Not functional in this skeleton. Sketch of the intended checks."
