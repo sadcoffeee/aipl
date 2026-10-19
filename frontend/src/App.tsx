@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import * as api from './api'
 import AdminView from './components/AdminView'
-import LessonList from './components/LessonList'
+//import LessonList from './components/LessonList'
 import LessonView from './components/LessonView'
 import LoginView from './components/LoginView'
 import type { Course, User } from './types'

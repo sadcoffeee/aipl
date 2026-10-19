@@ -6,7 +6,7 @@ import FeedbackPanel from './FeedbackPanel'
 import HintPanel from './HintPanel'
 import InstructionView from './InstructionView'
 import ParsonsView from './ParsonsView'
-import '../styles_goals-bar.css'
+import '../styles_collection-bar.css'
 
 export default function LessonView({
   lessonId,
@@ -89,12 +89,10 @@ export default function LessonView({
                       title={collection.state.replace('_', ' ')}
                     >
                       {collection.state === 'completed'
-                        ? '✓'
-                        : collection.state === 'in_progress'
-                          ? '↻'
+                          ? '✓'
                           : collection.state === 'locked'
                             ? '🔒'
-                            : '○'}
+                            : '▶︎'}
                     </span>
 
                     <span>{collection.title}</span>
@@ -110,7 +108,7 @@ export default function LessonView({
                   <ol className="goals-list">
                     {[...collection.lessons]
                       .sort((a, b) => a.position - b.position)
-                      .map((step, index) => (
+                      .map((step) => (
                         <li key={step.id}>
                           <button
                             type="button"
@@ -127,8 +125,20 @@ export default function LessonView({
                           >
                             <span
                               className="goal-number"
-                              data-status={collection.state === 'locked' ? 'locked' : step.status}
-                              title={collection.state === 'locked' ? 'locked' : step.status}
+                              data-status={
+                                collection.state === 'locked'
+                                  ? 'locked'
+                                  : step.status === 'available' && step.id === lessonId
+                                    ? 'in_progress'
+                                    : step.status
+                              }
+                              title={
+                                collection.state === 'locked'
+                                  ? 'Locked'
+                                  : step.status === 'available' && step.id === lessonId
+                                    ? 'In progress'
+                                    : step.status
+                              }
                             >
                               {collection.state === 'locked' || step.status === 'locked'
                                 ? '🔒'
@@ -136,7 +146,7 @@ export default function LessonView({
                                   ? '✓'
                                   : step.status === 'attempted'
                                     ? '↻'
-                                    : index + 1}
+                                    : '▶︎'}
                             </span>
 
                             <span>{step.title}</span>
