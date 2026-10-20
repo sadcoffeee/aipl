@@ -1,6 +1,6 @@
 {
   "id": "l020-variable-open-file",
-  "title": "Introduktion til open()",
+  "title": "Åben en fil",
   "type": "instruction",
   "concepts": [
     "variable",
@@ -16,25 +16,35 @@
         "items": [
           {
             "type": "text",
-            "markdown": "I denne lektion kigger vi på hvordan man i Python kan åbne en fil, som vi senere kan arbejde med.\n\n I dette program findes filen: `EKG_data.txt`. Filen indeholder to kolonner: \n Tid - Angivet i sekunder \n EKG - den målte spænding i milivolt(mV). Din opgave er at bruge Python til at åbne filen, læse dens indhold og vise målingerne i konsollen."
+            "markdown": "I denne lektion kigger vi på hvordan man i Python kan åbne en fil, som vi senere kan arbejde med.\n\n I dette program findes filen: `EKG_data.txt`. Filen indeholder to kolonner: \n 1.   Tid - Angivet i sekunder \n 2.   EKG - den målte spænding i milivolt(mV). \nDin opgave er at bruge Python til at åbne filen, læse dens indhold og vise målingerne i konsollen."
           }
         ]
       },
       {
-        "split": [
-          55,
-          45
-        ],
         "items": [
           {
             "type": "text",
-            "markdown": "For at fortælle Python hvilken fil der skal arbejdes med skal man skrive følgende som ses på højre side."
-          },
+            "markdown": "Først skal man fortælle python hvilken fil man vil arbejde med."
+          }
+        ]
+      },
+
+      {
+        "items": [
           {
             "type": "code",
             "language": "python",
-            "code": "EKG_data = open(\"EKG_data.txt\",\"r\");\n print(EKG_data.read())",
-            "caption": "Tekstfilen åbnes og indholdet vises i konsollen"
+            "code": "EKG_data = open(\"EKG_data.txt\",\"r\")",
+            "caption": "Tekstfilen ´EKG_data.txt´ læses og gemmes i variablen ´EKG_data´"
+          }
+        ]
+      },
+      
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "`EKG_data` er navnet på en variabel. Du bestemmer selv hvad din variabel skal hedde, det er dog vigtigt at skrive navnet på samme måde da Python er case sensitiv.​"
           }
         ]
       },
@@ -42,15 +52,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "`EKG_data` er navnet på en variable. \nEn variabel er en boks hvor man kan gemme noget, som man gerne vil bruge igen senere\n Du bestemmer selv hvad din variabel skal hedde, det er dog vigtigt at skrive navnet på samme måde da Python er case sensitiv.​"
-          }
-        ]
-      },
-      {
-        "items": [
-          {
-            "type": "text",
-            "markdown": "`open()` er en funktion som bruges til at åbne en fil. Filen der skal bruges skal stå imellem to citations tegn. Filens navn skal være præcis som filen er navgivet på din computer. Hvis filen hedder EKG_10Hz.txt virker EKG10Hz.txt ikke. \n Det lille r imellem citations tegnene står for `read` og fortæller python vi gerne vil læse filen."
+            "markdown": "`open()` er en funktion som bruges til at åbne en fil.\n-  En funktion er en kommando, der udfører en bestemt opgave. Funktionens navn efterfølges altid af parenteser, som kan indeholde de oplysninger, funktionen skal bruge. \n-  Filen der bruges skal stå imellem to citations tegn. \n-  Filens navn skal være præcis som filen er navgivet på din computer. Hvis filen hedder EKG_10Hz.txt virker EKG10Hz.txt ikke. \n-  Det lille r imellem citations tegnene står for `read` og fortæller python vi gerne vil læse filen."
           }
         ]
       }
@@ -60,5 +62,8 @@
   "unlocks": [
     "h-open",
     "h-r"
+  ],
+  "datasets": [
+    "EKG_data.txt"
   ]
 }

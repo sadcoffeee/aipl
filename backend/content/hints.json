@@ -4,7 +4,7 @@
     {
       "id": "h-assign",
       "title": "Assign en variabel",
-      "markdown": "Navnet til højre og værdien på venstre",
+      "markdown": "(Navnet på din variabel) = (Værdien du vil gemme)",
       "code": "age = 42",
       "tags": ["variable"]
     },
@@ -13,37 +13,49 @@
       "title": "Vis værdien i konsollen",
       "markdown": "`print()` viser værdien i konsollen.",
       "code": "print(age)",
-      "tags": ["output"]
+      "tags": [ "output" ]
     },
     {
-      "id": "h-quotes",
-      "title": "Citationstegn",
-      "markdown": "`signal` er en variabel. `\"signal\"` er ordet som tekst. Begge variabler er ikke det samme.",
-      "tags": ["strings", "variable"]
+      "id": "h-string",
+      "title": "Gem tekst",
+      "markdown": "Husk citationstegn omkring tekst.",
+      "code": "filnavn = \"EKG_data\"",
+      "tags": [ "string" ]
     },
     {
-      "id": "h-decimal",
-      "title": "Decimal",
-      "markdown": "I kode bliver punktum brugt når man skriver decimel tal.",
-      "tags": ["decimal", "variable"]
+      "id": "h-float",
+      "title": "Gem et decimaltal",
+      "markdown": "Decimaltal skrives med punktum, ikke komma.",
+      "code": "ekg = 1.2",
+      "tags": [ "float" ]
     },
     {
       "id": "h-open",
-      "title": "open() funktion",
-      "markdown": "Denne funktion kan åbne filen i programmet, som senere kan arbejdes med",
-      "tags": ["function-call"]
+      "title": "Åbn en fil",
+      "markdown": "`open()` bruges til at åbne en fil.",
+      "code": "fil = open(\"navn på din fil\", \"r\")",
+      "tags": [ "file" ]
     },
     {
       "id": "h-r",
-      "title": "Læsetilstand",
-      "markdown": "Ved et skrive r gør man det muligt for programmet at læse filens indhold uden at ændre dem",
-      "tags": ["mode"]
+      "title": "Læs en fil",
+      "markdown": "`\"r\"` betyder at filen åbnes til læsning, man kan ikke redigere i den.",
+      "code": "open(\"EKG_data.txt\", \"r\")",
+      "tags": [ "mode" ]
     },
     {
       "id": "h-read",
-      "title": "read() funktion",
-      "markdown": "Denne funktion tager indeholdet og putter det i en variabel",
-      "tags": ["mode"]
+      "title": "Læs filens indhold",
+      "markdown": "Brug `.read()` til at læse filen `fil` og gem resultatet i variablen `indhold`.",
+      "code": "indhold = fil.read()",
+      "tags": [ "file" ]
+    },
+    {
+      "id": "h-printvariabel",
+      "title": "Vis en variabel",
+      "markdown": "Brug `print()` til at vise indholdet af en variabel i konsollen.",
+      "code": "print(indhold)",
+      "tags": [ "output" ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "id": "l013-parsons-correct",
-  "title": "Vælg Korrekt Rækkefølge",
+  "title": "Assign variabler med forskellige typer",
   "type": "parsons",
   "concepts": [
     "file",
@@ -11,7 +11,7 @@
   "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
-    "description": "I denne opgave skal du først finde den linje kode der assigner et decimaltal til en variabel. I næste boks skal vi assigne tekst til en variabel",
+    "description": "Placer de to linje koder i den rigtige rækkefølge.\nFørst skal vi assign en variabel med decimaltallet `0.8`. Næste linje assign teksen `min fil hedder: EGK_data` til variablen ekg_tekst",
     "language": "python",
     "shuffleOptions": true,
     "lines": [
@@ -33,7 +33,7 @@
       },
       {
         "id": "o2",
-        "code": "ekg = \"EKG_data.txt\""
+        "code": "ekg_tekst = \"min fil hedder: EGK_data\""
       },
       {
         "id": "o3",
@@ -41,7 +41,7 @@
       },
       {
         "id": "o4",
-        "code": "ekg = EKG_data.txt"
+        "code": "ekg_tekst = min fil hedder: EGK_data"
       }
     ]
   },
@@ -52,7 +52,7 @@
     },
     "distractorNotes": {
       "o3": "Værdien står i citationstegn og bliver derfor gemt som string i stedet for et tal.",
-      "o4": "Tekst skal stå i citationstegn. Uden citationstegn tror Python, at EKG_data.txt er et variabelnavn."
+      "o4": "Tekst skal stå i citationstegn. Uden citationstegn forsøger Python at fortolke teksten som variabelnavne i stedet for tekst."
     }
   },
   "version": 1

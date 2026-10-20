@@ -7,30 +7,20 @@
     "variable",
     "open"
   ],
-  "estimatedMinutes": 3,
+  "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende dele af koden, vi skal **åbne** vores fil. Husk at Python er case sensitiv.\n Du skal bruge filen **EKG_data.txt**",
+    "description": "Udfyld den manglende del af koden. Åbn filen `EKG_data.txt`",
     "language": "python",
     "starterCode": "EKG_data = open(\"{{gap}}\", \"r\")"
   },
+  "datasets": [
+    "EKG_data.txt"
+  ],
   "private": {
-    "referenceSolution": "EKG_data = open(\"EKG_data.txt\", \"r\")",
-
-      "behaviour": [
-        {
-          "variable": "EKG_data.txt",
-          "expect": "number",
-          "allShouldSatisfy": "15",
-          "note": "Not functional in this skeleton. Sketch of the intended checks."
-        }
-      ],
-      "structure": [
-        {
-          "astCheck": "uses a comparison operator",
-          "onFail": "h-addition"
-        }
-      ]
+    "gapSolutions": [
+      "EKG_data.txt"
+    ]
   },
   "version": 1
 }

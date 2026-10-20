@@ -1,13 +1,13 @@
 {
   "id": "l022-variable-read-file",
-  "title": "Introduktion til read()",
+  "title": "Læs indholdet af en fil",
   "type": "instruction",
   "concepts": [
     "variable",
     "read",
     "file"
   ],
-  "estimatedMinutes": 3,
+  "estimatedMinutes": 2,
   "selfAssessment": false,
   "content": {
     "rows": [
@@ -20,20 +20,28 @@
         ]
       },
       {
-        "split": [
-          55,
-          45
-        ],
         "items": [
           {
             "type": "text",
-            "markdown": "Igen bruger vi en variabel, som vi nu kalder `indhold`, denne variabel skal gemme det, som står inde i filen. `.read()` er en funktion der læser hele indholdet af filen. \n Punktummet før `read()` er vigtigt og bruges til at fortælle at vi vil bruge `.read()` på den fil som ligger i vores variabel `EKG_data`​​ (se anden linje af koden)"
-          },
+            "markdown": "Vi laver variabel `indhold`, denne variabel skal gemme det, som står inde i filen."
+          }
+        ]
+      },
+      {
+        "items": [
           {
             "type": "code",
             "language": "python",
-            "code": "indhold = open(\"EKG_data.txt\",\"r\");\n print(EKG_data.read())",
-            "caption": "Tekstfilen åbnes og indholdet vises i konsollen"
+            "code": "EKG_data = open(\"EKG_data.txt\",\"r\")\nindhold = EKG_data.read()",
+            "caption": "Tekstfilen ´EKG_data.txt´ åbnes og indholdet læses og gemmes i variablen ´indhold´"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "`.read()` er en funktion der læser hele indholdet af filen.\n-  Punktummet er vigtigt og bruges til at fortælle at man vil bruge `read()` på den fil som ligger i vores variabel `EKG_data`​"
           }
         ]
       },

@@ -1,36 +1,23 @@
 {
   "id": "l011-completion-assign",
-  "title": "Lav en Variabel",
+  "title": "Assign en Variabel",
   "type": "completion",
   "concepts": [
     "file",
     "variable",
     "assign"
   ],
-  "estimatedMinutes": 3,
+  "estimatedMinutes": 1,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende del af koden. Vi skal fortælle python at variablen med navnet ekg, skal indeholde 0.8",
+    "description": "Udfyld den manglende del af koden.\nFortæl python at variablen med navnet `ekg`, skal indeholde værdien `0.8`",
     "language": "python",
     "starterCode": "ekg {{gap}} 0.8\nprint(ekg)"
   },
   "private": {
-    "referenceSolution": "ekg = 0.8\nprint(ekg)",
-
-      "behaviour": [
-        {
-          "variable": "=",
-          "expect": "number",
-          "allShouldSatisfy": "15",
-          "note": "Not functional in this skeleton. Sketch of the intended checks."
-        }
-      ],
-      "structure": [
-        {
-          "astCheck": "uses a comparison operator",
-          "onFail": "h-addition"
-        }
-      ]
+    "gapSolutions": [
+      "="
+    ]
   },
   "version": 1
 }

@@ -1,13 +1,13 @@
 {
   "id": "l024-variable-print",
-  "title": "Introduktion til print()",
+  "title": "Vis indholdet i konsollen",
   "type": "instruction",
   "concepts": [
     "variable",
     "print",
     "file"
   ],
-  "estimatedMinutes": 3,
+  "estimatedMinutes": 2,
   "selfAssessment": false,
   "content": {
     "rows": [
@@ -15,25 +15,18 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Nu hvor Python har åbnet og læst dataen vil vi gerne gøre dem visuelle for os."
+            "markdown": "Nu har vi indholdet af en fil gemt i variabelen `indhold` , og nu skal det visualiseres så vi kan se hvad indholdet er. Til dette bruger vi `print()` funktionen"
           }
         ]
       },
       {
-        "split": [
-          55,
-          45
-        ],
         "items": [
-          {
-            "type": "text",
-            "markdown": "`print()` er en funktion, der bruges til at vise noget i konsollen."
-          },
           {
             "type": "code",
             "language": "python",
-            "code": "EKG_data = open(\"EKG_data.txt\",\"r\");\n print(EKG_data.read())",
-            "caption": "Tekstfilen åbnes og indholdet vises i konsollen"
+            "code": "EKG_data = open(\"EKG_data.txt\",\"r\") \nindhold = EKG_data.read() \nprint(indhold)",
+            "caption": "Åbner filen ´EKG_data.txt´, læser filens indhold og viser det i konsollen ved at bruge ´print()´."
+
           }
         ]
       },
@@ -41,7 +34,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Konsollen er det område, hvor Python viser resultaterne af filen.​"
+            "markdown": "`print()` er en funktion det bruges til at vise noget i konsollen. Konsollen er det område, hvor Python viser resultaterne fra programmet. Når programmet kører, vil teksten fra filen blive vist her.​"
           }
         ]
       },
@@ -49,7 +42,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Når programmet bliver kørt, vil indholdet af filen blive vist i konsollen.​ Konsollen bruges både til at vise resultater og fejlmeddelelser.​"
+            "markdown": "Konsollen bruges både til at vise resultater fra programmet og at vise fejlmeddelelser, hvis noget går galt.​"
           }
         ]
       }
@@ -57,6 +50,6 @@
   },
   "version": 1,
   "unlocks": [
-    "h-print"
+    "h-printvariabel"
   ]
 }

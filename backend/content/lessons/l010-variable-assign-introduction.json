@@ -26,13 +26,13 @@
         "items": [
           {
             "type": "text",
-            "markdown": "En variabel fungerer som en navngivet beholder. Når vi bruger tegnet `=`, gemmer vi en værdi i variablen. Dette kaldes at **assigne** en værdi til en variabel."
+            "markdown": "En variabel fungerer som en navngivet beholder. Når vi bruger tegnet `=`, gemmer vi værdien der står til højre for tegnet i variablen som er navngivet det der står til venstre for tegnet. Dette kaldes at **assigne** en værdi til en variabel."
           },
           {
             "type": "code",
             "language": "python",
-            "code": "ekg = 0.8\nprint(ekg)",
-            "caption": "Værdien 0.8 gemmes i variablen ekg"
+            "code": "ekg = 0.8",
+            "caption": "Værdien ´0.8´ gemmes i variablen ´ekg´"
           }
         ]
       },
@@ -48,7 +48,15 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Vi kan også gemme mere avancerede ting i variabler. For eksempel kan vi gemme en åbnet fil i variablen **EKG_data**. Senere i programmet kan vi bruge variablen til at læse indholdet af filen uden at skulle åbne den igen."
+            "markdown": "Det er vigtigt at huske at navnet på variablen er **case sensitiv**, derfor skal man skrive det præcise navn når man skal bruge variablen. Hvis variablen er kaldt EKG_data, kan man ikke bruge ekg_data til at kalde variablen. Dette vil give fejl."
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Vi kan også gemme mere avancerede ting i variabler. For eksempel kan vi gemme hele filer eller datasæt, men det vil du lære senere."
           }
         ]
       }

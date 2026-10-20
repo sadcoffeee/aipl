@@ -6,7 +6,7 @@
     "variable",
     "types"
   ],
-  "estimatedMinutes": 3,
+  "estimatedMinutes": 2,
   "selfAssessment": false,
   "content": {
     "rows": [
@@ -26,13 +26,13 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Tal med decimaler bruges ofte til målinger. Decimal tal er altid i punktum når vi skriver kode. I eksemplet gemmes en EKG-måling i variablen **ekg**."
+            "markdown": "Tal med decimaler bruges ofte til målinger. Decimal tal er altid i punktum når vi skriver kode. I eksemplet gemmes en EKG-måling i variablen `ekg`."
           },
           {
             "type": "code",
             "language": "python",
-            "code": "ekg = 0.8\nprint(ekg)",
-            "caption": "Variablen indeholder et decimaltal."
+            "code": "ekg = 0.8",
+            "caption": "Variablen `ekg` indeholder decimaltallet `0.8` ."
           }
         ]
       },
@@ -44,47 +44,21 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Tekst gemmes mellem citationstegn. Dette kaldes en string. Alt inde i citationstegnene kan behandles som tekst selv hvis det er tal. "
+            "markdown": "Tekst gemmes mellem citationstegn. Dette kaldes en **string**. Alt inde i citationstegnene behandles som tekst selv hvis det er tal. "
           },
           {
             "type": "code",
             "language": "python",
-            "code": "filnavn = \"EKG_data.txt\"\nprint(filnavn)",
-            "caption": "Variablen indeholder tekst."
-          }
-        ]
-      },
-      {
-        "split": [
-          55,
-          45
-        ],
-        "items": [
-          {
-            "type": "text",
-            "markdown": "Variabler kan også indeholde mere komplekse objekter. Når vi åbner en fil med **open()**, gemmes den åbne fil i en variabel."
-          },
-          {
-            "type": "code",
-            "language": "python",
-            "code": "EKG_data = open(\"EKG_data.txt\", \"r\")\nprint(EKG_data.read())",
-            "caption": "Variablen indeholder en åben fil."
-          }
-        ]
-      },
-      {
-        "items": [
-          {
-            "type": "text",
-            "markdown": "Det er vigtigt at huske at navnet på variablen er case sensitiv, derfor skal man skrive det præcise navn når man skal bruge variablen. Hvis variablen er kaldt EKG_data, kan man ikke bruge ekg_data til at kalde variablen. Dette vil give fejl."
+            "code": "filnavn = \"min fil hedder: EGK_data\"",
+            "caption": "Variablen  `ekg` indeholder teksen `min fil hedder: EGK_data`."
           }
         ]
       }
-    ]
+     ]
   },
   "version": 1,
   "unlocks": [
-    "h-quotes",
-    "h-decimal"
+    "h-string",
+    "h-float"
   ]
 }

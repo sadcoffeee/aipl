@@ -7,30 +7,30 @@
     "variable",
     "read"
   ],
-  "estimatedMinutes": 3,
+  "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende del af koden. Vi skal **læse** indeholdet af EKG_data. Derfor skal vi bruge en funktion som kan læse indeholdet af en variabel. Husk at Python er case sensitiv.",
+    "description": "Udfyld den manglende del af koden. Åben filen og gem den i en variable du selv bestemmer navnet på, herefter brug variablen til at læse og gemme indholdet i variablen `indhold`",
     "language": "python",
-    "starterCode": "indhold = EKG_data.{{gap}}()"
+    "starterCode": "{{gap}} = open(\"EKG_data.txt\",\"r\") \nindhold = {{gap}}.read()"
   },
   "private": {
-    "referenceSolution": "indhold = EKG_data.read()",
-
-      "behaviour": [
-        {
-          "variable": "read",
-          "expect": "number",
-          "allShouldSatisfy": "15",
-          "note": "Not functional in this skeleton. Sketch of the intended checks."
-        }
-      ],
-      "structure": [
-        {
-          "astCheck": "uses a comparison operator",
-          "onFail": "h-addition"
-        }
-      ]
+    "gapSolutions": [
+      "bareEtNavn",
+      "bareEtNavn"
+    ],
+    "checks": [
+      {
+        "id": "variable_holds_textfile",
+        "type": "variable_matches_reference",
+        "variable": "indhold",
+        "message": "the variable names should be the same"
+      }
+    ]
   },
+
+  "datasets": [
+    "EKG_data.txt"
+  ],
   "version": 1
 }
