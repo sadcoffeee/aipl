@@ -1,0 +1,47 @@
+
+// Based on the template in the Spark guide, with five changes, each marked "CHANGED" below.
+
+{
+  "name": "aipl",
+
+  "build": {
+    "dockerfile": "Dockerfile",
+    // CHANGED from "..": the Dockerfile copies nothing from the project, so
+    // there is no reason to send the whole repo (node_modules, the backend's
+    // virtualenv, the database) to Docker on every rebuild.
+    "context": "."
+  },
+
+  "runArgs": [
+    "--device=nvidia.com/gpu=all",
+    "--ipc=host",
+    "--ulimit=stack=67108864"
+
+    // CHANGED (not active yet): publishing the backend so other machines can reach it.
+    //
+    // , "-p", "8001:8001"
+  ],
+
+  "mounts": [
+    // CHANGED: ",readonly" added. We only ever read model weights; mounting
+    // the shared folder read-only means nothing running in this container can damage weights
+    "source=/models,target=/models,type=bind,readonly"
+  ],
+
+  // CHANGED: workspaceMount added. This line is what makes /workspace be the
+  // repo on disk, so the code and the study data survive a rebuild instead of 
+  // living inside a container that can be thrown away.
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
+
+  // CHANGED: by default VS Code *stops* the container when the window is closed.
+  // "none" keeps it, and the model and backend in it, running for everyone after you disconnect.
+  "shutdownAction": "none",
+
+  "customizations": {
+    "vscode": {
+      // Installed inside the container
+      "extensions": ["ms-python.python"]
+    }
+  }
+}
