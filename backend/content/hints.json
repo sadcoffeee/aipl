@@ -37,13 +37,6 @@
       "tags": [ "file" ]
     },
     {
-      "id": "h-r",
-      "title": "Læs en fil",
-      "markdown": "`\"r\"` betyder at filen åbnes til læsning, man kan ikke redigere i den.",
-      "code": "open(\"EKG_data.txt\", \"r\")",
-      "tags": [ "mode" ]
-    },
-    {
       "id": "h-read",
       "title": "Læs filens indhold",
       "markdown": "Brug `.read()` til at læse filen `fil` og gem resultatet i variablen `indhold`.",
