@@ -9,7 +9,11 @@
         "l010-variable-assign-introduction",
         "l011-completion-assign",
         "l012-variable-typer",
-        "l013-parsons-correct" 
+        "l013-parsons-correct",
+        "l014-print-console-introduction",
+        "l015-parsons-print",
+        "l016-print-variable-different",
+        "l017-parsons-print"
       ]
     },
     {

@@ -56,6 +56,20 @@
       "markdown": "Brug `print()` til at vise indholdet af en variabel i konsollen.",
       "code": "print(indhold)",
       "tags": [ "output" ]
+    },
+    {
+      "id": "h-print-variable",
+      "title": "Print en variabel",
+      "markdown": "Skriv variablens navn inde i parenteserne.",
+      "code": "print(ekg)",
+      "tags": [ "variable" ]
+    },
+    {
+      "id": "h-print-type",
+      "title": "Print forskellige typer",
+      "markdown": "Tekst skal stå mellem citationstegn `print(\"EKG-data indlæst\")`. \nTal kan printes direkte i print funktionen `print(12.5)` \nVariabler printes ves at skrive navnet i print funktionen `print(navn_på_variabel)`",
+      "tags": [ "string" ]
     }
+
   ]
 }

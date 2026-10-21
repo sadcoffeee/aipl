@@ -60,8 +60,7 @@
   },
   "version": 1,
   "unlocks": [
-    "h-open",
-    "h-r"
+    "h-open"
   ],
   "datasets": [
     "EKG_data.txt"

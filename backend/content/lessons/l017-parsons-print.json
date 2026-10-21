@@ -1,0 +1,68 @@
+{
+  "id": "l017-parsons-print",
+  "title": "Vælg Korrekt Rækkefølge",
+  "type": "parsons",
+  "concepts": [
+    "print",
+    "type",
+    "order"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Sæt de tre korrkte linjer kode i den rigtige rækkefølge. \n1.  Assign en variabel med værdien `1.2`  \n2.  Print tallet 0.4 \n3.  Print 1.2 fra variablen",
+    "language": "python",
+    "shuffleOptions": true,
+    "lines": [
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s2",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s3",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "print(\"ekg\")"
+      },
+      {
+        "id": "o2",
+        "code": "ekg = 1.2"
+      },
+      {
+        "id": "o3",
+        "code": "print(0.4)"
+      },
+      {
+        "id": "o4",
+        "code": "ekg = 1,2"
+      },
+      {
+        "id": "o5",
+        "code": "print(ekg)"
+      },
+      {
+        "id": "o6",
+        "code": "print = 0.4"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o2",
+      "s2": "o3",
+      "s3": "o5"
+    }
+  },
+  "version": 1
+}

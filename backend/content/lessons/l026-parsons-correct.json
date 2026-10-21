@@ -11,7 +11,7 @@
   "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
-    "description": "I denne opgave skal du sætte koden i den rigtige rækkefølge. Først skal vi lave en variable hvor vi **åbner** filen, dernæst skal den **læses** og til sidst **printes** til konsollen",
+    "description": "Sæt koden i den rigtige rækkefølge. \n1.  Assign en variabel der åbner filen `EKG_data.txt`. \n2.  Læs og gem indholdet i en variabel. \n3.  Print teksten fra filen til konsollen",
     "language": "python",
     "shuffleOptions": true,
     "lines": [
@@ -34,7 +34,7 @@
     "options": [
       {
         "id": "o1",
-        "code": "EKG_data = (\"EKG.txt\",\"r\")"
+        "code": "EKG_data = (\"EKG_data.txt\",\"r\")"
       },
       {
         "id": "o2",

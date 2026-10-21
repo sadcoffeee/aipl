@@ -10,27 +10,26 @@
   "estimatedMinutes": 3,
   "selfAssessment": true,
   "content": {
-    "description": "Udfyld den manglende dele af koden, vi skal **printe** indeholdet af EKG_data.",
+    "description": "Udfyld den manglende del af koden. Print indholdet og  af filen `EKG_data.txt`",
     "language": "python",
-    "starterCode": "{{gap}}(indhold)"
+    "starterCode": "EKG_data = open(\"EKG_data.txt\",\"r\") \nindhold = EKG_data.read() \n{{gap}}({{gap}})"
   },
   "private": {
-    "referenceSolution": "print(indhold)",
+    "gapSolutions": [
+      "print",
+      "indhold"
+    ],
 
-      "behaviour": [
-        {
-          "variable": "print",
-          "expect": "number",
-          "allShouldSatisfy": "15",
-          "note": "Not functional in this skeleton. Sketch of the intended checks."
-        }
-      ],
-      "structure": [
-        {
-          "astCheck": "uses a comparison operator",
-          "onFail": "h-addition"
-        }
-      ]
+    "checks": [
+      {
+        "id": "is_indhold_printed",
+        "type": "stdout_matches_reference"
+      }
+    ]
+
   },
+  "datasets": [
+    "EKG_data.txt"
+  ],
   "version": 1
 }

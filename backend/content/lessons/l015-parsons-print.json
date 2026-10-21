@@ -1,0 +1,57 @@
+{
+  "id": "l015-parsons-print",
+  "title": "Vis din variabel",
+  "type": "parsons",
+  "concepts": [
+    "output",
+    "variable"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Placer den rigtige linje kode. \nPrint værdien `0.8` der er gemt i variblen `ekg` til konsollen",
+    "language": "python",
+    "shuffleOptions": true,
+
+    "lines": [
+      {
+        "kind": "fixed",
+        "code": "ekg = 0.8"
+      },
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "Print(ekg)"
+      },
+      {
+        "id": "o2",
+        "code": "print(ekg)"
+      },
+      {
+        "id": "o3",
+        "code": "print = ekg"
+      },
+      {
+        "id": "o4",
+        "code": "print(EKG)"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o2"
+    },
+    "distractorNotes": {
+      "o2": "Funktioner er case sensitive, og print funktionen er ikke med stort P",
+      "o3": "print funktionen kaldes vil at komme indholdet i paranteser",
+      "o4": "Variabler er case sensitive, og variablen er assigned til 'ekg'"
+    }
+  },
+  "version": 1
+}

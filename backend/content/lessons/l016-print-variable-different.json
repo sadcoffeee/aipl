@@ -1,0 +1,61 @@
+{
+  "id": "l016-print-variable-different",
+  "title": "Print forskellige typer variabler",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "print",
+    "types"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Funktionen `print()` kan vise mange forskellige typer værdier i konsollen. Vi kan både printe tal, tekst og indholdet af variabler."
+          }
+        ]
+      },
+
+      {
+        "items": [
+          {
+            "type": "code",
+            "language": "python",
+            "code": "print(42)",
+            "caption": "Print et tal"
+          },
+
+          {
+            "type": "code",
+            "language": "python",
+            "code": "print(\"EKG-data indlæst\")",
+            "caption": "Print en tekst"
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "ekg = 0.8\nprint(ekg)",
+            "caption": "Print en variabel"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Vi kan have flere `print()` funktioner i samme program. Hver gang Python møder en `print()`, vises værdien på en ny linje i konsollen."
+          }
+        ]
+      }
+      
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-print-type"
+  ]
+}
