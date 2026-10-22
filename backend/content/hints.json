@@ -62,6 +62,13 @@
       "title": "Print forskellige typer",
       "markdown": "Tekst skal stå mellem citationstegn `print(\"EKG-data indlæst\")`. \nTal kan printes direkte i print funktionen `print(12.5)` \nVariabler printes ves at skrive navnet i print funktionen `print(navn_på_variabel)`",
       "tags": [ "string" ]
+    },
+    {
+      "id": "h-code-order",
+      "title": "Rækkefølgen er vigtig",
+      "markdown": "En variabel skal oprettes, før den kan bruges.",
+      "code": "ekg = 0.8\nprint(ekg)",
+      "tags": [ "order" ]
     }
 
   ]

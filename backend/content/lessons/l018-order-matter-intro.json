@@ -1,0 +1,67 @@
+{
+  "id": "l018-order-matter-intro",
+  "title": "Rækkefølgen på kode har betydning",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "order",
+    "print"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Når et Python-program kører, læses koden fra toppen mod bunden. Python udfører én linje ad gangen i den rækkefølge de står i koden"
+          }
+        ]
+      },
+
+
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Først gemmes værdien `0.8` i variablen `ekg`. Derefter finder `print()` værdien og viser den i konsollen."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "ekg = 0.8\nprint(ekg)",
+            "caption": "Variablen oprettes først og kan derefter bruges af print()."
+          }
+        ]
+      },
+
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "**Denne kode giver en fejl**. Når Python når til `print(ekg)`, findes variablen endnu ikke. Variablen skal oprettes før den kan bruges."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "print(ekg)\nekg = 0.8",
+            "caption": "Python forsøger at bruge variablen før den er oprettet."
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-code-order"
+  ]
+}

@@ -7,7 +7,7 @@
     "variable",
     "print"
   ],
-  "estimatedMinutes": 3,
+  "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
     "description": "Udfyld den manglende del af koden. Print indholdet og  af filen `EKG_data.txt`",
