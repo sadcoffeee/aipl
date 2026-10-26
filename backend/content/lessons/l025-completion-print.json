@@ -1,0 +1,35 @@
+{
+  "id": "l025-completion-print",
+  "title": "Print Filen",
+  "type": "completion",
+  "concepts": [
+    "file",
+    "variable",
+    "print"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Udfyld den manglende del af koden. Print indholdet og  af filen `EKG_data.txt`",
+    "language": "python",
+    "starterCode": "EKG_data = open(\"EKG_data.txt\",\"r\") \nindhold = EKG_data.read() \n{{gap}}({{gap}})"
+  },
+  "private": {
+    "gapSolutions": [
+      "print",
+      "indhold"
+    ],
+
+    "checks": [
+      {
+        "id": "is_indhold_printed",
+        "type": "stdout_matches_reference"
+      }
+    ]
+
+  },
+  "datasets": [
+    "EKG_data.txt"
+  ],
+  "version": 1
+}

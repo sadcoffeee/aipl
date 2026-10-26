@@ -1,0 +1,62 @@
+{
+  "id": "l022-variable-read-file",
+  "title": "Læs indholdet af en fil",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "read",
+    "file"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Nu har vi åbnet filen, men vi skal også fortælle Python, at vi gerne vil læse det, der står i den.​"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Vi laver variabel `indhold`, denne variabel skal gemme det, som står inde i filen."
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "code",
+            "language": "python",
+            "code": "EKG_data = open(\"EKG_data.txt\",\"r\")\nindhold = EKG_data.read()",
+            "caption": "Tekstfilen ´EKG_data.txt´ åbnes og indholdet læses og gemmes i variablen ´indhold´"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "`.read()` er en funktion der læser hele indholdet af filen.\n-  Punktummet er vigtigt og bruges til at fortælle at man vil bruge `read()` på den fil som ligger i vores variabel `EKG_data`​"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Efter denne linje kode indeholder variablen `indhold` teksten fra EKG-filen​"
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-read"
+  ]
+}

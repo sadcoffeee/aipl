@@ -1,6 +1,6 @@
 {
-  "id": "l020-parsons-mean",
-  "title": "Assign a value to a variable",
+  "id": "l041-parsons-ekg-variabler",
+  "title": "Vis EKG-målingerne",
   "type": "parsons",
   "concepts": [
     "import",
@@ -10,7 +10,7 @@
   "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
-    "description": "PLACEHOLDER CONTENT for layout testing only.\n\nThe script below should load a recording and print its average value. Drag one option into each empty box. Not every option belongs somewhere.",
+    "description": "PLACEHOLDER CONTENT for layout testing only.\n\n Du skal vælge de linjer der kan få programmet til at vælge EKG-kolonnen og vise EKG-målingerne.",
     "language": "python",
     "shuffleOptions": true,
     "lines": [
@@ -40,40 +40,36 @@
     "options": [
       {
         "id": "o1",
-        "code": "average = np.mean(signal)"
+        "code": "print(ekg)"
       },
       {
         "id": "o2",
-        "code": "print(average)"
+        "code": "ekg = data[:, 1]"
       },
       {
         "id": "o3",
-        "code": "average = mean(signal)"
-      },
+        "code": "print(\"EKG-Målinger:\")"
+      }, 
       {
         "id": "o4",
-        "code": "average = np.mean(\"signal\")"
-      },
+        "code": "ekg = data[:, 0]"
+      }, 
       {
         "id": "o5",
-        "code": "print(\"average\")"
+        "code": "ekg = data[1,:]"
       }
     ]
   },
   "private": {
     "solution": {
-      "s1": "o1",
-      "s2": "o2"
+      "s1": "o2",
+      "s2": "o3"
     },
     "distractorNotes": {
-      "o3": "Missing the np. prefix.",
-      "o4": "Passes the variable name as text instead of the variable.",
-      "o5": "Prints the word rather than the computed value."
+      "o3": "Denne linje printer en overskrift, den viser ikke selve EKG-målingerne",
+      "o4": "Kolonne 0 indeholder tid, ikke EKG",
+      "o5": "Dette vælger én række. opgaven skal vælge hele EKG-kolonnen"
     }
   },
-  "version": 1,
-  "unlocks": [
-    "h-np-mean",
-    "h-quotes"
-  ]
+  "version": 1
 }

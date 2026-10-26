@@ -1,0 +1,80 @@
+{
+  "id": "l052-parsons-syntex",
+  "title": "Gendkend korrekt syntax",
+  "type": "parsons",
+  "concepts": [
+    "file",
+    "function-call",
+    "variable",
+    "Syntax"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Python læser koden præcis som den er skrevet, derfor er det vigtigt at syntaxen er korrekt. Typiske syntax fejl er blandt andet manglende citationstegn, parantecer eller navnet der er skrevet forkert eller ikke matcher\n I denne opgave skal du derfor vælge de linjer af kode der har den korrekte syntax.",
+    "language": "python",
+    "shuffleOptions": true,
+    "lines": [
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s2",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "print(EKG_data.read())"
+      },
+      {
+        "id": "o2",
+        "code": "print(EKG_data.read)"
+      },
+      {
+        "id": "o3",
+        "code": "print(ekg_data.read)"
+      },
+      {
+        "id": "o4",
+        "code": "Print(ekg_data.read())"
+      },
+      {
+        "id": "o5",
+        "code": "EKG_data = open(EKG_data.txt,r)"
+      },
+      {
+        "id": "o6",
+        "code": "EKG_data = open(\"EKG_data.txt\", \"r\")"
+      },
+      {
+        "id": "o7",
+        "code": "EKG_data = Open(\"EKG_data.txt\", \"r\")"
+      },
+      {
+        "id": "o8",
+        "code": "EKG_data = open(\"EKG_data.txt\", r)"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o6",
+      "s2": "o1"
+    },
+    "distractorNotes": {
+      "o2": "read er en funktion og skal derfor afsluttes med parenteser: read().",
+      "o3": "Python skelner mellem store og små bogstaver, og read skal kaldes som en funktion med parenteser: read().",
+      "o4": "Python skelner mellem store og små bogstaver. Funktionen hedder print() og ikke Print().",
+      "o5": "Både filnavnet og r skal stå i citationstegn, fordi de er tekst.",
+      "o7": "Python skelner mellem store og små bogstaver. Funktionen hedder open() og ikke Open().",
+      "o8": "r er tekst og skal derfor stå i citationstegn."
+    
+    }
+  },
+  "version": 1
+}

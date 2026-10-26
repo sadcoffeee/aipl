@@ -1,0 +1,34 @@
+{
+  "id": "l042-completion-threshold",
+  "title": "Add two variables",
+  "type": "completion",
+  "concepts": [
+    "arithmetic",
+    "variable"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "PLACEHOLDER CONTENT for layout testing only.\n\n Udfyld de manglende felter så programmet vælger EKG-kolonnen og viser målingerne.",
+    "language": "python",
+    "starterCode": "ekg = {{gap}}\n\nprint({{gap}})"
+  },
+  "private": {
+    "referenceSolution": "ekg = data[:,1]\n\nprint(ekg)",
+      "behaviour": [
+        {
+          "variable": "ekg",
+          "expect": "column",
+          "allShouldSatisfy": "data[:,1]",
+          "note": "Kontrollere at EKG-kolonnen vælges korrekt og at variablen printes"
+        }
+      ],
+      "structure": [
+        {
+          "astCheck": "uses a comparison operator",
+          "onFail": "h-addition"
+        }
+      ]
+  },
+  "version": 1
+}

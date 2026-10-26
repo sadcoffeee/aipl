@@ -1,0 +1,55 @@
+{
+  "id": "l024-variable-print",
+  "title": "Vis indholdet i konsollen",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "print",
+    "file"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Nu har vi indholdet af en fil gemt i variabelen `indhold` , og nu skal det visualiseres så vi kan se hvad indholdet er. Til dette bruger vi `print()` funktionen"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "code",
+            "language": "python",
+            "code": "EKG_data = open(\"EKG_data.txt\",\"r\") \nindhold = EKG_data.read() \nprint(indhold)",
+            "caption": "Åbner filen ´EKG_data.txt´, læser filens indhold og viser det i konsollen ved at bruge ´print()´."
+
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "`print()` er en funktion det bruges til at vise noget i konsollen. Konsollen er det område, hvor Python viser resultaterne fra programmet. Når programmet kører, vil teksten fra filen blive vist her.​"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Konsollen bruges både til at vise resultater fra programmet og at vise fejlmeddelelser, hvis noget går galt.​"
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-printvariabel"
+  ]
+}

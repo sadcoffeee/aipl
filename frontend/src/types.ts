@@ -221,3 +221,5 @@ export interface SubmissionRow {
   status: string | null
   solved: number | null
 }
+
+

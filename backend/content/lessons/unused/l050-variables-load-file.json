@@ -1,0 +1,43 @@
+{
+  "id": "l050-variable-open-file",
+  "title": "Open Variables",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "assignment",
+    "file"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "I denne lektion kigger vi på hvordan man i Python kan åbne en fil, som vi senere kan arbejde med.\n\n I dette program findes filen: EKG_data.txt. Før vi kan bruge dataen inde i filen skal vi fortælle Python at vi gerne vil arbejde med filen. Det gør man ved at bruge funktionen **open(file, mode)**. I parantecerne ses file og mode som er to parametere der bruges til at specificere den valgte fil. **File** er navnet på selve filen og **mode** er en måde at definere hvilken måde filen skal åbnes på. I denne fil bruger vi mode **\"r\"**, som står for read og betyder at filen kun skal læses."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Når filen er åbnet, gemmer vi den i variablen **EKG_data**. Derefter kan vi bruge **read()** til at læse indholdet og **print()** til at vise det i konsollen."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "EKG_data = open(\"EKG_data.txt\",\"r\");\n print(EKG_data.read())",
+            "caption": "Tekstfilen åbnes og indholdet vises i konsollen"
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1
+}

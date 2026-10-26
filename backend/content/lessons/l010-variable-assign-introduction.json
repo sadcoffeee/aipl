@@ -1,0 +1,69 @@
+{
+  "id": "l010-variable-assign-introduction",
+  "title": "Introduktion til Variabler",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "assign"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Når vi programmerer, er det ofte nødvendigt at gemme værdier, så de kan bruges senere i programmet. Til dette bruger vi **variabler**."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "En variabel fungerer som en navngivet beholder. Når vi bruger tegnet `=`, gemmer vi værdien der står til højre for tegnet i variablen som er navngivet det der står til venstre for tegnet. Dette kaldes at **assigne** en værdi til en variabel."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "ekg = 0.8",
+            "caption": "Værdien ´0.8´ gemmes i variablen ´ekg´"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Når værdien er gemt, kan vi bruge variabelnavnet i stedet for at skrive værdien igen. Python finder automatisk den værdi, som er gemt i variablen."
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Det er vigtigt at huske at navnet på variablen er **case sensitiv**, derfor skal man skrive det præcise navn når man skal bruge variablen. Hvis variablen er kaldt EKG_data, kan man ikke bruge ekg_data til at kalde variablen. Dette vil give fejl."
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Vi kan også gemme mere avancerede ting i variabler. For eksempel kan vi gemme hele filer eller datasæt, men det vil du lære senere."
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-assign"
+  ]
+}

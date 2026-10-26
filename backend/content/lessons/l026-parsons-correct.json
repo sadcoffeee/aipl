@@ -1,0 +1,57 @@
+{
+  "id": "l026-parsons-correct",
+  "title": "Vælg Korrekt Rækkefølge",
+  "type": "parsons",
+  "concepts": [
+    "file",
+    "function-call",
+    "variable",
+    "order"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Sæt koden i den rigtige rækkefølge. \n1.  Assign en variabel der åbner filen `EKG_data.txt`. \n2.  Læs og gem indholdet i en variabel. \n3.  Print teksten fra filen til konsollen",
+    "language": "python",
+    "shuffleOptions": true,
+    "lines": [
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s2",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s3",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "EKG_data = (\"EKG_data.txt\",\"r\")"
+      },
+      {
+        "id": "o2",
+        "code": "indhold = EKG_data.read()"
+      },
+      {
+        "id": "o3",
+        "code": "print(indhold)"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o1",
+      "s2": "o2",
+      "s3": "o3"
+    }
+  },
+  "version": 1
+}

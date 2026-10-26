@@ -1,0 +1,23 @@
+{
+  "id": "l011-completion-assign",
+  "title": "Assign en Variabel",
+  "type": "completion",
+  "concepts": [
+    "file",
+    "variable",
+    "assign"
+  ],
+  "estimatedMinutes": 1,
+  "selfAssessment": true,
+  "content": {
+    "description": "Udfyld den manglende del af koden.\nFortæl python at variablen med navnet `ekg`, skal indeholde værdien `0.8`",
+    "language": "python",
+    "starterCode": "ekg {{gap}} 0.8\nprint(ekg)"
+  },
+  "private": {
+    "gapSolutions": [
+      "="
+    ]
+  },
+  "version": 1
+}

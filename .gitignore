@@ -1,6 +1,8 @@
+frontend/node_modules
 node_modules/
 dist/
 __pycache__/
+backend/app/__pycache__
 *.pyc
 .venv/
 backend/data/

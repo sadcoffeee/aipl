@@ -1,0 +1,26 @@
+{
+  "id": "l021-completion-ekg-syntax",
+  "title": "Åben Filen",
+  "type": "completion",
+  "concepts": [
+    "file",
+    "variable",
+    "open"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Udfyld den manglende del af koden. Åbn filen `EKG_data.txt`",
+    "language": "python",
+    "starterCode": "EKG_data = open(\"{{gap}}\", \"r\")"
+  },
+  "datasets": [
+    "EKG_data.txt"
+  ],
+  "private": {
+    "gapSolutions": [
+      "EKG_data.txt"
+    ]
+  },
+  "version": 1
+}

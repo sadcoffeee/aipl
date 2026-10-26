@@ -1,0 +1,56 @@
+{
+  "id": "l014-print-console-introduction",
+  "title": "Print variabler til konsollen",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "print",
+    "console"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Indtil nu har vi gemt værdier i variabler, men vi har endnu ikke set dem på skærmen. Til dette bruger vi funktionen print(). Når vi skriver en værdi eller en variabel inde i parenteserne, bliver den vist i konsollen."
+          }
+        ]
+      },
+
+      {
+        "items": [
+          {
+            "type": "code",
+            "language": "python",
+            "code": "ekg = 0.8 \nprint(ekg)",
+            "caption": "gemmer '0.8' i variablen 'ekg og printes af 'print' funktionen"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Når et Python-program kører, bliver resultatet fra `print()` vist i konsollen. \n-  Konsollen er et område hvor programmet kan skrive beskeder, værdier og resultater. Den bruges ofte til at kontrollere om programmet arbejder som forventet."
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Husk at navnet på variablen er case sensitiv, det skal derfor altid skrives præcis på samme måde når man skal bruge variablen."
+          }
+        ]
+      }
+      
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-print-variable"
+  ]
+}

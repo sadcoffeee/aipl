@@ -1,0 +1,59 @@
+{
+  "id": "l013-parsons-correct",
+  "title": "Assign variabler med forskellige typer",
+  "type": "parsons",
+  "concepts": [
+    "file",
+    "function-call",
+    "variable",
+    "order"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Placer de to linje koder i den rigtige rækkefølge.\nFørst skal vi assign en variabel med decimaltallet `0.8`. Næste linje assign teksen `min fil hedder: EGK_data` til variablen ekg_tekst",
+    "language": "python",
+    "shuffleOptions": true,
+    "lines": [
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s2",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "ekg = 0.8"
+      },
+      {
+        "id": "o2",
+        "code": "ekg_tekst = \"min fil hedder: EGK_data\""
+      },
+      {
+        "id": "o3",
+        "code": "ekg = \"0.8\""
+      },
+      {
+        "id": "o4",
+        "code": "ekg_tekst = min fil hedder: EGK_data"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o1",
+      "s2": "o2"
+    },
+    "distractorNotes": {
+      "o3": "Værdien står i citationstegn og bliver derfor gemt som string i stedet for et tal.",
+      "o4": "Tekst skal stå i citationstegn. Uden citationstegn forsøger Python at fortolke teksten som variabelnavne i stedet for tekst."
+    }
+  },
+  "version": 1
+}

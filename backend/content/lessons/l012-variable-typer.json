@@ -1,0 +1,64 @@
+{
+  "id": "l012-variable-typer",
+  "title": "Variabel Typer",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "types"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Variabler kan indeholde forskellige typer værdier. Hvilken type værdi en variabel indeholder, kaldes dens **datatype**."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Tal med decimaler bruges ofte til målinger. Decimal tal er altid i punktum når vi skriver kode. I eksemplet gemmes en EKG-måling i variablen `ekg`."
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "ekg = 0.8",
+            "caption": "Variablen `ekg` indeholder decimaltallet `0.8` ."
+          }
+        ]
+      },
+      {
+        "split": [
+          55,
+          45
+        ],
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Tekst gemmes mellem citationstegn. Dette kaldes en **string**. Alt inde i citationstegnene behandles som tekst selv hvis det er tal. "
+          },
+          {
+            "type": "code",
+            "language": "python",
+            "code": "filnavn = \"min fil hedder: EGK_data\"",
+            "caption": "Variablen  `ekg` indeholder teksen `min fil hedder: EGK_data`."
+          }
+        ]
+      }
+     ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-string",
+    "h-float"
+  ]
+}

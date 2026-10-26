@@ -1,0 +1,36 @@
+{
+  "id": "l054-completion-ekg",
+  "title": "Importance of syntax",
+  "type": "completion",
+  "concepts": [
+    "arithmetic",
+    "variable",
+    "syntax"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": true,
+  "content": {
+    "description": "I denne opgave kan vi nu sammenkoble alt det vi har lært fra de tidligere opgaver. Brug EKG_data.txt filen igen til at åbne og vise indeholdet.",
+    "language": "python",
+    "starterCode": "{{gap}} \n\n print({{gap}})"
+  },
+  "private": {
+    "referenceSolution": "EKG_data = open(\"EKG_data.txt\", \"r\") \n\n print(EKG_data.read())",
+      
+      "behaviour": [
+        {
+          "variable": "EKG_data",
+          "expect": "number",
+          "allShouldSatisfy": "15",
+          "note": "Not functional in this skeleton. Sketch of the intended checks."
+        }
+      ],
+      "structure": [
+        {
+          "astCheck": "uses a comparison operator",
+          "onFail": "h-addition"
+        }
+      ]
+  },
+  "version": 1
+}

@@ -1,0 +1,63 @@
+{
+  "id": "l051-parsons-open-file-order",
+  "title": "Åben EKG-filen",
+  "type": "parsons",
+  "concepts": [
+    "open",
+    "function-call",
+    "variable"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Indlæs EKG-filen i en variable og print filen\n\n Du skal vælge de linjer der kan få programmet til at åbne filen, og printe indholdet til konsollen. Husk at sætte dem i den rigtige rækkefølge!",
+    "language": "python",
+    "shuffleOptions": true,
+    "lines": [
+      {
+        "kind": "slot",
+        "id": "s1",
+        "indent": 0
+      },
+      {
+        "kind": "slot",
+        "id": "s2",
+        "indent": 0
+      }
+    ],
+    "options": [
+      {
+        "id": "o1",
+        "code": "print(ekg)"
+      },
+      {
+        "id": "o2",
+        "code": "EKG_data = open(\"EKG_data.txt\", \"r\")"
+      },
+      {
+        "id": "o3",
+        "code": "print(EKG_data.read())"
+      }, 
+      {
+        "id": "o4",
+        "code": "print(\"ekg\")"
+      }, 
+      {
+        "id": "o5",
+        "code": "open(\"EKG_data.txt\")"
+      }
+    ]
+  },
+  "private": {
+    "solution": {
+      "s1": "o2",
+      "s2": "o3"
+    },
+    "distractorNotes": {
+      "o1": "Variablen 'ekg' findes ikke i denne opgave. Hvilken variabel indeholder den åbnede fil?",
+      "o4": "Dette printer teksten 'ekg'. Opgaven skal vise data fra filen, ikke bare tekst.",
+      "o5": "Filen åbnes, men gemmes ikke i en variabel. Hvordan kan du bruge filen senere, hvis den ikke er gemt?"
+    }
+  },
+  "version": 1
+}

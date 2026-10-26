@@ -1,0 +1,33 @@
+{
+  "id": "l019-completion-order",
+  "title": "Brug variablen efter den er oprettet",
+  "type": "completion",
+  "concepts": [
+    "order",
+    "variable",
+    "print"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": true,
+  "content": {
+    "description": "Udfyld den manglende del af koden.\nGem værdien `4.2` i en variabel. Print derefter variablen i konsollen",
+    "language": "python",
+    "starterCode": "{{gap}} = 4.2\n{{gap}}({{gap}})"
+  },
+  "private": {
+    "gapSolutions": [
+      "navn",
+      "print",
+      "navn"
+    ],
+
+    "checks": [
+      {
+        "id": "output",
+        "type": "stdout_matches_reference"
+      }
+    ]
+
+  },
+  "version": 1
+}

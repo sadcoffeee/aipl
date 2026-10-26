@@ -1,0 +1,287 @@
+/* Lesson layout with goals (collection !) navigation */
+
+/* Page layout: menu on the left, lesson on the right. */
+.lesson-view {
+  display: grid;
+  grid-template-columns: 0px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: 0;
+  transition: grid-template-columns 200ms ease, column-gap 200ms ease;
+}
+
+/* Make room for the menu when it opens. */
+.lesson-view.goals-open {
+  grid-template-columns: 250px minmax(0, 1fr);
+  column-gap: 1rem;
+}
+
+/* Put the buttons and title above the lesson. */
+.lesson-view > .lesson-header {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+/* Put the lesson content below the title. */
+.lesson-view > .lesson-body {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+}
+
+
+/* Goals bar */
+
+/* Navigation panel appearance.  -> menu BG */
+.goals-bar {
+  background: #e9e9e9;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Collection title. Click to show or hide its lessons. */
+.goals-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: white;
+  padding: 1rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 1.1rem 1rem;
+}
+
+/* Hide the browser's arrow so we can use our own. */
+.goals-heading::-webkit-details-marker {
+  display: none;
+}
+
+/* Create the arrow beside the collection title. */
+.goals-heading::after {
+  content: '';
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+
+/* Rotate the arrow when the collection is open. */
+.goals-bar details[open] > .goals-heading::after {
+  transform: rotate(225deg);
+}
+
+/* Outline when selected using the keyboard. */
+.goals-heading:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Remove the list's default numbers and spacing. */
+.goals-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Lesson buttons and their colours when hovered or active. */
+.goal-step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  /* Indent lessons under their collection. */
+  padding: 0.75rem 0.75rem 0.75rem 2.3rem;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.goal-step:hover:not(:disabled) {
+  background: #dceef3;
+}
+
+.goal-step.active {
+  background: #b8dce8;
+}
+
+/* Circle around the lesson number or icon. */
+.goal-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  font-size: 0.85rem;
+  border-radius: 50%;
+  background: #ccc;
+  font-weight: 700;
+}
+
+.goal-step.active .goal-number {
+  background: #65c3df;
+}
+
+/* Make locked lesson buttons look faded. */
+.goal-step:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Outline when selected using the keyboard. */
+.goal-step:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Size, position and border of the whole sidebar. */
+.goals-wrapper {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  min-width: 0;
+  /*overflow: hidden;
+  min-height: calc(100dvh - 120px); */
+  background: #e9e9e9;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  /* Keep the sidebar within the screen. Scroll inside when needed. */
+  height: calc(100dvh - 120px);
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  align-self: start;
+}
+
+/* Hide the sidebar when closed. */
+.goals-wrapper[hidden] {
+  display: none;
+}
+
+/* Menu width. The sidebar already has a border. */
+.goals-wrapper .goals-bar {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+.goals-bar[hidden] {
+  display: none;
+}
+
+/* Burger button. */
+.goals-toggle {
+  flex-shrink: 0;
+  width: 32px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: none;
+  color: var(--ink);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.goals-toggle:hover {
+  background: var(--accent-soft);
+}
+
+/* Same height for both buttons. Centre the text and icon. */
+.back-button,
+.goals-toggle {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Text showing how many lessons are completed. */
+.goals-progress {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Line between collections. */
+.goals-bar details + details {
+  border-top: 1px solid var(--line);
+}
+
+
+/* Colours for completed, attempted and locked lessons. - data statuses */
+.goal-step .goal-number[data-status='completed'] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.goal-step .goal-number[data-status='attempted'] {
+  background: #fff0d9;
+  color: #9a6725;
+  padding-bottom: 2.5px;
+}
+
+.goal-step .goal-number[data-status='locked'] {
+  background: #e5e7eb;
+}
+
+/* Place the collection icon beside its title. */
+.collection-heading-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+/* Collection icon size and colours. */
+.collection-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #eef0f3;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.collection-status[data-state='completed'] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.collection-status[data-state='in_progress'] {
+  background: #fff0d9;
+  color: #9a6725;
+  padding-bottom: 2px; /* Moves the icon slightly upwards. */}
+
+  /* Move collection play icons slightly to the right. */
+.collection-status[data-state='in_progress'],
+.collection-status[data-state='not_started'] {
+  padding-left: 2.5px;
+}
+
+
+/* Orange play icon for the current lesson before submission. */
+.goal-step .goal-number[data-status='in_progress'] {
+  background: #fff0d9;
+  color: #9a6725;
+}
+
+/* Move lesson play icons slightly to the right. */
+.goal-step .goal-number[data-status='available'],
+.goal-step .goal-number[data-status='in_progress'] {
+  padding-left: 2px;
+}

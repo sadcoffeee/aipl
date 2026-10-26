@@ -1,0 +1,37 @@
+{
+  "id": "l053-completion-ekg-syntax",
+  "title": "Importance of syntax",
+  "type": "completion",
+  "concepts": [
+    "file",
+    "variable",
+    "syntax"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": true,
+  "content": {
+    "description": "Udfyld de manglende dele af koden, vi skal igen åbne vores fil og printe indholdet. Husk at Python er følsom overfor store og små bogstaver, og at tekst skal stå i citationstegn.",
+    "language": "python",
+    "starterCode": "EKG_data = {{gap}}({{gap}}, {{gap}}) \n\n print(EKG_data{{gap}})"
+  },
+  "private": {
+    "referenceSolution": "EKG_data = open(\"EKG_data.txt\", \"r\") print(EKG_data.read())",
+      
+      "behaviour": [
+        {
+          "variable": "EKG_data",
+          "expect": "number",
+          "allShouldSatisfy": "15",
+          "note": "Not functional in this skeleton. Sketch of the intended checks."
+        }
+      ],
+      "structure": [
+        {
+          "astCheck": "uses a comparison operator",
+          "onFail": "h-addition"
+        }
+      ]
+    
+  },
+  "version": 1
+}

@@ -1,0 +1,68 @@
+{
+  "id": "l020-variable-open-file",
+  "title": "Åben en fil",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "mode",
+    "file",
+    "open"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "I denne lektion kigger vi på hvordan man i Python kan åbne en fil, som vi senere kan arbejde med.\n\n I dette program findes filen: `EKG_data.txt`. Filen indeholder to kolonner: \n 1.   Tid - Angivet i sekunder \n 2.   EKG - den målte spænding i milivolt(mV). \nDin opgave er at bruge Python til at åbne filen, læse dens indhold og vise målingerne i konsollen."
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Først skal man fortælle python hvilken fil man vil arbejde med."
+          }
+        ]
+      },
+
+      {
+        "items": [
+          {
+            "type": "code",
+            "language": "python",
+            "code": "EKG_data = open(\"EKG_data.txt\",\"r\")",
+            "caption": "Tekstfilen ´EKG_data.txt´ læses og gemmes i variablen ´EKG_data´"
+          }
+        ]
+      },
+      
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "`EKG_data` er navnet på en variabel. Du bestemmer selv hvad din variabel skal hedde, det er dog vigtigt at skrive navnet på samme måde da Python er case sensitiv.​"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "`open()` er en funktion som bruges til at åbne en fil.\n-  En funktion er en kommando, der udfører en bestemt opgave. Funktionens navn efterfølges altid af parenteser, som kan indeholde de oplysninger, funktionen skal bruge. \n-  Filen der bruges skal stå imellem to citations tegn. \n-  Filens navn skal være præcis som filen er navgivet på din computer. Hvis filen hedder EKG_10Hz.txt virker EKG10Hz.txt ikke. \n-  Det lille r imellem citations tegnene står for `read` og fortæller python vi gerne vil læse filen."
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-open"
+  ],
+  "datasets": [
+    "EKG_data.txt"
+  ]
+}

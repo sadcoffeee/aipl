@@ -1,0 +1,36 @@
+{
+  "id": "l023-completion-read-file",
+  "title": "Læs Filen",
+  "type": "completion",
+  "concepts": [
+    "file",
+    "variable",
+    "read"
+  ],
+  "estimatedMinutes": 2,
+  "selfAssessment": true,
+  "content": {
+    "description": "Udfyld den manglende del af koden. Åben filen og gem den i en variable du selv bestemmer navnet på, herefter brug variablen til at læse og gemme indholdet i variablen `indhold`",
+    "language": "python",
+    "starterCode": "{{gap}} = open(\"EKG_data.txt\",\"r\") \nindhold = {{gap}}.read()"
+  },
+  "private": {
+    "gapSolutions": [
+      "bareEtNavn",
+      "bareEtNavn"
+    ],
+    "checks": [
+      {
+        "id": "variable_holds_textfile",
+        "type": "variable_matches_reference",
+        "variable": "indhold",
+        "message": "the variable names should be the same"
+      }
+    ]
+  },
+
+  "datasets": [
+    "EKG_data.txt"
+  ],
+  "version": 1
+}

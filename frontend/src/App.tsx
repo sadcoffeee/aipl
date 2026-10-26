@@ -8,10 +8,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import * as api from './api'
 import AdminView from './components/AdminView'
-import LessonList from './components/LessonList'
+//import LessonList from './components/LessonList'
 import LessonView from './components/LessonView'
 import LoginView from './components/LoginView'
 import type { Course, User } from './types'
+import CollectionList from './components/LessonList'
 
 type AdminTab = 'participants' | 'lessons'
 
@@ -22,11 +23,13 @@ export default function App() {
   const [openLessonId, setOpenLessonId] = useState<string | null>(null)
   const [adminTab, setAdminTab] = useState<AdminTab>('participants')
   const [error, setError] = useState<string | null>(null)
+  const [goalsOpen, setGoalsOpen] = useState(false) //.
 
   const signOut = useCallback(() => {
     setUser(null)
     setCourse(null)
     setOpenLessonId(null)
+    setGoalsOpen(false) 
   }, [])
 
   const refreshCourse = useCallback(() => {
@@ -122,8 +125,11 @@ export default function App() {
           course === null ? (
             <div className="panel">Loading course...</div>
           ) : (
-            <LessonList
-              lessons={course.collections.flatMap((collection) => collection.lessons)}
+            <CollectionList
+       //course.collrection -> retrives all collections
+       //.flatmap takes lessons from each collection and combine into one array
+       //lessonList recives the array, no longer know
+              collections={course.collections}
               isAdmin={user.role === 'admin'}
               onOpen={(lessonId) => {
                 api.logEvent({ lessonId, type: 'lesson_opened' })
@@ -133,10 +139,20 @@ export default function App() {
           )
         ) : (
           <LessonView
-            lessonId={openLessonId}
-            onProgressChanged={refreshCourse}
+          onProgressChanged={refreshCourse}
+          key={openLessonId}
+          collections={course?.collections ?? []} //. denne og ned
+          goalsOpen={goalsOpen}
+          onToggleGoals={() => setGoalsOpen((open) => !open)}
+          lessonId={openLessonId}
+          onOpen={(lessonId)=> {
+              api.logEvent({ lessonId: openLessonId, type: 'lesson_closed'})
+              api.logEvent({ lessonId, type: 'lesson_opened'})
+              setOpenLessonId(lessonId)
+          }}
             onBack={() => {
               api.logEvent({ lessonId: openLessonId, type: 'lesson_closed' })
+              setGoalsOpen(false) //sørger for at goalsbaren lukker når de går til forsiden
               setOpenLessonId(null)
               // Re-fetch so a newly unlocked lesson appears without a reload.
               refreshCourse()

@@ -1,0 +1,286 @@
+/* Plain CSS, no framework. */
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #1c2024;
+  --muted: #667085;
+  --line: #dfe3e8;
+  --accent: #2f5bea;
+  --accent-soft: #eaefff;
+  --warn: #b42318;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+.app-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1.5rem;
+}
+
+.app-title {
+  font-weight: 600;
+}
+
+.participant {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0 0 0.25rem;
+}
+
+h2 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.error {
+  border-color: #f3c6c2;
+  background: #fdf3f2;
+  color: var(--warn);
+  white-space: pre-wrap;
+}
+
+/* collection list ------------------------------------------------------------ */
+
+/* Styles the unordered list (<ul>) inside the lesson-list container */
+.lesson-list ul {
+    list-style: none; /* Removes  default bullet points*/
+    margin: 1rem 0 0; /*Adds space above the list*/
+    padding: 0; /* inner spacing around the list */
+
+    display: grid; /* CSS Grid to arrange the lesson items */
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Creates x equal-width columns */
+    gap: 0.75rem; /* Sets the space between each lesson */
+}
+
+/*each collection card*/
+.lesson-button {
+    width: 100%; /* button fill the available width of its container */
+    min-width: 0;
+    display: flex; /* Places icon and text side by side*/
+    align-items: flex-start;
+    gap: 0.85rem; /* Sets the space between the icon and the text */
+    min-height: 250px;
+    text-align: left;
+    font: inherit; /* Inherits the font family, size, weight and style from its parent */
+
+    color: var(--ink);
+    background: var(--panel); /* Sets the background using the --panel CSS variable */
+    border: 1px solid var(--line); /* Adds a 1px solid border using the --line variable */
+    border-radius: 10px; /* Rounds the corners of the button */
+    padding: 1rem; /* Adds inner spacing */
+    cursor: pointer; /* pointer cursor when hovering over the button */
+    transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+    position:relative; /*needed for feedforward*/
+    padding-bottom:3rem; /*padding for feedforward*/
+}
+
+/* Icon on the left */
+.lesson-icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    font-size: 2rem; /* Sets the size of the icon */
+}
+
+/* Content to the right of the icon */
+.lesson-button-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* First row: title on the left, time on the right */
+.collection-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.collection-name {
+    min-width: 0;
+    font-weight: 650;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    font-size: 2.2rem;
+}
+
+/* Estimated duration */
+.collection-time {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 1rem;
+    white-space: nowrap;
+    line-height: 1.5;
+}
+
+/* Second row: description */
+.collection-description {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+/* ----------------Third row: progress----------------- */
+.collection-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+
+    /*Line seperating desription and progress*/
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--line);
+}
+
+/* Large circular progress icon */
+.progress-icon {
+    flex: 0 0 3.25rem; /*keep icon consistent size*/
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%; /*make round*/
+    display: flex;
+    align-items: center; /*vertical center*/
+    justify-content: center; /*horixontally center*/
+    background: #b9c0ca;
+    color: white; /*set color of icon to write*/
+    font-size: 1.8rem; /*control the size of the icon*/
+    font-weight: 700; /*how thick the icon is*/
+    
+}
+
+/* In-progress icon */
+.collection-progress--in_progress .progress-icon {
+    background: #e8b547; /*yellow*/
+    line-height: 1;
+    padding-bottom: 3px; /*moves a little up*/
+}
+
+/* Completed icon */
+.collection-progress--completed .progress-icon {
+    background: #70b765; /*green*/
+}
+
+/*not started icon*/
+.collection-progress--not_started .progress-icon {
+    background: #98a2b3;
+    line-height: 1;
+    padding-bottom: 3px; /*moves a little up*/
+}
+/* Locked icon */
+.collection-progress--locked .progress-icon {
+    background: #98a2b3;
+    font-size: 1.3rem;
+}
+
+/* Progress label and bar */
+.progress-content {
+flex: 1;
+min-width: 0;
+display: flex;
+flex-direction: column;
+gap: 0.45rem;
+}
+
+/* Completion count */
+.progress-label {
+font-size: 0.95rem;
+font-weight: 700;
+line-height: 1.35;
+}
+
+/* Progress bar background */
+.progress-track {
+width: 100%;
+height: 9px;
+overflow: hidden;
+border-radius: 999px;
+background: #dfe3e8;
+}
+
+/* Filled progress */
+.progress-fill {
+height: 100%;
+border-radius: inherit;
+background: #70b765;
+transition: width 300ms ease;
+}
+
+/* State-specific bar colors */
+.collection-progress--in_progress .progress-fill {
+    background: #e8b547; /*yellow*/
+}
+
+.collection-progress--locked .progress-fill {
+background: #98a2b3; /*grey*/
+}
+
+.collection-progress--completed .progress-fill {
+background: #70b765; /*green*/
+}
+
+/*feedforward*/
+.feedforward-container {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.75rem;
+    text-align: right;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.progress-state {
+color: var(--muted);
+font-size: 0.75rem;
+}
+
+.lesson-button:hover {
+        border-color: var(--accent); /* Changes the border to the accent color */
+        background: var(--accent-soft); /* Changes the background to a softer accent color */
+    }
+
+

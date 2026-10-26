@@ -3,37 +3,73 @@
   "entries": [
     {
       "id": "h-assign",
-      "title": "Assigning a variable",
-      "markdown": "Name on the left, value on the right.",
+      "title": "Assign en variabel",
+      "markdown": "(Navnet på din variabel) = (Værdien du vil gemme)",
       "code": "age = 42",
       "tags": ["variable"]
     },
     {
       "id": "h-print",
-      "title": "Showing a value in the console",
-      "markdown": "`print()` writes a value to the output area.",
+      "title": "Vis værdien i konsollen",
+      "markdown": "`print()` viser værdien i konsollen.",
       "code": "print(age)",
-      "tags": ["output"]
+      "tags": [ "output" ]
     },
     {
-      "id": "h-np-mean",
-      "title": "Averaging an array",
-      "markdown": "Functions from numpy are written with the `np.` prefix.",
-      "code": "np.mean(values)",
-      "tags": ["numpy", "function-call"]
+      "id": "h-string",
+      "title": "Gem tekst",
+      "markdown": "Husk citationstegn omkring tekst.",
+      "code": "filnavn = \"EKG_data\"",
+      "tags": [ "string" ]
     },
     {
-      "id": "h-quotes",
-      "title": "Quotes",
-      "markdown": "`signal` is a variable. `\"signal\"` is the word as plain text. They are not the same thing.",
-      "tags": ["strings", "variable"]
+      "id": "h-float",
+      "title": "Gem et decimaltal",
+      "markdown": "Decimaltal skrives med punktum, ikke komma.",
+      "code": "ekg = 1.2",
+      "tags": [ "float" ]
     },
     {
-      "id": "h-addition",
-      "title": "Adding variables",
-      "markdown": "Python supports standard mathematical operations such as addition, subtraction and multiplication with variables. The result can be stored in a new variable.",
-      "code": "z = x + y",
-      "tags": ["arithmetic"]
+      "id": "h-open",
+      "title": "Åbn en fil",
+      "markdown": "`open()` bruges til at åbne en fil.",
+      "code": "fil = open(\"navn på din fil\", \"r\")",
+      "tags": [ "file" ]
+    },
+    {
+      "id": "h-read",
+      "title": "Læs filens indhold",
+      "markdown": "Brug `.read()` til at læse filen `fil` og gem resultatet i variablen `indhold`.",
+      "code": "indhold = fil.read()",
+      "tags": [ "file" ]
+    },
+    {
+      "id": "h-printvariabel",
+      "title": "Vis en variabel",
+      "markdown": "Brug `print()` til at vise indholdet af en variabel i konsollen.",
+      "code": "print(indhold)",
+      "tags": [ "output" ]
+    },
+    {
+      "id": "h-print-variable",
+      "title": "Print en variabel",
+      "markdown": "Skriv variablens navn inde i parenteserne.",
+      "code": "print(ekg)",
+      "tags": [ "variable" ]
+    },
+    {
+      "id": "h-print-type",
+      "title": "Print forskellige typer",
+      "markdown": "Tekst skal stå mellem citationstegn `print(\"EKG-data indlæst\")`. \nTal kan printes direkte i print funktionen `print(12.5)` \nVariabler printes ves at skrive navnet i print funktionen `print(navn_på_variabel)`",
+      "tags": [ "string" ]
+    },
+    {
+      "id": "h-code-order",
+      "title": "Rækkefølgen er vigtig",
+      "markdown": "En variabel skal oprettes, før den kan bruges.",
+      "code": "ekg = 0.8\nprint(ekg)",
+      "tags": [ "order" ]
     }
+
   ]
 }

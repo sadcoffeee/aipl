@@ -1,20 +1,35 @@
 {
   "collections": [
+    
     {
-      "id": "c010-first-steps",
-      "title": "First steps",
-      "description": "PLACEHOLDER 1",
+      "id": "c010-variabler",
+      "title": "Variabler i Python",
+      "description": "I denne lektion bliver vi introdukseret til hvad en variabel er, hvad der er vigtigt når man skal lave en og hvilke forskellige typer der findes som vi kan bruge til de næste lektioner.",
       "lessons": [
-        "l010-variables",
-        "l020-parsons-mean"
+        "l010-variable-assign-introduction",
+        "l011-completion-assign",
+        "l012-variable-typer",
+        "l013-parsons-correct",
+        "l014-print-console-introduction",
+        "l015-parsons-print",
+        "l016-print-variable-different",
+        "l017-parsons-print",
+        "l018-order-matter-intro",
+        "l019-completion-order"
       ]
     },
     {
-      "id": "c020-second-steps",
-      "title": "Second steps",
-      "description": "PLACEHOLDER 2",
+      "id": "c020-funktioner",
+      "title": "Funktioner",
+      "description": "I denne lektion bliver vi introdukseret til hvad en funktion er og derefter kigger vi på tre forskellige funktioner.",
       "lessons": [
-        "l030-completion-addition"
+        "l020-variable-open-file",
+        "l021-completion-ekg-syntax",
+        "l022-variable-read-file",
+        "l023-completion-read-file",
+        "l024-variable-print",
+        "l025-completion-print",
+        "l026-parsons-correct"
       ]
     }
   ]
