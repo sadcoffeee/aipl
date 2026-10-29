@@ -8,6 +8,7 @@ import CodeEditor from './CodeEditor'
 import SelfAssessment from './SelfAssessment'
 import { PyRunner } from './pyRunner'
 
+
 export default function CompletionView({
   lesson,
   onFeedback,
@@ -25,6 +26,7 @@ export default function CompletionView({
   )
 
   const [code, setCode] = useState(parsed.text)
+  
   const flow = useSubmissionFlow({ lessonId: lesson.id, onFeedback })
 
   const locked = flow.phase !== 'working'
@@ -45,6 +47,9 @@ export default function CompletionView({
       </div>
 
       <PyRunner code={code}/>
+      
+      
+      
 
       {flow.error && <div className="panel error">{flow.error}</div>}
 
@@ -71,4 +76,8 @@ export default function CompletionView({
       )}
     </div>
   )
+  
+
 }
+
+

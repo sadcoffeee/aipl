@@ -17,6 +17,10 @@ declare global{
             runPythonAsync: (code : string, options?: {globals?: unknown}) => Promise<unknown>
             //the globals value is another object that has the function property named get which returns a function
             globals: {get: (key: string) => () => unknown}
+            FS: {
+                writeFile: (path:string, data: Uint8Array) => void
+            }
+            loadPackage: (names: string | string[]) => Promise<void>
         }>
     }
 }
@@ -54,6 +58,7 @@ export function usePy(){
     const [running, setRun] = useState(false) //tracks if the code is running
     const [output, setOut] = useState('') //is an empty string
     const [error, setErr] = useState<string | null>(null) //if its null there is no error, if its string it is the error
+    const [image, setImg] = useState<string | null>(null) //to convert the file to an image
 
     const outRef = useRef('')
 
@@ -68,11 +73,13 @@ export function usePy(){
   const run = useCallback(
     async(code: string) => {
         outRef.current = ''
-        setOut('')
+        setOut('') //resets everything when run
         setErr(null)
+        setImg(null)
         setRun(true)
         try{
             const pyodide = await getPy()
+            await pyodide.loadPackage('matplotlib') //is used to make the image
             currentstdout = useLine
             currentstderr = useLine
             const namespace = pyodide.globals.get('dict')()
@@ -86,6 +93,16 @@ export function usePy(){
         }
     }, [useLine],
   )
-return{running, output, error, run}
+  //for loading the file we have
+async function loadFile(url: string, filename: string) {
+    const pyodide = await getPy()
+    const response = await fetch(url) // downloads file from folder
+    const buffer = await response.arrayBuffer() //turns response into raw bits
+    pyodide.FS.writeFile(filename, new Uint8Array(buffer)) //writes into pyodides filesystem under a filename
+}
+
+return{running, output, error, run, image,loadFile}
+
+
 
 }

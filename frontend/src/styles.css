@@ -724,3 +724,20 @@ button.primary:disabled {
   color: #f04c3d;
 }
 
+/* consol panel -------------------------------------------------- */
+
+.plot-panel{
+  background:  #11161c;
+  color: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem;
+
+}
+
+.ekg-plot{
+  width: 100%;
+  min-height: 200px;
+  overflow-x: auto;
+}
+
