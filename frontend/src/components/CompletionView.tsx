@@ -6,6 +6,7 @@ import type { CompletionLesson, Feedback } from '../types'
 import { useSubmissionFlow } from '../useSubmissionFlow'
 import CodeEditor from './CodeEditor'
 import SelfAssessment from './SelfAssessment'
+import { PyRunner } from './pyRunner'
 
 export default function CompletionView({
   lesson,
@@ -42,6 +43,8 @@ export default function CompletionView({
           extensions={extensions}
         />
       </div>
+
+      <PyRunner code={code}/>
 
       {flow.error && <div className="panel error">{flow.error}</div>}
 

@@ -690,3 +690,37 @@ button.primary:disabled {
   background: #f3e8ff;
   color: #6b21a8;
 }
+/* consol panel -------------------------------------------------- */
+/* The run button similair to submit*/
+.run-button {
+  background: #16804a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  font: inherit;
+  margin-top: 0.5rem;
+}
+/* When its running to give visual feedback*/
+.run-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+/* the console itself + if error happens*/
+.py-console {
+  margin-top: 0.5rem;
+  background: #11161c;
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 8px;
+  min-height: 3rem;
+  white-space: pre-wrap;
+}
+
+.py-console-error {
+  color: #f04c3d;
+}
+
