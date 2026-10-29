@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import auth, config, content, db, llm, grader, progress
+from . import auth, config, content, db, llm, grader, progress, feedback
 
 
 @asynccontextmanager
@@ -296,6 +296,7 @@ def create_self_assessment(
     body: SelfAssessmentIn,
     user: dict[str, Any] = Depends(auth.current_user),
 ) -> dict[str, Any]:
+    # Transaction 1: record the self-assessment, gather what feedback needs.
     with db.connect() as conn:
         submission = conn.execute(
             "SELECT * FROM submissions WHERE id = ?", (submission_id,)
@@ -320,8 +321,35 @@ def create_self_assessment(
         )
 
         evaluation = latest_evaluation(conn, submission_id)
-        feedback_body = rule_based_feedback(evaluation, body)
+    
+    lesson = LESSONS_BY_ID.get(submission["lesson_id"])
+    if lesson is None:  # removed from the course since it was submitted
+        feedback_body, calls = feedback.rule_based(evaluation, body.confidence), []
+    else:
+        feedback_body, calls = feedback.produce(
+            lesson=lesson,
+            payload=json.loads(submission["payload_json"]),
+            evaluation=evaluation,
+            confidence=body.confidence,
+            notes=body.notes,
+            attempt_no=submission["attempt_no"],
+            ctx=feedback.context_for(lesson, LESSONS, HINTS),
+        )
 
+    # Transaction 2: store the feedback and every model call behind it.
+    with db.connect() as conn:
+        for call in calls:
+            conn.execute(
+                """INSERT INTO llm_calls
+                   (id, submission_id, purpose, attempt, model, prompt_version,
+                    messages_json, response, outcome, detail, latency_ms, created_at)
+                   VALUES (?, ?, 'feedback', ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (
+                    new_id("l"), submission_id, call["attempt"], call["model"],
+                    call["promptVersion"], json.dumps(call["messages"], ensure_ascii=False),
+                    call["response"], call["outcome"], call["detail"], call["latencyMs"], now(),
+                ),
+            )
         conn.execute(
             """INSERT INTO feedback (id, submission_id, source, body_json, created_at)
                VALUES (?, ?, ?, ?, ?)""",
@@ -329,89 +357,11 @@ def create_self_assessment(
                 new_id("f"),
                 submission_id,
                 feedback_body["source"],
-                json.dumps(feedback_body),
+                json.dumps(feedback_body, ensure_ascii=False),
                 now(),
             ),
         )
     return feedback_body
-
-
-SUMMARIES = {
-    "passed": "Your solution works.",
-    "failed": "Your code runs, but the result is not right yet.",
-    "incomplete": "Some of the task was left unfinished.",
-    "syntax_error": "Python could not read the code, so it did not run.",
-    "runtime_error": "The code started running but stopped with an error.",
-    "timeout": "The code took too long to finish. Is there a loop that never ends?",
-    "grader_error": "Something went wrong on our side while checking this — it is not your mistake.",
-}
-
-
-def rule_based_feedback(
-    evaluation: dict[str, Any] | None, assessment: SelfAssessmentIn
-) -> dict[str, Any]:
-    if evaluation is None:
-        return {
-            "source": "rules", "solved": None,
-            "summary": "Your answer has been recorded.",
-            "points": [], "revisitLessonId": None,
-        }
-
-    status = evaluation["status"]
-    points: list[dict[str, Any]] = []
-
-    error = evaluation.get("error")
-    if status in ("syntax_error", "runtime_error") and error:
-        points.append({
-            "line": error.get("line"),
-            "text": f"{error['type']}: {error['message']}",
-            "hintId": None,
-        })
-
-    if status == "incomplete":
-        empty = [g["index"] for g in evaluation.get("gaps") or [] if g["empty"]]
-        empty += evaluation.get("emptySlots") or []
-        if empty:
-            points.append({
-                "line": None,
-                "text": "Not filled in yet: " + ", ".join(f"gap {i}" if isinstance(i, int) else f"box {i}" for i in empty),
-                "hintId": None,
-            })
-
-    # Failed checks, required ones first, using the author's own wording.
-    failed = [c for c in evaluation.get("checks", []) if c["passed"] is False]
-    failed.sort(key=lambda c: not c["required"])
-    for check in failed:
-        if check.get("message"):
-            points.append({"line": None, "text": check["message"], "hintId": check.get("hint")})
-
-    # Parson's: name the misconception a chosen distractor suggests.
-    for slot in evaluation.get("slots") or []:
-        if not slot["correct"] and slot.get("note"):
-            points.append({"line": None, "text": slot["note"], "hintId": None})
-        elif slot.get("misplaced"):
-            points.append({"line": None, "text": "A correct line is in the wrong place.", "hintId": None})
-
-    # Calibration: how the confidence rating compares with the result.
-    solved = evaluation["solved"]
-    if solved is not None:
-        confident = assessment.confidence >= 4
-        if solved and not confident:
-            remark = "You were unsure, but it works. Well done!"
-        elif not solved and confident:
-            remark = "You felt sure about this one. It is worth looking again at what you expected to happen."
-        else:
-            remark = None
-        if remark:
-            points.append({"line": None, "text": remark, "hintId": None})
-    
-    return {
-        "source": "rules",
-        "solved": solved,
-        "summary": SUMMARIES.get(status, "Your answer has been recorded."),
-        "points": points,
-        "revisitLessonId": None,
-    }
 
 @app.get("/api/me/submissions")
 def my_submissions(user: dict[str, Any] = Depends(auth.current_user)) -> list[dict[str, Any]]:
@@ -518,7 +468,7 @@ def list_participants(_: dict[str, Any] = Depends(auth.require_admin)) -> list[d
 def admin_submission_detail(
     submission_id: str, _: dict[str, Any] = Depends(auth.require_admin)
 ) -> dict[str, Any]:
-    """Everything about one submission: the code, every evaluation, feedback."""
+    """Everything about one submission: code, evaluations, feedback, model calls."""
     with db.connect() as conn:
         submission = conn.execute(
             "SELECT * FROM submissions WHERE id = ?", (submission_id,)
@@ -529,16 +479,23 @@ def admin_submission_detail(
             "SELECT * FROM evaluations WHERE submission_id = ? ORDER BY created_at",
             (submission_id,),
         ).fetchall()
-        feedback = conn.execute(
+        feedback_rows = conn.execute(
             "SELECT * FROM feedback WHERE submission_id = ? ORDER BY created_at",
             (submission_id,),
         ).fetchall()
+        call_rows = conn.execute(
+            "SELECT * FROM llm_calls WHERE submission_id = ? ORDER BY created_at",
+            (submission_id,),
+        ).fetchall()        
     return {
         "submission": {**dict(submission), "payload": json.loads(submission["payload_json"])},
         "evaluations": [
             {**dict(row), "result": json.loads(row["result_json"])} for row in evaluations
         ],
-        "feedback": [{**dict(row), "body": json.loads(row["body_json"])} for row in feedback],
+        "feedback": [{**dict(row), "body": json.loads(row["body_json"])} for row in feedback_rows],
+        "llmCalls": [
+            {**dict(row), "messages": json.loads(row["messages_json"])} for row in call_rows
+        ],
     }
 
 
@@ -579,6 +536,53 @@ def participant_submissions(
 ) -> list[dict[str, Any]]:
     return submissions_for(user_id)
 
+@app.get("/api/admin/feedback")
+def review_feedback(
+    limit: int = 50,
+    source: str | None = None,
+    _: dict[str, Any] = Depends(auth.require_admin),
+) -> list[dict[str, Any]]:
+    query = """
+        SELECT f.created_at, f.source, f.body_json,
+               s.id AS submission_id, s.lesson_id, s.attempt_no, s.payload_json,
+               a.confidence, a.notes,
+               (SELECT status FROM evaluations e WHERE e.submission_id = s.id
+                ORDER BY e.created_at DESC LIMIT 1) AS status,
+               (SELECT group_concat(outcome, ', ') FROM llm_calls l
+                WHERE l.submission_id = s.id) AS model_outcomes,
+               (SELECT sum(latency_ms) FROM llm_calls l
+                WHERE l.submission_id = s.id) AS model_ms
+        FROM feedback f
+        JOIN submissions s ON s.id = f.submission_id
+        LEFT JOIN self_assessments a ON a.submission_id = s.id
+    """
+    params: list[Any] = []
+    if source:
+        query += " WHERE f.source = ?"
+        params.append(source)
+    query += " ORDER BY f.created_at DESC LIMIT ?"
+    params.append(max(1, min(limit, 500)))
+
+    with db.connect() as conn:
+        rows = conn.execute(query, params).fetchall()
+    return [
+        {
+            "createdAt": row["created_at"],
+            "submissionId": row["submission_id"],
+            "lessonId": row["lesson_id"],
+            "attemptNo": row["attempt_no"],
+            "submitted": json.loads(row["payload_json"]),
+            "status": row["status"],
+            "confidence": row["confidence"],
+            "notes": row["notes"],
+            "feedback": json.loads(row["body_json"]),
+            "modelOutcomes": row["model_outcomes"],
+            "modelMs": row["model_ms"],
+        }
+        for row in rows
+    ]
+
+
 
 @app.get("/api/admin/export")
 def export_everything(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[str, Any]:
@@ -597,6 +601,7 @@ def export_everything(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[s
             "selfAssessments": rows("SELECT * FROM self_assessments"),
             "evaluations": rows("SELECT * FROM evaluations"),
             "feedback": rows("SELECT * FROM feedback"),
+            "llmCalls": rows("SELECT * FROM llm_calls"),            
             "events": rows("SELECT * FROM events"),
         }
 

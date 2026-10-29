@@ -7,7 +7,9 @@ import sqlite3
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from fastapi import Depends, Header, HTTPException
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
 
 from . import config, db
 
@@ -91,8 +93,13 @@ def purge_expired_sessions(conn: sqlite3.Connection) -> None:
 # A "dependency" is a function FastAPI runs before running the endpoint. Writing user: dict = Depends(current_user) in an endpoint's arguments means: run this first, give me the result, and if it raises, never run the endpoint.
 
 
+bearer = HTTPBearer(auto_error=False)
 
-def current_user(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+
+def current_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer),
+) -> dict[str, Any]:
+    authorization = f"Bearer {credentials.credentials}" if credentials else None
     if not authorization or not authorization.lower().startswith("bearer "):
         raise HTTPException(status_code=401, detail="Not logged in")
     token = authorization.split(" ", 1)[1].strip()

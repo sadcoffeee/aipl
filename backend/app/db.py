@@ -62,6 +62,22 @@ CREATE TABLE IF NOT EXISTS evaluations (
     created_at     TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS llm_calls (
+    id             TEXT PRIMARY KEY,
+    submission_id  TEXT REFERENCES submissions(id),
+    purpose        TEXT NOT NULL,     -- 'feedback'
+    attempt        INTEGER NOT NULL,  -- 1, or 2 for the retry
+    model          TEXT,
+    prompt_version TEXT,
+    messages_json  TEXT NOT NULL,     -- exactly what was sent
+    response       TEXT,              -- exactly what came back
+    outcome        TEXT NOT NULL,     -- ok | invalid_json | invalid_shape | leak | code_block | not_danish | error
+    detail         TEXT,
+    latency_ms     INTEGER,
+    created_at     TEXT NOT NULL
+);
+
+
 CREATE TABLE IF NOT EXISTS feedback (
     id            TEXT PRIMARY KEY,
     submission_id TEXT NOT NULL REFERENCES submissions(id),
@@ -85,6 +101,8 @@ CREATE INDEX IF NOT EXISTS idx_events_user
     ON events(user_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_sessions_user
     ON sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_llm_calls_submission
+    ON llm_calls(submission_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_evaluations_submission
     ON evaluations(submission_id, created_at);
 """

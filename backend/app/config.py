@@ -53,8 +53,19 @@ GRADER_STDOUT_LIMIT = int(os.getenv("AIPL_GRADER_STDOUT_LIMIT", "20000"))
 #endpoint, placeholder for now. remember to include the /v1 part
 LLM_BASE_URL = os.getenv("AIPL_LLM_BASE_URL", "http://127.0.0.1:8000/v1")
 
-LLM_MODEL = os.getenv("AIPL_LLM_MODEL", "")
+LLM_MODEL = os.getenv("AIPL_LLM_MODEL", "ministral")
 
 LLM_API_KEY = os.getenv("AIPL_LLM_API_KEY", "not-needed")
 
 LLM_TIMEOUT_SECONDS = float(os.getenv("AIPL_LLM_TIMEOUT", "60"))
+
+# --- feedback ----------------------------------------------------------------
+FEEDBACK_MODE = os.getenv("AIPL_FEEDBACK_MODE", "llm").strip().lower()
+
+FEEDBACK_PROMPT_PATH = pathlib.Path(
+    os.getenv("AIPL_FEEDBACK_PROMPT", str(BACKEND_DIR / "prompts" / "feedback_system.md"))
+)
+
+FEEDBACK_TEMPERATURE = float(os.getenv("AIPL_FEEDBACK_TEMPERATURE", "0.2"))
+FEEDBACK_MAX_TOKENS = int(os.getenv("AIPL_FEEDBACK_MAX_TOKENS", "700"))
+FEEDBACK_TIMEOUT_SECONDS = float(os.getenv("AIPL_FEEDBACK_TIMEOUT", "30"))
