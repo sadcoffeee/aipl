@@ -7,7 +7,7 @@ import HintPanel from './HintPanel'
 import InstructionView from './InstructionView'
 import ParsonsView from './ParsonsView'
 import '../styles_collection-bar.css'
-import {Plot} from './Plot'
+//import {Plot} from './Plot'
 
 export default function LessonView({
   lessonId,
@@ -203,7 +203,7 @@ export default function LessonView({
                 lessonId={lesson.id}
               />
             )}
-            <div className="plot-panel"><Plot /></div>
+            
           </aside>
         )}
         

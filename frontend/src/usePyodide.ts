@@ -20,7 +20,6 @@ declare global{
             FS: {
                 writeFile: (path:string, data: Uint8Array) => void
             }
-            loadPackage: (names: string | string[]) => Promise<void>
         }>
     }
 }
@@ -79,7 +78,7 @@ export function usePy(){
         setRun(true)
         try{
             const pyodide = await getPy()
-            await pyodide.loadPackage('matplotlib') //is used to make the image
+            
             currentstdout = useLine
             currentstderr = useLine
             const namespace = pyodide.globals.get('dict')()
@@ -97,6 +96,9 @@ export function usePy(){
 async function loadFile(url: string, filename: string) {
     const pyodide = await getPy()
     const response = await fetch(url) // downloads file from folder
+    if (!response.ok || !response.headers.get('content-type')?.includes('text/plain')) {
+        throw new Error(`Failed to load ${filename} from ${url} (status ${response.status})`)
+    } // file not found error
     const buffer = await response.arrayBuffer() //turns response into raw bits
     pyodide.FS.writeFile(filename, new Uint8Array(buffer)) //writes into pyodides filesystem under a filename
 }
