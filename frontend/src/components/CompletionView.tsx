@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { LOCK_SCAFFOLD_OUTSIDE_GAPS } from '../config'
 import { gapExtensions, parseGaps } from '../gaps'
 import { Markdown } from '../markdown'
@@ -7,6 +7,7 @@ import { useSubmissionFlow } from '../useSubmissionFlow'
 import CodeEditor from './CodeEditor'
 import SelfAssessment from './SelfAssessment'
 import { PyRunner } from './pyRunner'
+import { usePy } from '../usePyodide'
 
 
 export default function CompletionView({
@@ -26,6 +27,18 @@ export default function CompletionView({
   )
 
   const [code, setCode] = useState(parsed.text)
+
+  const [fileReady, setFileReady] = useState(false)
+const { loadFile } = usePy()
+
+useEffect(() => {
+  async function prepareFile() {
+    await loadFile('/datasets/EKG_data.txt', 'EKG_data.txt')
+    setFileReady(true)
+  }
+  prepareFile()
+}, [])
+
   
   const flow = useSubmissionFlow({ lessonId: lesson.id, onFeedback })
 
@@ -46,7 +59,8 @@ export default function CompletionView({
         />
       </div>
 
-      <PyRunner code={code}/>
+      <PyRunner code={code} fileReady={fileReady}/>
+
       
       
       

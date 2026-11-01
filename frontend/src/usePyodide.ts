@@ -19,6 +19,7 @@ declare global{
             globals: {get: (key: string) => () => unknown}
             FS: {
                 writeFile: (path:string, data: Uint8Array) => void
+                mkdir: (path: string) => void
             }
         }>
     }
@@ -95,13 +96,15 @@ export function usePy(){
   //for loading the file we have
 async function loadFile(url: string, filename: string) {
     const pyodide = await getPy()
-    const response = await fetch(url) // downloads file from folder
-    if (!response.ok || !response.headers.get('content-type')?.includes('text/plain')) {
+    const response = await fetch(url)
+    if (!response.ok) {
         throw new Error(`Failed to load ${filename} from ${url} (status ${response.status})`)
-    } // file not found error
-    const buffer = await response.arrayBuffer() //turns response into raw bits
-    pyodide.FS.writeFile(filename, new Uint8Array(buffer)) //writes into pyodides filesystem under a filename
+    }
+    const buffer = await response.arrayBuffer()
+    pyodide.FS.writeFile(`/home/pyodide/${filename}`, new Uint8Array(buffer))
 }
+
+
 
 return{running, output, error, run, image,loadFile}
 

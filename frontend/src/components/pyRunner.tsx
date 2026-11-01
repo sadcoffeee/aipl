@@ -1,11 +1,11 @@
 import { usePy } from '../usePyodide'
 
-export function PyRunner({ code }: { code: string }) {
+export function PyRunner({ code, fileReady = true }: { code: string; fileReady?: boolean }) {
   const { running, output, error, run } = usePy()
 
   return (
     <div className="py-runner">
-      <button className="run-button" disabled={running} onClick={() => void run(code)}>
+      <button className="run-button" disabled={running || !fileReady} onClick={() => void run(code)}>
         {running ? 'Kører…' : 'Kør Koden'}
       </button>
       <pre className="py-console">
