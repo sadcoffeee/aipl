@@ -4,7 +4,7 @@ export function Console(){
     const {output, error, running} = usePy()
     
     return (
-        <pre className ="py-consol">
+        <pre className ="py-console">
             {running && 'Kører koden...\n'}
             {output}
             {error && (<div className="py-console-error">{error}</div>)}

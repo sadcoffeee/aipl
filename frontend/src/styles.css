@@ -724,14 +724,6 @@ button.primary:disabled {
 }
 /* the console itself + if error happens*/
 .py-console {
-  margin-top: 0.5rem;
-  background: #11161c;
-  color: white;
-  font-family: var(--mono);
-  font-size: 0.9rem;
-  padding: 0.9rem;
-  border-radius: 8px;
-  min-height: 3rem;
   white-space: pre-wrap;
 }
 
@@ -747,13 +739,14 @@ button.primary:disabled {
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 1rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
 
 }
 
 .ekg-plot{
-  width: 100%;
+ width: 100%;
   min-height: 200px;
-  overflow-x: auto;
 }
 
 .scrollable-panel {
@@ -777,4 +770,17 @@ button.primary:disabled {
 .output-tabs .tab.active {
   background: #e9e9e9;
   font-weight: bold;
+}
+
+.output-tab-content {
+  margin-top: 0.75rem;
+  background: #11161c;
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 8px;
+  height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
 }

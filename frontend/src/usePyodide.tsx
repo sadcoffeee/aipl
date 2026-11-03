@@ -137,8 +137,12 @@ base64.b64encode(buf.read()).decode('utf-8')`)
             currentstderr = useLine
             const namespace = pyodide.globals.get('dict')()
             await pyodide.runPythonAsync(code, {globals: namespace})
-            await generatePlot()
 
+            if (code.includes('print(indhold)')){
+                await generatePlot()
+
+            }
+            
         } catch (err) {
             const message = err instanceof Error ? err.message : String(err)
             setErr(simplifyError(message))// here it gets simplified
