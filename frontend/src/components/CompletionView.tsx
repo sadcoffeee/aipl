@@ -76,7 +76,7 @@ useEffect(() => {
             disabled={flow.busy}
             onClick={() => flow.submitAttempt({ code })}
           >
-            {flow.busy ? 'Submitting…' : 'Submit'}
+            {flow.busy ? 'Checker svar…' : 'Check svar'}
           </button>
         </div>
       )}
@@ -87,7 +87,7 @@ useEffect(() => {
 
       {flow.phase === 'done' && (
         <div className="task-actions">
-          <button onClick={flow.restart}>Try again</button>
+          <button onClick={flow.restart}>Prøv igen</button>
         </div>
       )}
     </div>

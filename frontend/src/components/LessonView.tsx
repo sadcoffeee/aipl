@@ -55,14 +55,14 @@ export default function LessonView({
       <main className="lesson-view">
         <div className="lesson-header">
           <button className="back-button" onClick={onBack}>
-            ← Back
+            ← Tilbage
           </button>
         </div>
         <div className="panel error">{error}</div>
       </main>
     )
   }
-  if (!lesson) return <div className="panel">Loading lesson…</div>
+  if (!lesson) return <div className="panel">Loader lektioner…</div>
 
   const hintCount = (hints?.new.length ?? 0) + (hints?.earlier.length ?? 0)
   const hasSideColumn = lesson.type !== 'instruction' || hintCount > 0
@@ -105,7 +105,7 @@ export default function LessonView({
 
 
                   <p className="goals-progress">
-                    {collection.progress.completed} of {collection.progress.total} lessons completed
+                    {collection.progress.completed} ud af {collection.progress.total} lektioner færdiggjort
                   </p>
 
                   <ol className="goals-list">
@@ -173,7 +173,7 @@ export default function LessonView({
           </button>
         
         <button className="back-button" onClick={onBack}>
-          ← Back
+          ← Tilbage
         </button>
 
         <h1>{lesson.title}</h1>

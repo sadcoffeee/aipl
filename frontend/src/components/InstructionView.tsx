@@ -81,7 +81,7 @@ export default function InstructionView({
       ))}
       <div className="task-actions">
         <button className="primary" disabled={busy || done} onClick={() => void markRead()}>
-          {done ? 'Done' : busy ? 'Saving...' : 'Continue'}
+          {done ? 'Færdig' : busy ? 'Gemmer...' : 'Fortsæt'}
         </button>
       </div>
     </article>
