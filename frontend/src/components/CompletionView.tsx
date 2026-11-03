@@ -6,8 +6,9 @@ import type { CompletionLesson, Feedback } from '../types'
 import { useSubmissionFlow } from '../useSubmissionFlow'
 import CodeEditor from './CodeEditor'
 import SelfAssessment from './SelfAssessment'
+import { usePy} from '../usePyodide'
 import { PyRunner } from './pyRunner'
-import { usePy } from '../usePyodide'
+
 
 
 export default function CompletionView({
@@ -29,7 +30,7 @@ export default function CompletionView({
   const [code, setCode] = useState(parsed.text)
 
   const [fileReady, setFileReady] = useState(false)
-const { loadFile } = usePy()
+  const { loadFile } = usePy()
 
 useEffect(() => {
   async function prepareFile() {
@@ -59,8 +60,9 @@ useEffect(() => {
         />
       </div>
 
+      
       <PyRunner code={code} fileReady={fileReady}/>
-
+      
       
       
       

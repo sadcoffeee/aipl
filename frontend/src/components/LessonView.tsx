@@ -7,7 +7,9 @@ import HintPanel from './HintPanel'
 import InstructionView from './InstructionView'
 import ParsonsView from './ParsonsView'
 import '../styles_collection-bar.css'
-//import {Plot} from './Plot'
+import { PyodideProvider } from '../usePyodide'
+import OutputPanel from './OutputPanel'
+
 
 export default function LessonView({
   lessonId,
@@ -177,7 +179,7 @@ export default function LessonView({
         <h1>{lesson.title}</h1>
       </div>
 
-        
+    <PyodideProvider>    
       <div className={hasSideColumn ? 'lesson-body with-side' : 'lesson-body'}>
         
 
@@ -203,11 +205,13 @@ export default function LessonView({
                 lessonId={lesson.id}
               />
             )}
+            {lesson.type === 'completion' && <OutputPanel/>}
             
           </aside>
         )}
         
       </div>
+    </PyodideProvider>   
     </main>
   )
 }
