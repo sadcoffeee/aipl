@@ -124,11 +124,26 @@ h2 {
   top: 1rem;
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hint-panel {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 1rem;
 }
+
+.output-panel{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+
 
 /* Instruction content ---------------------------------------------------- */
 
