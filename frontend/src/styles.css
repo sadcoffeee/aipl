@@ -749,6 +749,11 @@ button.primary:disabled {
   min-height: 200px;
 }
 
+.ekg-plot img{
+  max-height: 255px;
+  display: block;
+}
+
 .scrollable-panel {
   max-height: 300px;
   overflow-y: auto;
