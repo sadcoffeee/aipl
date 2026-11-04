@@ -124,11 +124,26 @@ h2 {
   top: 1rem;
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hint-panel {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 1rem;
 }
+
+.output-panel{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+
 
 /* Instruction content ---------------------------------------------------- */
 
@@ -689,4 +704,88 @@ button.primary:disabled {
 .status-grader_error {
   background: #f3e8ff;
   color: #6b21a8;
+}
+/* consol panel -------------------------------------------------- */
+/* The run button similair to submit*/
+.run-button {
+  background: #16804a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  font: inherit;
+  margin-top: 0.5rem;
+}
+/* When its running to give visual feedback*/
+.run-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+/* the console itself + if error happens*/
+.py-console {
+  white-space: pre-wrap;
+}
+
+.py-console-error {
+  color: #f04c3d;
+}
+
+/* consol panel -------------------------------------------------- */
+
+.plot-panel{
+  background:  #11161c;
+  color: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+
+}
+
+.ekg-plot{
+ width: 100%;
+  min-height: 200px;
+}
+
+.ekg-plot img{
+  max-height: 255px;
+  display: block;
+}
+
+.scrollable-panel {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.output-tabs{
+  display: flex;
+  gap: 4px;
+
+}
+.output-tabs .tab{
+  padding: 6px 12px;
+ border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #ecedf0;
+  cursor: pointer;
+}
+
+.output-tabs .tab.active {
+  background: #e9e9e9;
+  font-weight: bold;
+}
+
+.output-tab-content {
+  margin-top: 0.75rem;
+  background: #11161c;
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 8px;
+  height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
 }

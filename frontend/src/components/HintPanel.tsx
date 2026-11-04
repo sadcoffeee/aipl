@@ -76,19 +76,19 @@ export default function HintPanel({
   if (hints.new.length === 0 && hints.earlier.length === 0) {
     return (
       <div className="hint-panel">
-        <h2>Reference</h2>
-        <p className="muted">Nothing unlocked yet.</p>
+        <h2>Referencer</h2>
+        <p className="muted">Intet låst op endnu.</p>
       </div>
     )
   }
 
   return (
     <div className="hint-panel">
-      <h2>Reference</h2>
+      <h2>Referencer</h2>
 
       {hints.new.length > 0 && (
         <>
-          <p className="group-label">New in this lesson</p>
+          <p className="group-label">Nyt i denne lektion</p>
           <ul>
             {hints.new.map((hint) => (
               <Entry key={hint.id} hint={hint} />
@@ -105,7 +105,7 @@ export default function HintPanel({
             onClick={() => setShowEarlier((value) => !value)}
           >
             <span className="chevron">{showEarlier ? '▾' : '▸'}</span>
-            Earlier lessons ({hints.earlier.length})
+            Tidligere lektioner ({hints.earlier.length})
           </button>
           {showEarlier && (
             <ul>

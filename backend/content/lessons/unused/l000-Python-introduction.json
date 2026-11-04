@@ -1,0 +1,27 @@
+{
+  "id": "l000-Python-introduction.json",
+  "title": "Introduktion til Python",
+  "type": "instruction",
+  "concepts": [
+    "variable",
+    "assign"
+  ],
+  "estimatedMinutes": 3,
+  "selfAssessment": false,
+  "content": {
+    "rows": [
+      {
+        "items": [
+          {
+            "type": "text",
+            "markdown": "Python er et kodesprog som man kan bruge til at behandle data"
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "unlocks": [
+    "h-assign"
+  ]
+}

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
 const OPTIONS = [
-  { value: 1, label: '1 - I was guessing' },
-  { value: 2, label: '2 - Mostly unsure' },
-  { value: 3, label: '3 - Some idea' },
-  { value: 4, label: '4 - Fairly sure' },
-  { value: 5, label: '5 - I know this works' },
+  { value: 1, label: '1 - Meget usikker' },
+  { value: 2, label: '2 - Lidt usikker' },
+  { value: 3, label: '3 - Hverken eller' },
+  { value: 4, label: '4 - Lidt sikker' },
+  { value: 5, label: '5 - Meget sikker' },
 ]
 
 export default function SelfAssessment({
@@ -20,9 +20,9 @@ export default function SelfAssessment({
 
   return (
     <section className="self-assessment">
-      <h2>Before you see any feedback</h2>
+      <h2>Før du modtager feedback</h2>
       <p className="muted">
-        How confident are you that your answer is correct?
+        Hvor sikker er du på at dit svar er korrekt?
       </p>
 
       <div className="confidence-options">
@@ -41,12 +41,12 @@ export default function SelfAssessment({
       </div>
 
       <label className="field">
-        <span>Anything you were unsure about? (optional)</span>
+        <span>Noget du var usikker på? (valgfri)</span>
         <textarea
           rows={3}
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
-          placeholder="e.g. I was not sure which brackets to use"
+          placeholder="f.eks jeg vidste ikke hvilke paranteser jeg skulle bruge"
         />
       </label>
 
@@ -55,7 +55,7 @@ export default function SelfAssessment({
         disabled={confidence === null || busy}
         onClick={() => confidence !== null && onSubmit(confidence, notes)}
       >
-        {busy ? 'Sending...' : 'Continue to feedback'}
+        {busy ? 'Sender...' : 'Fortsæt til feedback'}
       </button>
     </section>
   )

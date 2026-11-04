@@ -103,7 +103,7 @@ export default function ParsonsView({
               <code>
                 {placements[line.id]
                   ? optionById.get(placements[line.id]!)?.code
-                  : (line.placeholder ?? 'drop a line here')}
+                  : (line.placeholder ?? 'Træk en linje hen til dette felt')}
               </code>
             </div>
           ),
@@ -112,9 +112,9 @@ export default function ParsonsView({
 
       {!locked && (
         <div className="option-bank">
-          <h2>Available lines</h2>
+          <h2>Tilgængelige linjer</h2>
           <p className="muted">
-            Drag a line into a box, or click it and then click a box. Not all lines are needed.
+            Træk en linje ind i et felt, eller klik på linjen og klik på et felt. Ikke alle linjer behøver at blive brugt.
           </p>
           <ul>
             {orderedOptions.map((option: ParsonsOption) => {
@@ -152,9 +152,9 @@ export default function ParsonsView({
             disabled={flow.busy || !allFilled}
             onClick={() => flow.submitAttempt({ placements })}
           >
-            {flow.busy ? 'Submitting...' : 'Submit'}
+            {flow.busy ? 'Sender svar...' : 'Send svar'}
           </button>
-          {!allFilled && <span className="muted">Fill every box first.</span>}
+          {!allFilled && <span className="muted">Udfyld alle felter.</span>}
         </div>
       )}
 
@@ -164,7 +164,7 @@ export default function ParsonsView({
 
       {flow.phase === 'done' && (
         <div className="task-actions">
-          <button onClick={flow.restart}>Try again</button>
+          <button onClick={flow.restart}>Prøv igen</button>
         </div>
       )}
     </div>

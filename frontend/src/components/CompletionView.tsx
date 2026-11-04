@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { LOCK_SCAFFOLD_OUTSIDE_GAPS } from '../config'
 import { gapExtensions, parseGaps } from '../gaps'
 import { Markdown } from '../markdown'
@@ -6,6 +6,10 @@ import type { CompletionLesson, Feedback } from '../types'
 import { useSubmissionFlow } from '../useSubmissionFlow'
 import CodeEditor from './CodeEditor'
 import SelfAssessment from './SelfAssessment'
+import { usePy} from '../usePyodide'
+import { PyRunner } from './pyRunner'
+
+
 
 export default function CompletionView({
   lesson,
@@ -24,6 +28,19 @@ export default function CompletionView({
   )
 
   const [code, setCode] = useState(parsed.text)
+
+  const [fileReady, setFileReady] = useState(false)
+  const { loadFile } = usePy()
+
+useEffect(() => {
+  async function prepareFile() {
+    await loadFile('/datasets/EKG_data.txt', 'EKG_data.txt')
+    setFileReady(true)
+  }
+  prepareFile()
+}, [])
+
+  
   const flow = useSubmissionFlow({ lessonId: lesson.id, onFeedback })
 
   const locked = flow.phase !== 'working'
@@ -43,6 +60,13 @@ export default function CompletionView({
         />
       </div>
 
+      
+      <PyRunner code={code} fileReady={fileReady}/>
+      
+      
+      
+      
+
       {flow.error && <div className="panel error">{flow.error}</div>}
 
       {flow.phase === 'working' && (
@@ -52,7 +76,7 @@ export default function CompletionView({
             disabled={flow.busy}
             onClick={() => flow.submitAttempt({ code })}
           >
-            {flow.busy ? 'Submitting…' : 'Submit'}
+            {flow.busy ? 'Checker svar…' : 'Check svar'}
           </button>
         </div>
       )}
@@ -63,9 +87,13 @@ export default function CompletionView({
 
       {flow.phase === 'done' && (
         <div className="task-actions">
-          <button onClick={flow.restart}>Try again</button>
+          <button onClick={flow.restart}>Prøv igen</button>
         </div>
       )}
     </div>
   )
+  
+
 }
+
+
