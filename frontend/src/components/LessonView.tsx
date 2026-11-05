@@ -64,6 +64,35 @@ export default function LessonView({
   const hintCount = (hints?.new.length ?? 0) + (hints?.earlier.length ?? 0)
   const hasSideColumn = lesson.type !== 'instruction' || hintCount > 0
 
+    //function of the continue button
+  function goToNextLesson() {
+      //find the collection containing the current lesson
+        const currentCollection = collections.find(collection =>
+        collection.lessons.some(step => step.id === lessonId)
+        )
+
+      //stop if the current lesson do not belong to a collection
+        if (!currentCollection) return
+
+        //sort lessons by their position to ensure correct order, unsure of we already have a way to keep track of this
+        const sortedLessons = [...currentCollection.lessons].sort(
+            (a, b) => a.position - b.position
+            )
+
+        // Find the current lesson's position
+        const currentIndex = sortedLessons.findIndex(
+            step => step.id === lessonId
+            )
+
+        // Find the next lesson
+        const nextLesson = sortedLessons[currentIndex + 1]
+
+        // Open the next lesson if it exists
+        if (nextLesson) {
+            onOpen(nextLesson.id)
+        }
+    }
+
   return (
     <main className={goalsOpen ? 'lesson-view goals-open' : 'lesson-view'}>
 
@@ -178,11 +207,11 @@ export default function LessonView({
 
         
       <div className={hasSideColumn ? 'lesson-body with-side' : 'lesson-body'}>
-        
+
 
        <div className="lesson-main">
          {lesson.type === 'instruction' && (
-            <InstructionView key={lesson.id} lesson={lesson} onCompleted={onProgressChanged} />
+            <InstructionView key={lesson.id} lesson={lesson} onCompleted={onProgressChanged} onNext={goToNextLesson} />     // Pass the navigation function to InstructionView
           )}
         {lesson.type === 'completion' && (
             <CompletionView key={lesson.id} lesson={lesson} onFeedback={receiveFeedback} />

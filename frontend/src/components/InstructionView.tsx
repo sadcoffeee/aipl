@@ -38,10 +38,12 @@ function Item({ item }: { item: ContentItem }) {
 
 export default function InstructionView({
   lesson,
-  onCompleted,
+  onCompleted, onNext, //callback used to navigate to next lesson
+
 }: {
   lesson: InstructionLesson
   onCompleted: () => void
+  onNext: () => void //function received from parent(lessonview)
 }) {
   const [done, setDone] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -52,6 +54,7 @@ export default function InstructionView({
       await api.completeLesson(lesson.id)
       setDone(true)
       onCompleted()
+      onNext() //ask parent to navigate to next lesson
     } finally {
       setBusy(false)
     }
@@ -81,7 +84,7 @@ export default function InstructionView({
       ))}
       <div className="task-actions">
         <button className="primary" disabled={busy || done} onClick={() => void markRead()}>
-          {done ? 'Done' : busy ? 'Saving...' : 'Continue'}
+          {done ? 'Done' : busy ? 'Saving...' : 'Fortsæt'}
         </button>
       </div>
     </article>
