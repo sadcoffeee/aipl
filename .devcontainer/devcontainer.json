@@ -15,11 +15,10 @@
   "runArgs": [
     "--device=nvidia.com/gpu=all",
     "--ipc=host",
-    "--ulimit=stack=67108864"
+    "--ulimit=stack=67108864",
 
-    // CHANGED (not active yet): publishing the backend so other machines can reach it.
-    //
-    // , "-p", "8001:8001"
+    // CHANGED: publishing the backend so other machines can reach it.
+    "-p", "10200:8001"
   ],
 
   "mounts": [
