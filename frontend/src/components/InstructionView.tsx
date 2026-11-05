@@ -38,10 +38,12 @@ function Item({ item }: { item: ContentItem }) {
 
 export default function InstructionView({
   lesson,
-  onCompleted,
+  onCompleted, onNext, //callback used to navigate to next lesson
+
 }: {
   lesson: InstructionLesson
   onCompleted: () => void
+  onNext: () => void //function received from parent(lessonview)
 }) {
   const [done, setDone] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -52,6 +54,7 @@ export default function InstructionView({
       await api.completeLesson(lesson.id)
       setDone(true)
       onCompleted()
+      onNext() //ask parent to navigate to next lesson
     } finally {
       setBusy(false)
     }
