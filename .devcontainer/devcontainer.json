@@ -1,5 +1,5 @@
 
-// Based on the template in the Spark guide, with five changes, each marked "CHANGED" below.
+// Based on the template in the Spark guide, with six changes, each marked "CHANGED" below.
 
 {
   "name": "aipl",
@@ -24,7 +24,10 @@
   "mounts": [
     // CHANGED: ",readonly" added. We only ever read model weights; mounting
     // the shared folder read-only means nothing running in this container can damage weights
-    "source=/models,target=/models,type=bind,readonly"
+    "source=/models,target=/models,type=bind,readonly",
+
+    // CHANGED: the Spark's (rootless) Docker socket, so the backend can start a separate, locked-down container for each graded submission.
+    "source=${localEnv:XDG_RUNTIME_DIR}/docker.sock,target=/var/run/docker.sock,type=bind"
   ],
 
   // CHANGED: workspaceMount added. This line is what makes /workspace be the

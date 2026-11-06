@@ -18,6 +18,12 @@ from . import auth, config, content, db, llm, grader, progress, feedback
 async def lifespan(_: FastAPI):
     #Runs once when the server starts: create tables and read the content files
     db.init_db()
+    if config.GRADER_SANDBOX != "docker":
+        print(
+            f"WARNING: the grader runs student code with AIPL_GRADER_SANDBOX={config.GRADER_SANDBOX}, not in a container. "
+            "Fine for development; set AIPL_GRADER_SANDBOX=docker if real participants are using this server.",
+            flush=True,
+        )
     with db.connect() as conn:
         auth.purge_expired_sessions(conn)
     reload_content()
@@ -609,7 +615,7 @@ def export_everything(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[s
 @app.get("/api/health")
 def health() -> dict[str, Any]:
     # Unauthenticated on purpose; it is how I check the server is up
-    return {"ok": True, "lessons": len(LESSONS), "hints": len(HINTS)}
+    return {"ok": True, "lessons": len(LESSONS), "hints": len(HINTS), "grader": config.GRADER_SANDBOX}
 
 @app.get("/api/admin/llm-check")
 def admin_llm_check(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[str, Any]:

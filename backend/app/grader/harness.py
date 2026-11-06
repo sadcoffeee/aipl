@@ -1,3 +1,4 @@
+import base64
 import builtins
 import io
 import json
@@ -110,6 +111,13 @@ def _apply_limits(limits: dict) -> None:
             resource.setrlimit(resource.RLIMIT_AS, (memory, memory))
         except (ValueError, OSError):
             pass
+
+
+def _write_files(files: dict) -> None:
+    """Datasets arrive inside the job (base64) and are written into the working folder, where the student's code expects them."""
+    for name, data in files.items():
+        with open(os.path.basename(name), "wb") as handle:  # basename: a dataset can only land in this folder
+            handle.write(base64.b64decode(data))
 
 
 def _seed() -> None:
@@ -397,7 +405,10 @@ def main() -> None:
     nonce = job["nonce"]
 
     _apply_limits(job.get("limits", {}))
-    _install_guard(os.getcwd())
+    _write_files(job.get("files", {}))
+    # The guard is always on for real grading. Only the sandbox self-test (app.grader_check) turns it off
+    if job.get("guard", True):
+        _install_guard(os.getcwd())
 
     limit = int(job.get("stdoutLimit", 20000))
     result: dict = {"reference": None, "student": None, "checks": [], "authoringError": None}

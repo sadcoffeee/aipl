@@ -47,6 +47,17 @@ GRADER_CPU_SECONDS = int(os.getenv("AIPL_GRADER_CPU_SECONDS", "5"))
 GRADER_MEMORY_MB = int(os.getenv("AIPL_GRADER_MEMORY_MB", "2048"))
 GRADER_STDOUT_LIMIT = int(os.getenv("AIPL_GRADER_STDOUT_LIMIT", "20000"))
 
+# Where student code runs: "local" (a child process next to the backend - development only) or "docker" (a throwaway, locked-down container per submission)
+GRADER_SANDBOX = os.getenv("AIPL_GRADER_SANDBOX", "local").strip().lower()
+
+# docker mode only. The image is built with: bash deploy/run.sh grader build
+GRADER_IMAGE = os.getenv("AIPL_GRADER_IMAGE", "aipl-grader:latest")
+GRADER_DOCKER = os.getenv("AIPL_GRADER_DOCKER", "docker")
+GRADER_MAX_PARALLEL = int(os.getenv("AIPL_GRADER_MAX_PARALLEL", "4"))
+GRADER_PIDS_LIMIT = int(os.getenv("AIPL_GRADER_PIDS_LIMIT", "64"))
+GRADER_SCRATCH_MB = int(os.getenv("AIPL_GRADER_SCRATCH_MB", "64"))
+GRADER_CPUS = os.getenv("AIPL_GRADER_CPUS", "").strip()
+
 
 # --- model server ----------------------------------------------------------
 

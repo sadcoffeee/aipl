@@ -77,6 +77,27 @@ status() {
   fi
 }
 
+grader() {
+  local image="${AIPL_GRADER_IMAGE:-aipl-grader:latest}"
+  case "${1:-}" in
+    build)
+      command -v docker >/dev/null || { echo "No docker command here. Rebuild the devcontainer."; exit 1; }
+      # numpy is pinned in one place, requirements.txt, and passed on to the image from there.
+      local numpy
+      numpy=$(grep -E '^numpy==' "$REPO/backend/requirements.txt" | cut -d= -f3)
+      [[ -n "$numpy" ]] || { echo "Could not find numpy==<version> in backend/requirements.txt"; exit 1; }
+      docker build --build-arg "NUMPY_VERSION=$numpy" -t "$image" "$REPO/backend/sandbox"
+      echo
+      echo "Built $image. Now check it:   bash deploy/run.sh grader check"
+      ;;
+    check)
+      [[ -x "$REPO/backend/.venv/bin/python" ]] || { echo "No backend virtualenv yet"; exit 1; }
+      cd "$REPO/backend" && .venv/bin/python -m app.grader_check
+      ;;
+    *) echo "usage: bash deploy/run.sh grader build|check"; exit 1 ;;
+  esac
+}
+
 logs() {
   case "${1:-}" in
     model) tail -n 50 -f "$LOGS/vllm.log" ;;
@@ -92,6 +113,7 @@ case "${1:-}" in
   restart) stop "${2:-}"; sleep 1
            case "${2:-}" in app) start_app ;; model) echo "Start it again with: bash deploy/run.sh model <path> <name>" ;; esac ;;
   status)  status ;;
+  grader)  grader "${2:-}" ;;
   logs)    logs "${2:-}" ;;
   *)       sed -n '2,10p' "$0"; exit 1 ;;
 esac
