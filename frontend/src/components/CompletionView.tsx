@@ -5,6 +5,7 @@ import { Markdown } from '../markdown'
 import type { CompletionLesson, Feedback } from '../types'
 import { useSubmissionFlow } from '../useSubmissionFlow'
 import CodeEditor from './CodeEditor'
+import ConversationBox from './ConversationBox'
 import SelfAssessment from './SelfAssessment'
 import { usePy} from '../usePyodide'
 import { PyRunner } from './pyRunner'
@@ -83,6 +84,10 @@ useEffect(() => {
 
       {flow.phase === 'assessing' && (
         <SelfAssessment busy={flow.busy} onSubmit={flow.submitAssessment} />
+      )}
+
+      {flow.phase === 'done' && flow.conversation && (
+        <ConversationBox conversation={flow.conversation} onChange={flow.setConversation} />
       )}
 
       {flow.phase === 'done' && (

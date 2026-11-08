@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Markdown } from '../markdown'
 import type { Feedback, ParsonsLesson, ParsonsOption } from '../types'
 import { useSubmissionFlow } from '../useSubmissionFlow'
+import ConversationBox from './ConversationBox'
 import SelfAssessment from './SelfAssessment'
 
 /** Fisher-Yates shuffle, so the option order does not give the answer away */
@@ -160,6 +161,10 @@ export default function ParsonsView({
 
       {flow.phase === 'assessing' && (
         <SelfAssessment busy={flow.busy} onSubmit={flow.submitAssessment} />
+      )}
+
+      {flow.phase === 'done' && flow.conversation && (
+        <ConversationBox conversation={flow.conversation} onChange={flow.setConversation} />
       )}
 
       {flow.phase === 'done' && (

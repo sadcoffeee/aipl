@@ -1,9 +1,10 @@
 import type {
+  Conversation,
   Course,
-  Feedback,
   Lesson,
   LessonHints,
   ParticipantRow,
+  SelfAssessmentResult,
   SubmissionResult,
   SubmissionRow,
   User,
@@ -130,10 +131,24 @@ export function completeLesson(lessonId: string): Promise<SubmissionResult> {
 export function submitSelfAssessment(
   submissionId: string,
   body: { confidence: number; notes?: string },
-): Promise<Feedback> {
-  return request<Feedback>(`/api/submissions/${submissionId}/self-assessment`, {
+): Promise<SelfAssessmentResult> {
+  return request<SelfAssessmentResult>(`/api/submissions/${submissionId}/self-assessment`, {
     method: 'POST',
     body: JSON.stringify(body),
+  })
+}
+
+/** Conversations ---------------------------------------------------------- */
+
+export function fetchConversation(conversationId: string): Promise<Conversation> {
+  return request<Conversation>(`/api/conversations/${conversationId}`)
+}
+
+/** Sends a student message; resolves with the whole conversation, the model's answer included. */
+export function sendChatMessage(conversationId: string, text: string): Promise<Conversation> {
+  return request<Conversation>(`/api/conversations/${conversationId}/messages`, {
+    method: 'POST',
+    body: JSON.stringify({ text }),
   })
 }
 

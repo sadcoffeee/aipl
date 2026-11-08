@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import * as api from './api'
-import type { Feedback } from './types'
+import type { Conversation, Feedback } from './types'
 
 export type Phase = 'working' | 'assessing' | 'done'
 
@@ -12,6 +12,8 @@ export function useSubmissionFlow(args: {
 
   const [phase, setPhase] = useState<Phase>('working')
   const [submissionId, setSubmissionId] = useState<string | null>(null)
+  // The feedback and the replies after it. Shown in place of the self-assessment once it exists.
+  const [conversation, setConversation] = useState<Conversation | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -46,11 +48,12 @@ export function useSubmissionFlow(args: {
       setBusy(true)
       setError(null)
       try {
-        const feedback = await api.submitSelfAssessment(submissionId, {
+        const result = await api.submitSelfAssessment(submissionId, {
           confidence,
           notes: notes.trim() || undefined,
         })
-        onFeedback(feedback)
+        setConversation(result.conversation)
+        onFeedback(result)
         setPhase('done')
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err))
@@ -61,12 +64,22 @@ export function useSubmissionFlow(args: {
     [submissionId, onFeedback],
   )
 
-  /** Lets the student try again; clears the feedback column. */
+  /** Lets the student try again. The old conversation stays on the server, closed once the next attempt is assessed. */
   const restart = useCallback(() => {
     setPhase('working')
     setSubmissionId(null)
+    setConversation(null)
     onFeedback(null)
   }, [onFeedback])
 
-  return { phase, busy, error, submitAttempt, submitAssessment, restart }
+  return {
+    phase,
+    busy,
+    error,
+    conversation,
+    setConversation,
+    submitAttempt,
+    submitAssessment,
+    restart,
+  }
 }

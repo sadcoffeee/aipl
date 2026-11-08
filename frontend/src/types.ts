@@ -199,6 +199,45 @@ export interface Feedback {
   revisitLessonId: string | null
 }
 
+/** Conversations ---------------------------------------------------------- */
+
+interface MessageBase {
+  id: string
+  seq: number
+  role: 'student' | 'assistant'
+  /** For student chat messages: whether it used up one of the attempt's messages. */
+  counted: boolean
+  createdAt: string
+}
+
+/** One entry in the feedback box. `kind` says what `body` holds. */
+export type ConversationMessage = MessageBase &
+  (
+    | { kind: 'self_assessment'; body: { confidence: number; notes: string | null } }
+    | { kind: 'feedback'; body: Feedback }
+    /** chat: a student message or a model reply. fallback: a fixed reply used when no usable answer could be written. */
+    | { kind: 'chat' | 'fallback'; body: { text: string } }
+  )
+
+export interface Conversation {
+  id: string
+  lessonId: string
+  condition: Condition
+  submissionId: string | null
+  /** A newer attempt at the lesson has started; this one can be read, not continued. */
+  closed: boolean
+  maxMessages: number
+  remainingMessages: number
+  canReply: boolean
+  messages: ConversationMessage[]
+}
+
+/** What the self-assessment endpoint returns: the feedback, and the conversation it starts. */
+export interface SelfAssessmentResult extends Feedback {
+  conversationId: string
+  conversation: Conversation
+}
+
 /** Admin ------------------------------------------------------------------ */
 
 export interface ParticipantRow {

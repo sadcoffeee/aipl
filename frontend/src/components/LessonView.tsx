@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import * as api from '../api'
 import type { Feedback, Lesson, LessonHints, Collection } from '../types'
 import CompletionView from './CompletionView'
-import FeedbackPanel from './FeedbackPanel'
 import HintPanel from './HintPanel'
 import InstructionView from './InstructionView'
 import ParsonsView from './ParsonsView'
@@ -30,12 +29,11 @@ export default function LessonView({
 }) {
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [hints, setHints] = useState<LessonHints | null>(null)
-  const [feedback, setFeedback] = useState<Feedback | null>(null)
   const [error, setError] = useState<string | null>(null)
 
+  // Feedback is shown in the task itself (the conversation box); here it only means progress changed.
   const receiveFeedback = useCallback(
     (next: Feedback | null) => {
-      setFeedback(next)
       if (next) onProgressChanged()
     },
     [onProgressChanged],
@@ -44,7 +42,6 @@ export default function LessonView({
   useEffect(() => {
     setLesson(null)
     setHints(null)
-    setFeedback(null)
     setError(null)
     api.fetchLesson(lessonId).then(setLesson).catch((err) => setError(String(err)))
     api.fetchLessonHints(lessonId).then(setHints).catch(() => setHints({ new: [], earlier: [] }))
@@ -226,14 +223,10 @@ export default function LessonView({
 
         {hasSideColumn && (
           <aside className="side-column">
-            {feedback ? (
-              <FeedbackPanel feedback={feedback} />
-            ) : (
-              <HintPanel
-                hints={hints ?? { new: [], earlier: [] }}
-                lessonId={lesson.id}
-              />
-            )}
+            <HintPanel
+              hints={hints ?? { new: [], earlier: [] }}
+              lessonId={lesson.id}
+            />
             {lesson.type === 'completion' && <OutputPanel/>}
             
           </aside>
