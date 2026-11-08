@@ -8,9 +8,13 @@ export interface User {
   role: Role
   code: string | null
   username: string | null
-  condition: string | null
+  condition: Condition | null
+  /** What the user actually gets; no condition (and admins) fall back to the server default. */
+  effectiveCondition: Condition
   label: string | null
 }
+
+export type Condition = 'restricted' | 'unrestricted'
 
 export interface LessonSummary {
   id: string

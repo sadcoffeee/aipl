@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import auth, config, content, db, llm, grader, progress, feedback
+from . import auth, chat, config, content, db, llm, grader, progress, feedback
 
 
 @asynccontextmanager
@@ -92,6 +92,10 @@ class SelfAssessmentIn(BaseModel):
     notes: str | None = None
 
 
+class ChatMessageIn(BaseModel):
+    text: str = Field(min_length=1, max_length=config.CHAT_MAX_MESSAGE_CHARS)
+
+
 class EventIn(BaseModel):
     lessonId: str | None = None
     type: str
@@ -108,6 +112,18 @@ class UpdateParticipantIn(BaseModel):
     condition: str | None = None
     label: str | None = None
     active: bool | None = None
+
+
+def clean_condition(value: str | None) -> str | None:
+    """'' or None means no condition; anything else must be one of the known ones."""
+    if not value:
+        return None
+    if value not in config.CONDITIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unknown condition {value!r}; use one of {', '.join(config.CONDITIONS)}",
+        )
+    return value
 
 
 # --------------------------------------------------------------------------
@@ -342,20 +358,20 @@ def create_self_assessment(
             ctx=feedback.context_for(lesson, LESSONS, HINTS),
         )
 
-    # Transaction 2: store the feedback and every model call behind it.
+    # Transaction 2: store the feedback, every model call behind it, and put both the
+    # self-assessment and the feedback into the conversation for this attempt.
     with db.connect() as conn:
-        for call in calls:
-            conn.execute(
-                """INSERT INTO llm_calls
-                   (id, submission_id, purpose, attempt, model, prompt_version,
-                    messages_json, response, outcome, detail, latency_ms, created_at)
-                   VALUES (?, ?, 'feedback', ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (
-                    new_id("l"), submission_id, call["attempt"], call["model"],
-                    call["promptVersion"], json.dumps(call["messages"], ensure_ascii=False),
-                    call["response"], call["outcome"], call["detail"], call["latencyMs"], now(),
-                ),
-            )
+        conversation_id = chat.conversation_for_submission(
+            conn, user, submission["lesson_id"], submission_id
+        )
+        chat.add_message(
+            conn, conversation_id, "student", "self_assessment",
+            {"confidence": body.confidence, "notes": body.notes}, submission_id=submission_id,
+        )
+        chat.add_message(
+            conn, conversation_id, "assistant", "feedback", feedback_body, submission_id=submission_id,
+        )
+        chat.store_calls(conn, calls, "feedback", submission_id, conversation_id)
         conn.execute(
             """INSERT INTO feedback (id, submission_id, source, body_json, created_at)
                VALUES (?, ?, ?, ?, ?)""",
@@ -367,7 +383,131 @@ def create_self_assessment(
                 now(),
             ),
         )
-    return feedback_body
+        conversation = chat.view(conn, conversation_id)
+    # Same shape as before, so the current frontend keeps working; the conversation rides along.
+    return {**feedback_body, "conversationId": conversation_id, "conversation": conversation}
+
+
+# --------------------------------------------------------------------------
+# Conversations
+# --------------------------------------------------------------------------
+
+
+def own_conversation(conn, conversation_id: str, user: dict[str, Any]):
+    row = conn.execute("SELECT * FROM conversations WHERE id = ?", (conversation_id,)).fetchone()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Unknown conversation")
+    if row["user_id"] != user["id"]:
+        raise HTTPException(status_code=403, detail="Not your conversation")
+    return row
+
+
+@app.get("/api/conversations/{conversation_id}")
+def get_conversation(
+    conversation_id: str, user: dict[str, Any] = Depends(auth.current_user)
+) -> dict[str, Any]:
+    with db.connect() as conn:
+        own_conversation(conn, conversation_id, user)
+        return chat.view(conn, conversation_id)
+
+
+@app.get("/api/lessons/{lesson_id}/conversation")
+def latest_conversation(
+    lesson_id: str, user: dict[str, Any] = Depends(auth.current_user)
+) -> dict[str, Any] | None:
+    """The student's most recent conversation about a lesson, or null. For showing old feedback."""
+    with db.connect() as conn:
+        row = conn.execute(
+            """SELECT id FROM conversations WHERE user_id = ? AND lesson_id = ?
+               ORDER BY created_at DESC LIMIT 1""",
+            (user["id"], lesson_id),
+        ).fetchone()
+        return chat.view(conn, row["id"]) if row else None
+
+
+@app.post("/api/conversations/{conversation_id}/messages")
+def send_chat_message(
+    conversation_id: str,
+    body: ChatMessageIn,
+    user: dict[str, Any] = Depends(auth.current_user),
+) -> dict[str, Any]:
+    """A student message, and the model's answer. Returns the whole conversation."""
+    text = body.text.strip()
+    if not text:
+        raise HTTPException(status_code=422, detail="Empty message")
+
+    # Transaction 1: check the student may send it, record it, gather what the model needs.
+    # The message is stored as counted straight away, so two quick sends cannot both
+    # slip under the cap; it stops counting if no usable answer comes back.
+    with db.connect() as conn:
+        conversation = own_conversation(conn, conversation_id, user)
+        current = chat.view(conn, conversation_id)
+        if current["closed"]:
+            raise HTTPException(status_code=409, detail="This conversation is closed")
+        if current["remainingMessages"] <= 0:
+            raise HTTPException(status_code=409, detail="No messages left for this attempt")
+        if not current["canReply"]:
+            raise HTTPException(status_code=409, detail="Replies are not open yet")
+
+        student_message_id = chat.add_message(
+            conn, conversation_id, "student", "chat", {"text": text},
+            submission_id=conversation["submission_id"], counted=True,
+        )
+
+        submission_id = conversation["submission_id"]
+        submission = conn.execute(
+            "SELECT * FROM submissions WHERE id = ?", (submission_id,)
+        ).fetchone() if submission_id else None
+        evaluation = latest_evaluation(conn, submission_id) if submission_id else None
+        assessment = conn.execute(
+            "SELECT * FROM self_assessments WHERE submission_id = ?", (submission_id,)
+        ).fetchone() if submission_id else None
+
+    messages = current["messages"]
+    feedback_body = next((m["body"] for m in reversed(messages) if m["kind"] == "feedback"), None)
+    lesson = LESSONS_BY_ID.get(conversation["lesson_id"])
+
+    reply: str | None = None
+    calls: list[dict[str, Any]] = []
+    fallback = chat.UNAVAILABLE
+    usable = (
+        config.FEEDBACK_MODE == "llm"
+        and config.LLM_MODEL
+        and lesson is not None
+        and submission is not None
+        and assessment is not None
+        and feedback_body is not None
+        and evaluation is not None
+        and evaluation["status"] != "grader_error"
+    )
+    if usable:
+        payload = json.loads(submission["payload_json"])
+        context = feedback.build_user_message(
+            lesson, payload, evaluation, assessment["confidence"], assessment["notes"],
+            submission["attempt_no"], feedback.context_for(lesson, LESSONS, HINTS), closing=None,
+        )
+        system, prompt_version = chat.load_prompt()
+        prompt = chat.build_messages(
+            system, context, feedback_body, chat.history_pairs(messages), text
+        )
+        reply, calls = chat.write_reply(
+            prompt, feedback.secrets_for(lesson, payload, evaluation), prompt_version
+        )
+        # The model answered, but every answer broke a rule: say so without saying which.
+        if reply is None and calls and calls[-1]["outcome"] != "error":
+            fallback = chat.CANNOT_ANSWER
+
+    # Transaction 2: store the answer (or the fixed message) and the calls behind it.
+    with db.connect() as conn:
+        if reply is not None:
+            chat.add_message(conn, conversation_id, "assistant", "chat", {"text": reply},
+                             submission_id=submission_id)
+        else:
+            conn.execute("UPDATE messages SET counted = 0 WHERE id = ?", (student_message_id,))
+            chat.add_message(conn, conversation_id, "assistant", "fallback", {"text": fallback},
+                             submission_id=submission_id)
+        chat.store_calls(conn, calls, "chat", submission_id, conversation_id)
+        return chat.view(conn, conversation_id)
 
 @app.get("/api/me/submissions")
 def my_submissions(user: dict[str, Any] = Depends(auth.current_user)) -> list[dict[str, Any]]:
@@ -431,6 +571,7 @@ def create_participants(
     body: CreateParticipantsIn, _: dict[str, Any] = Depends(auth.require_admin)
 ) -> list[dict[str, Any]]:
     #Create participant codes, ready to be distributed to users
+    condition = clean_condition(body.condition)
     created: list[dict[str, Any]] = []
     with db.connect() as conn:
         for _index in range(body.count):
@@ -449,9 +590,9 @@ def create_participants(
             conn.execute(
                 """INSERT INTO users (id, role, code, condition, label, active, created_at)
                    VALUES (?, 'student', ?, ?, ?, 1, ?)""",
-                (user_id, code, body.condition, body.label, now()),
+                (user_id, code, condition, body.label, now()),
             )
-            created.append({"id": user_id, "code": code, "condition": body.condition})
+            created.append({"id": user_id, "code": code, "condition": condition})
     return created
 
 
@@ -492,7 +633,12 @@ def admin_submission_detail(
         call_rows = conn.execute(
             "SELECT * FROM llm_calls WHERE submission_id = ? ORDER BY created_at",
             (submission_id,),
-        ).fetchall()        
+        ).fetchall()
+        conversation_rows = conn.execute(
+            "SELECT id FROM conversations WHERE submission_id = ? ORDER BY created_at",
+            (submission_id,),
+        ).fetchall()
+        conversations = [chat.view(conn, row["id"]) for row in conversation_rows]
     return {
         "submission": {**dict(submission), "payload": json.loads(submission["payload_json"])},
         "evaluations": [
@@ -502,6 +648,7 @@ def admin_submission_detail(
         "llmCalls": [
             {**dict(row), "messages": json.loads(row["messages_json"])} for row in call_rows
         ],
+        "conversations": conversations,
     }
 
 
@@ -515,7 +662,7 @@ def update_participant(
     values: list[Any] = []
     if body.condition is not None:
         fields.append("condition = ?")
-        values.append(body.condition or None)
+        values.append(clean_condition(body.condition))
     if body.label is not None:
         fields.append("label = ?")
         values.append(body.label)
@@ -607,7 +754,9 @@ def export_everything(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[s
             "selfAssessments": rows("SELECT * FROM self_assessments"),
             "evaluations": rows("SELECT * FROM evaluations"),
             "feedback": rows("SELECT * FROM feedback"),
-            "llmCalls": rows("SELECT * FROM llm_calls"),            
+            "llmCalls": rows("SELECT * FROM llm_calls"),
+            "conversations": rows("SELECT * FROM conversations"),
+            "messages": rows("SELECT * FROM messages ORDER BY conversation_id, seq"),
             "events": rows("SELECT * FROM events"),
         }
 

@@ -101,8 +101,13 @@ def build_user_message(
     notes: str | None,
     attempt_no: int,
     ctx: dict[str, Any],
+    closing: str | None = "Write the feedback now, in Danish, as one JSON object.",
 ) -> str:
-    """Everything the model needs, in labelled sections"""
+    """Everything the model needs, in labelled sections.
+
+    `closing` is the request at the end. The conversation reuses this message as
+    background for its replies, and passes None because the feedback is already written.
+    """
     parts: list[str] = []
     description = lesson["content"].get("description", "")
 
@@ -202,7 +207,8 @@ def build_user_message(
             + "\n".join(f"- {l['id']}: {l['title']}" for l in ctx["earlierLessons"])
         )
 
-    parts.append("Write the feedback now, in Danish, as one JSON object.")
+    if closing:
+        parts.append(closing)
     return "\n\n".join(parts)
 
 

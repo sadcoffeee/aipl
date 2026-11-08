@@ -135,5 +135,11 @@ def public_user(user: dict[str, Any]) -> dict[str, Any]:
         "code": user["code"],
         "username": user["username"],
         "condition": user["condition"],
+        # What the user actually gets: no condition (and admins) fall back to the default
+        "effectiveCondition": (
+            user["condition"]
+            if user["role"] == "student" and user["condition"] in config.CONDITIONS
+            else config.DEFAULT_CONDITION
+        ),
         "label": user["label"],
     }

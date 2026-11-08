@@ -80,3 +80,28 @@ FEEDBACK_PROMPT_PATH = pathlib.Path(
 FEEDBACK_TEMPERATURE = float(os.getenv("AIPL_FEEDBACK_TEMPERATURE", "0.2"))
 FEEDBACK_MAX_TOKENS = int(os.getenv("AIPL_FEEDBACK_MAX_TOKENS", "700"))
 FEEDBACK_TIMEOUT_SECONDS = float(os.getenv("AIPL_FEEDBACK_TIMEOUT", "30"))
+
+# --- conditions and chat -----------------------------------------------------
+
+# The two study conditions. They differ only in WHEN the student can talk to the model:
+#   restricted   - only after submitting an attempt and rating their confidence
+#   unrestricted - at any time while working on the task
+CONDITIONS = ("restricted", "unrestricted")
+
+# Students with no condition (and admins testing) behave as this one.
+DEFAULT_CONDITION = os.getenv("AIPL_DEFAULT_CONDITION", "unrestricted").strip().lower()
+
+# How many messages a student can send per attempt, the same in both conditions.
+# The self-assessment is not one of them, and neither is a message the model could not answer.
+CHAT_MAX_STUDENT_MESSAGES = int(os.getenv("AIPL_CHAT_MAX_MESSAGES", "5"))
+
+# Longest message a student can send, in characters.
+CHAT_MAX_MESSAGE_CHARS = int(os.getenv("AIPL_CHAT_MAX_CHARS", "1000"))
+
+# Added after the feedback prompt for every reply in the conversation.
+CHAT_PROMPT_PATH = pathlib.Path(
+    os.getenv("AIPL_CHAT_PROMPT", str(BACKEND_DIR / "prompts" / "chat_followup.md"))
+)
+
+CHAT_TEMPERATURE = float(os.getenv("AIPL_CHAT_TEMPERATURE", "0.3"))
+CHAT_MAX_TOKENS = int(os.getenv("AIPL_CHAT_MAX_TOKENS", "400"))

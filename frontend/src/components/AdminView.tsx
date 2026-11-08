@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import * as api from '../api'
 import type { ParticipantRow, SubmissionRow } from '../types'
 
-const CONDITIONS = ['intervention', 'control']
+const CONDITIONS = ['restricted', 'unrestricted']
 
 export default function AdminView() {
   const [participants, setParticipants] = useState<ParticipantRow[] | null>(null)
