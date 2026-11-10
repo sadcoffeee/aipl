@@ -197,6 +197,8 @@ export interface Feedback {
   summary: string
   points: FeedbackPoint[]
   revisitLessonId: string | null
+  /** The suggested lesson's title; missing in feedback stored before titles were added. */
+  revisitLessonTitle?: string | null
 }
 
 /** Conversations ---------------------------------------------------------- */

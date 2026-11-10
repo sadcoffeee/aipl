@@ -513,10 +513,11 @@ def send_chat_message(
 
     if model_on and before_submission:
         # Still working: the model sees the task and the work so far, but no verdict.
+        ctx = feedback.context_for(lesson, LESSONS, HINTS)
         system, prompt_version = chat.load_prompt(before_submission=True)
-        context = chat.presubmission_context(lesson, snapshot, feedback.context_for(lesson, LESSONS, HINTS))
+        context = chat.presubmission_context(lesson, snapshot, ctx)
         prompt = chat.build_messages(system, context, None, chat.history_pairs(messages), text)
-        reply, calls = chat.write_reply(prompt, chat.presubmission_secrets(lesson, snapshot), prompt_version)
+        reply, calls = chat.write_reply(prompt, chat.presubmission_secrets(lesson, snapshot), prompt_version, ctx)
 
     elif (
         model_on
@@ -530,14 +531,15 @@ def send_chat_message(
         # goes into that context as a section, and the turns after the feedback follow it.
         payload = json.loads(submission["payload_json"])
         before, after = chat.split_at_feedback(messages)
+        ctx = feedback.context_for(lesson, LESSONS, HINTS)
         context = feedback.build_user_message(
             lesson, payload, evaluation, assessment["confidence"], assessment["notes"],
-            submission["attempt_no"], feedback.context_for(lesson, LESSONS, HINTS), closing=None,
+            submission["attempt_no"], ctx, closing=None,
         ) + chat.earlier_chat_section(chat.history_pairs(before))
         system, prompt_version = chat.load_prompt()
         prompt = chat.build_messages(system, context, feedback_body, chat.history_pairs(after), text)
         reply, calls = chat.write_reply(
-            prompt, feedback.secrets_for(lesson, payload, evaluation), prompt_version
+            prompt, feedback.secrets_for(lesson, payload, evaluation), prompt_version, ctx
         )
 
     # The model answered, but every answer broke a rule: say so without saying which.

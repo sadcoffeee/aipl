@@ -266,6 +266,19 @@ class Rejected(Exception):
         self.reason = reason
 
 
+def replace_ids(text: str, ctx: dict[str, Any]) -> str:
+    """Swap any hint or lesson id the model wrote in its text for the title the student knows.
+
+    The prompt asks for titles, but a small model sometimes copies the id from the
+    list it was given. Longest ids first, so one id that starts with another is not cut short.
+    """
+    items = sorted(ctx["hints"] + ctx["earlierLessons"], key=lambda item: len(item["id"]), reverse=True)
+    for item in items:
+        pattern = r"`?(?<![\w-])" + re.escape(item["id"]) + r"(?![\w-])`?"
+        text = re.sub(pattern, lambda _: f'"{item["title"]}"', text)
+    return text
+
+
 def parse_reply(raw: str, line_count: int, ctx: dict[str, Any]) -> dict[str, Any]:
     """Turn the model's text into the feedback dict, or raise Rejected."""
     text = raw.strip()
@@ -294,13 +307,16 @@ def parse_reply(raw: str, line_count: int, ctx: dict[str, Any]) -> dict[str, Any
         if not (isinstance(line, int) and 1 <= line <= line_count):
             line = None
         hint = item.get("hintId") if item.get("hintId") in hint_ids else None
-        points.append({"line": line, "text": item["text"].strip(), "hintId": hint})
+        points.append({"line": line, "text": replace_ids(item["text"].strip(), ctx), "hintId": hint})
 
     revisit = data.get("revisitLessonId")
+    revisit = revisit if revisit in lesson_ids else None
     return {
-        "summary": summary.strip(),
+        "summary": replace_ids(summary.strip(), ctx),
         "points": points[:MAX_POINTS],
-        "revisitLessonId": revisit if revisit in lesson_ids else None,
+        "revisitLessonId": revisit,
+        # So the browser can show the lesson by name without looking it up
+        "revisitLessonTitle": next((l["title"] for l in ctx["earlierLessons"] if l["id"] == revisit), None),
     }
 
 

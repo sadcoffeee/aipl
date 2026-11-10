@@ -28,10 +28,9 @@ export default function FeedbackPanel({ feedback }: { feedback: Feedback }) {
         </ul>
       )}
 
-      {/* Ids are not yet turned into titles (milestone 4), so for now this is only shown to us. */}
-      {feedback.revisitLessonId && (
+      {feedback.revisitLessonTitle && (
         <p className="revisit">
-          Foreslået lektion: <code>{feedback.revisitLessonId}</code>
+          Det kan hjælpe at kigge på lektionen „{feedback.revisitLessonTitle}“ igen.
         </p>
       )}
     </div>

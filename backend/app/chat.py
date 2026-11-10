@@ -406,9 +406,9 @@ def presubmission_secrets(lesson: dict[str, Any], snapshot: dict[str, Any]) -> l
 # ---------------------------------------------------------------------------
 
 
-def check_reply(raw: str, secrets: list[str]) -> str:
+def check_reply(raw: str, secrets: list[str], ctx: dict[str, Any]) -> str:
     """The usable reply text, or raise fb.Rejected. Same content rules as the feedback."""
-    text = raw.strip()
+    text = fb.replace_ids(raw.strip(), ctx)
     if not text:
         raise fb.Rejected("invalid_shape", "it was empty")
     fb.check_content({"summary": text, "points": []}, secrets)
@@ -416,7 +416,7 @@ def check_reply(raw: str, secrets: list[str]) -> str:
 
 
 def write_reply(
-    messages: list[dict[str, str]], secrets: list[str], prompt_version: str
+    messages: list[dict[str, str]], secrets: list[str], prompt_version: str, ctx: dict[str, Any]
 ) -> tuple[str | None, list[dict[str, Any]]]:
     """(reply text or None, one record per call made). One retry if the reply breaks a rule."""
     calls: list[dict[str, Any]] = []
@@ -448,7 +448,7 @@ def write_reply(
         record["response"] = raw
         record["latencyMs"] = round((time.perf_counter() - started) * 1000)
         try:
-            text = check_reply(raw, secrets)
+            text = check_reply(raw, secrets, ctx)
         except fb.Rejected as exc:
             record.update(outcome=exc.kind, detail=exc.reason)
             calls.append(record)
