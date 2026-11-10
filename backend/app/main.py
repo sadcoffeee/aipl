@@ -94,6 +94,10 @@ class SelfAssessmentIn(BaseModel):
 
 class ChatMessageIn(BaseModel):
     text: str = Field(min_length=1, max_length=config.CHAT_MAX_MESSAGE_CHARS)
+    # The student's work as it is right now. Only used before submitting, when there is
+    # no submission to read it from. Same shapes as SubmissionIn.
+    code: str | None = None
+    placements: dict[str, str | None] | None = None
 
 
 class EventIn(BaseModel):
@@ -273,6 +277,8 @@ def create_submission(
                 body.durationMs,
             ),
         )
+        # A chat from before submitting (unrestricted only) now belongs to this attempt.
+        chat.link_to_submission(conn, user["id"], body.lessonId, submission_id)
 
     # grader runs now but does not send the vercict back, so student can rate their confidence before the result becomes available to them. 
     store_evaluation(submission_id, grader.grade(lesson, payload))
@@ -425,6 +431,25 @@ def latest_conversation(
         return chat.view(conn, row["id"]) if row else None
 
 
+@app.post("/api/lessons/{lesson_id}/conversations")
+def start_conversation(
+    lesson_id: str, user: dict[str, Any] = Depends(auth.current_user)
+) -> dict[str, Any]:
+    """Start (or pick up again) the chat for the attempt in progress. Unrestricted condition only."""
+    lesson = LESSONS_BY_ID.get(lesson_id)
+    if lesson is None:
+        raise HTTPException(status_code=404, detail="Unknown lesson")
+    if lesson["type"] not in ("completion", "parsons"):
+        raise HTTPException(status_code=400, detail="This lesson has no task to talk about")
+    if lesson_id in locked_lesson_ids(user):
+        raise HTTPException(status_code=403, detail="This lesson is not unlocked yet")
+    if chat.effective_condition(user) != "unrestricted":
+        raise HTTPException(status_code=403, detail="Chat opens after feedback in this condition")
+    with db.connect() as conn:
+        conversation_id = chat.start_or_resume(conn, user, lesson_id)
+        return chat.view(conn, conversation_id)
+
+
 @app.post("/api/conversations/{conversation_id}/messages")
 def send_chat_message(
     conversation_id: str,
@@ -449,12 +474,21 @@ def send_chat_message(
         if not current["canReply"]:
             raise HTTPException(status_code=409, detail="Replies are not open yet")
 
+        submission_id = conversation["submission_id"]
+        before_submission = submission_id is None
+        snapshot: dict[str, Any] = {}
+        if before_submission:
+            if body.code is not None:
+                snapshot["code"] = body.code
+            if body.placements is not None:
+                snapshot["placements"] = body.placements
+
         student_message_id = chat.add_message(
-            conn, conversation_id, "student", "chat", {"text": text},
-            submission_id=conversation["submission_id"], counted=True,
+            conn, conversation_id, "student", "chat",
+            {"text": text, "snapshot": snapshot} if before_submission else {"text": text},
+            submission_id=submission_id, counted=True,
         )
 
-        submission_id = conversation["submission_id"]
         submission = conn.execute(
             "SELECT * FROM submissions WHERE id = ?", (submission_id,)
         ).fetchone() if submission_id else None
@@ -470,32 +504,45 @@ def send_chat_message(
     reply: str | None = None
     calls: list[dict[str, Any]] = []
     fallback = chat.UNAVAILABLE
-    usable = (
+    model_on = (
         config.FEEDBACK_MODE == "llm"
-        and config.LLM_MODEL
+        and bool(config.LLM_MODEL)
         and lesson is not None
+        and lesson["type"] in ("completion", "parsons")
+    )
+
+    if model_on and before_submission:
+        # Still working: the model sees the task and the work so far, but no verdict.
+        system, prompt_version = chat.load_prompt(before_submission=True)
+        context = chat.presubmission_context(lesson, snapshot, feedback.context_for(lesson, LESSONS, HINTS))
+        prompt = chat.build_messages(system, context, None, chat.history_pairs(messages), text)
+        reply, calls = chat.write_reply(prompt, chat.presubmission_secrets(lesson, snapshot), prompt_version)
+
+    elif (
+        model_on
         and submission is not None
         and assessment is not None
         and feedback_body is not None
         and evaluation is not None
         and evaluation["status"] != "grader_error"
-    )
-    if usable:
+    ):
+        # After feedback: the full context with the verdict. A chat from before submitting
+        # goes into that context as a section, and the turns after the feedback follow it.
         payload = json.loads(submission["payload_json"])
+        before, after = chat.split_at_feedback(messages)
         context = feedback.build_user_message(
             lesson, payload, evaluation, assessment["confidence"], assessment["notes"],
             submission["attempt_no"], feedback.context_for(lesson, LESSONS, HINTS), closing=None,
-        )
+        ) + chat.earlier_chat_section(chat.history_pairs(before))
         system, prompt_version = chat.load_prompt()
-        prompt = chat.build_messages(
-            system, context, feedback_body, chat.history_pairs(messages), text
-        )
+        prompt = chat.build_messages(system, context, feedback_body, chat.history_pairs(after), text)
         reply, calls = chat.write_reply(
             prompt, feedback.secrets_for(lesson, payload, evaluation), prompt_version
         )
-        # The model answered, but every answer broke a rule: say so without saying which.
-        if reply is None and calls and calls[-1]["outcome"] != "error":
-            fallback = chat.CANNOT_ANSWER
+
+    # The model answered, but every answer broke a rule: say so without saying which.
+    if reply is None and calls and calls[-1]["outcome"] != "error":
+        fallback = chat.CANNOT_ANSWER
 
     # Transaction 2: store the answer (or the fixed message) and the calls behind it.
     with db.connect() as conn:

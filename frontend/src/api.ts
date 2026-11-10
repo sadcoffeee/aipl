@@ -7,6 +7,7 @@ import type {
   SelfAssessmentResult,
   SubmissionResult,
   SubmissionRow,
+  TaskSnapshot,
   User,
 } from './types'
 
@@ -144,11 +145,28 @@ export function fetchConversation(conversationId: string): Promise<Conversation>
   return request<Conversation>(`/api/conversations/${conversationId}`)
 }
 
-/** Sends a student message; resolves with the whole conversation, the model's answer included. */
-export function sendChatMessage(conversationId: string, text: string): Promise<Conversation> {
+/** The latest conversation about a lesson, or null. */
+export function fetchLatestConversation(lessonId: string): Promise<Conversation | null> {
+  return request<Conversation | null>(`/api/lessons/${lessonId}/conversation`)
+}
+
+/** Starts the chat for the attempt in progress, or picks it up again (unrestricted condition). */
+export function startConversation(lessonId: string): Promise<Conversation> {
+  return request<Conversation>(`/api/lessons/${lessonId}/conversations`, { method: 'POST' })
+}
+
+/**
+ * Sends a student message; resolves with the whole conversation, the model's answer included.
+ * `snapshot` is the work so far, sent while there is no submission for the model to read it from.
+ */
+export function sendChatMessage(
+  conversationId: string,
+  text: string,
+  snapshot?: TaskSnapshot,
+): Promise<Conversation> {
   return request<Conversation>(`/api/conversations/${conversationId}/messages`, {
     method: 'POST',
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, ...snapshot }),
   })
 }
 

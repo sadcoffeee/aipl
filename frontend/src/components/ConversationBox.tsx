@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import * as api from '../api'
-import type { Conversation, ConversationMessage } from '../types'
+import type { Conversation, ConversationMessage, TaskSnapshot } from '../types'
 import FeedbackPanel from './FeedbackPanel'
 
 const CONFIDENCE_LABELS: Record<number, string> = {
@@ -14,16 +14,24 @@ const CONFIDENCE_LABELS: Record<number, string> = {
 /**
  * The feedback on an attempt, and the short conversation that can follow it.
  *
- * Takes the place of the self-assessment box once feedback exists. The server is
+ * Takes the place of the self-assessment box once feedback exists. In the unrestricted
+ * condition it is also there while the student works, before there is any conversation:
+ * the first message starts one. The server is
  * the source of truth: every send returns the whole conversation, which replaces
  * the one shown. While waiting, the student's message is shown straight away
  * ("pending") so the box does not look frozen during the model call.
  */
 export default function ConversationBox({
   conversation,
+  lessonId,
+  getSnapshot,
   onChange,
 }: {
-  conversation: Conversation
+  /** null: nothing said yet in this attempt (unrestricted, before the first message). */
+  conversation: Conversation | null
+  lessonId: string
+  /** The work so far; sent with each message while the attempt is not submitted. */
+  getSnapshot?: () => TaskSnapshot
   onChange: (next: Conversation) => void
 }) {
   const [draft, setDraft] = useState('')
@@ -35,7 +43,7 @@ export default function ConversationBox({
   useEffect(() => {
     const element = scrollRef.current
     if (element) element.scrollTop = element.scrollHeight
-  }, [conversation.messages.length, pending])
+  }, [conversation?.messages.length, pending])
 
   async function send() {
     const text = draft.trim()
@@ -43,27 +51,42 @@ export default function ConversationBox({
     setPending(text)
     setDraft('')
     setError(null)
+    let current = conversation
     try {
-      onChange(await api.sendChatMessage(conversation.id, text))
+      if (current === null) {
+        current = await api.startConversation(lessonId)
+        onChange(current)
+      }
+      const snapshot = current.submissionId === null ? getSnapshot?.() : undefined
+      onChange(await api.sendChatMessage(current.id, text, snapshot))
     } catch {
       // Give the text back so nothing typed is lost, and fetch the conversation
       // again in case it changed (closed, or out of messages) without us knowing.
       setDraft(text)
       setError('Beskeden kunne ikke sendes. Prøv igen.')
-      api.fetchConversation(conversation.id).then(onChange).catch(() => undefined)
+      if (current) api.fetchConversation(current.id).then(onChange).catch(() => undefined)
     } finally {
       setPending(null)
     }
   }
 
-  const canSend = conversation.canReply && pending === null
+  const messages = conversation?.messages ?? []
+  const canReply = conversation?.canReply ?? true
+  const canSend = canReply && pending === null
+  const hasFeedback = messages.some((message) => message.kind === 'feedback')
 
   return (
     <section className="conversation">
-      <h2>Feedback</h2>
+      <h2>{hasFeedback ? 'Feedback' : 'Spørg om opgaven'}</h2>
+
+      {messages.length === 0 && pending === null && (
+        <p className="muted conversation-empty">
+          Du kan stille spørgsmål om opgaven når som helst, mens du arbejder.
+        </p>
+      )}
 
       <div className="conversation-messages" ref={scrollRef}>
-        {conversation.messages.map((message) => (
+        {messages.map((message) => (
           <MessageView key={message.id} message={message} />
         ))}
         {pending !== null && (
@@ -76,14 +99,18 @@ export default function ConversationBox({
         )}
       </div>
 
-      {conversation.canReply ? (
+      {canReply ? (
         <div className="conversation-input">
           <textarea
             rows={2}
             value={draft}
             maxLength={1000}
             disabled={pending !== null}
-            placeholder="Skriv et spørgsmål eller en kommentar til feedbacken…"
+            placeholder={
+              hasFeedback
+                ? 'Skriv et spørgsmål eller en kommentar til feedbacken…'
+                : 'Skriv et spørgsmål om opgaven…'
+            }
             onChange={(event) => setDraft(event.target.value)}
             onKeyDown={(event) => {
               // Enter sends; Shift+Enter makes a new line.
@@ -95,7 +122,8 @@ export default function ConversationBox({
           />
           <div className="conversation-input-row">
             <span className="muted">
-              {conversation.remainingMessages} af {conversation.maxMessages} beskeder tilbage
+              {conversation &&
+                `${conversation.remainingMessages} af ${conversation.maxMessages} beskeder tilbage`}
             </span>
             <button className="primary" disabled={!canSend || !draft.trim()} onClick={() => void send()}>
               Send
@@ -104,7 +132,7 @@ export default function ConversationBox({
         </div>
       ) : (
         <p className="muted conversation-ended">
-          {conversation.closed
+          {conversation?.closed
             ? 'Denne samtale er afsluttet.'
             : 'Du har brugt alle beskeder til dette forsøg.'}
         </p>

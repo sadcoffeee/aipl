@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import * as api from '../api'
-import type { Feedback, Lesson, LessonHints, Collection } from '../types'
+import type { Condition, Feedback, Lesson, LessonHints, Collection } from '../types'
 import CompletionView from './CompletionView'
 import HintPanel from './HintPanel'
 import InstructionView from './InstructionView'
@@ -12,6 +12,7 @@ import OutputPanel from './OutputPanel'
 
 export default function LessonView({
   lessonId,
+  condition,
   collections,
   onOpen,
   onBack,
@@ -20,6 +21,7 @@ export default function LessonView({
   onToggleGoals, 
 }: {
   lessonId: string
+  condition: Condition
   collections: Collection[] 
   onOpen: (lessonId: string) => void
   onBack: () => void
@@ -214,10 +216,10 @@ export default function LessonView({
             <InstructionView key={lesson.id} lesson={lesson} onCompleted={onProgressChanged} onNext={goToNextLesson} />     // Pass the navigation function to InstructionView
           )}
         {lesson.type === 'completion' && (
-            <CompletionView key={lesson.id} lesson={lesson} onFeedback={receiveFeedback} />
+            <CompletionView key={lesson.id} lesson={lesson} condition={condition} onFeedback={receiveFeedback} />
           )}
           {lesson.type === 'parsons' && (
-            <ParsonsView key={lesson.id} lesson={lesson} onFeedback={receiveFeedback} />
+            <ParsonsView key={lesson.id} lesson={lesson} condition={condition} onFeedback={receiveFeedback} />
           )}
         </div>
 

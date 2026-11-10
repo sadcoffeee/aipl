@@ -216,8 +216,14 @@ export type ConversationMessage = MessageBase &
     | { kind: 'self_assessment'; body: { confidence: number; notes: string | null } }
     | { kind: 'feedback'; body: Feedback }
     /** chat: a student message or a model reply. fallback: a fixed reply used when no usable answer could be written. */
-    | { kind: 'chat' | 'fallback'; body: { text: string } }
+    | { kind: 'chat' | 'fallback'; body: { text: string; snapshot?: TaskSnapshot } }
   )
+
+/** The student's work as it is right now: written code, or Parson's placements. */
+export interface TaskSnapshot {
+  code?: string
+  placements?: Record<string, string | null>
+}
 
 export interface Conversation {
   id: string

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Markdown } from '../markdown'
-import type { Feedback, ParsonsLesson, ParsonsOption } from '../types'
+import type { Condition, Feedback, ParsonsLesson, ParsonsOption } from '../types'
 import { useSubmissionFlow } from '../useSubmissionFlow'
 import ConversationBox from './ConversationBox'
 import SelfAssessment from './SelfAssessment'
@@ -17,9 +17,11 @@ function shuffled<T>(items: T[]): T[] {
 
 export default function ParsonsView({
   lesson,
+  condition,
   onFeedback,
 }: {
   lesson: ParsonsLesson
+  condition: Condition
   onFeedback: (feedback: Feedback | null) => void
 }) {
   const { lines, options, shuffleOptions } = lesson.content
@@ -36,7 +38,7 @@ export default function ParsonsView({
   )
   const [heldOption, setHeldOption] = useState<string | null>(null)
 
-  const flow = useSubmissionFlow({ lessonId: lesson.id, onFeedback })
+  const flow = useSubmissionFlow({ lessonId: lesson.id, condition, onFeedback })
   const locked = flow.phase !== 'working'
 
   const usedOptionIds = new Set(Object.values(placements).filter(Boolean) as string[])
@@ -163,8 +165,16 @@ export default function ParsonsView({
         <SelfAssessment busy={flow.busy} onSubmit={flow.submitAssessment} />
       )}
 
-      {flow.phase === 'done' && flow.conversation && (
-        <ConversationBox conversation={flow.conversation} onChange={flow.setConversation} />
+      {/* Restricted: the box appears with the feedback. Unrestricted: it is there from the
+          start, and only steps aside while the self-assessment is being filled in. */}
+      {((flow.phase === 'done' && flow.conversation) ||
+        (flow.phase === 'working' && condition === 'unrestricted')) && (
+        <ConversationBox
+          conversation={flow.conversation}
+          lessonId={lesson.id}
+          getSnapshot={() => ({ placements })}
+          onChange={flow.setConversation}
+        />
       )}
 
       {flow.phase === 'done' && (

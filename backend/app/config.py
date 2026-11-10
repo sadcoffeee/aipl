@@ -103,5 +103,10 @@ CHAT_PROMPT_PATH = pathlib.Path(
     os.getenv("AIPL_CHAT_PROMPT", str(BACKEND_DIR / "prompts" / "chat_followup.md"))
 )
 
+# Added as well while an unrestricted student chats before submitting (no verdict yet).
+CHAT_PRESUBMISSION_PROMPT_PATH = pathlib.Path(
+    os.getenv("AIPL_CHAT_PRESUBMISSION_PROMPT", str(BACKEND_DIR / "prompts" / "chat_presubmission.md"))
+)
+
 CHAT_TEMPERATURE = float(os.getenv("AIPL_CHAT_TEMPERATURE", "0.3"))
 CHAT_MAX_TOKENS = int(os.getenv("AIPL_CHAT_MAX_TOKENS", "400"))

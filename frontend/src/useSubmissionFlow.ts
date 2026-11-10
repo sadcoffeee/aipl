@@ -1,19 +1,38 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import * as api from './api'
-import type { Conversation, Feedback } from './types'
+import type { Condition, Conversation, Feedback } from './types'
 
 export type Phase = 'working' | 'assessing' | 'done'
 
 export function useSubmissionFlow(args: {
   lessonId: string
+  condition: Condition
   onFeedback: (feedback: Feedback | null) => void
 }) {
-  const { lessonId, onFeedback } = args
+  const { lessonId, condition, onFeedback } = args
 
   const [phase, setPhase] = useState<Phase>('working')
   const [submissionId, setSubmissionId] = useState<string | null>(null)
   // The feedback and the replies after it. Shown in place of the self-assessment once it exists.
   const [conversation, setConversation] = useState<Conversation | null>(null)
+
+  // Unrestricted: pick up a chat about the attempt in progress, e.g. after a reload. Only an
+  // open one with no submission yet - an old, finished attempt's chat is not continued.
+  useEffect(() => {
+    if (condition !== 'unrestricted') return
+    let cancelled = false
+    api
+      .fetchLatestConversation(lessonId)
+      .then((latest) => {
+        if (!cancelled && latest && !latest.closed && latest.submissionId === null) {
+          setConversation(latest)
+        }
+      })
+      .catch(() => undefined)
+    return () => {
+      cancelled = true
+    }
+  }, [lessonId, condition])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 

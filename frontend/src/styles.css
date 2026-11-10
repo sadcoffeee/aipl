@@ -892,3 +892,8 @@ button.primary:disabled {
   font-size: 0.875rem;
   margin: 0.4rem 0 0;
 }
+
+.conversation-empty {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}

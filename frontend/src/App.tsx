@@ -145,6 +145,7 @@ export default function App() {
           goalsOpen={goalsOpen}
           onToggleGoals={() => setGoalsOpen((open) => !open)}
           lessonId={openLessonId}
+          condition={user.effectiveCondition}
           onOpen={(lessonId)=> {
               api.logEvent({ lessonId: openLessonId, type: 'lesson_closed'})
               api.logEvent({ lessonId, type: 'lesson_opened'})
