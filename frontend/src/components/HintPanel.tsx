@@ -76,7 +76,7 @@ export default function HintPanel({
   if (hints.new.length === 0 && hints.earlier.length === 0) {
     return (
       <div className="hint-panel">
-        <h2>Referencer</h2>
+        <h2>Brug for et tip</h2>
         <p className="muted">Intet låst op endnu.</p>
       </div>
     )
@@ -84,7 +84,7 @@ export default function HintPanel({
 
   return (
     <div className="hint-panel">
-      <h2>Referencer</h2>
+      <h2>Brug for et tip?</h2>
 
       {hints.new.length > 0 && (
         <>
