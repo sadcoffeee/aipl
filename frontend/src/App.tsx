@@ -23,7 +23,7 @@ export default function App() {
   const [openLessonId, setOpenLessonId] = useState<string | null>(null)
   const [adminTab, setAdminTab] = useState<AdminTab>('participants')
   const [error, setError] = useState<string | null>(null)
-  const [goalsOpen, setGoalsOpen] = useState(false) //.
+  const [goalsOpen, setGoalsOpen] = useState(true) //.
 
   const signOut = useCallback(() => {
     setUser(null)
@@ -133,6 +133,7 @@ export default function App() {
               isAdmin={user.role === 'admin'}
               onOpen={(lessonId) => {
                 api.logEvent({ lessonId, type: 'lesson_opened' })
+                setGoalsOpen(true)
                 setOpenLessonId(lessonId)
               }}
             />
@@ -148,7 +149,8 @@ export default function App() {
           condition={user.effectiveCondition}
           onOpen={(lessonId)=> {
               api.logEvent({ lessonId: openLessonId, type: 'lesson_closed'})
-              api.logEvent({ lessonId, type: 'lesson_opened'})
+              api.logEvent({ lessonId, type: 'lesson_opened' })
+              setGoalsOpen(true)
               setOpenLessonId(lessonId)
           }}
             onBack={() => {
