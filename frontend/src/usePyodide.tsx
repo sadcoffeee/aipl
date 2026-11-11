@@ -65,6 +65,9 @@ function usePyInternal(){
     const [output, setOut] = useState('') //is an empty string
     const [error, setErr] = useState<string | null>(null) //if its null there is no error, if its string it is the error
     const [image, setImg] = useState<string | null>(null) //to convert the file to an image
+    // true once a run has finished without an error. Lets the console say the code ran even when it printed nothing.
+    // Resets by itself when another lesson opens, since each lesson gets a fresh provider.
+    const [ranOk, setRanOk] = useState(false)
 
     const outRef = useRef('')
 
@@ -129,6 +132,7 @@ base64.b64encode(buf.read()).decode('utf-8')`)
         setOut('') //resets everything when run
         setErr(null)
         setImg(null)
+        setRanOk(false)
         setRun(true)
         try{
             const pyodide = await getPy()
@@ -142,6 +146,7 @@ base64.b64encode(buf.read()).decode('utf-8')`)
                 await generatePlot()
 
             }
+            setRanOk(true)
             
         } catch (err) {
             const message = err instanceof Error ? err.message : String(err)
@@ -162,7 +167,7 @@ async function loadFile(url: string, filename: string) {
     pyodide.FS.writeFile(`/home/pyodide/${filename}`, new Uint8Array(buffer))
 }
 
-return{running, output, error, run, image, loadFile, generatePlot}
+return{running, output, error, ranOk, run, image, loadFile, generatePlot}
 
 }
 

@@ -907,3 +907,8 @@ button.primary:disabled {
   margin: 0 0 0.5rem;
   font-size: 0.9rem;
 }
+
+/* Shown when code ran without errors but printed nothing */
+.py-console-ok {
+  color: #7ee2a8;
+}
