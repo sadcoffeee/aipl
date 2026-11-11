@@ -715,7 +715,7 @@ button.primary:disabled {
   padding: 0.55rem 1.1rem;
   cursor: pointer;
   font: inherit;
-  margin-top: 0.5rem;
+  margin-top:0.7rem;
 }
 /* When its running to give visual feedback*/
 .run-button:disabled {
@@ -729,6 +729,16 @@ button.primary:disabled {
 
 .py-console-error {
   color: #f04c3d;
+}
+
+.task-buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.task-buttons .task-actions {
+    margin-top: 0.7rem;
 }
 
 /* consol panel -------------------------------------------------- */

@@ -63,26 +63,25 @@ useEffect(() => {
         />
       </div>
 
-      
-      <PyRunner code={code} fileReady={fileReady}/>
-      
-      
-      
-      
+     <div className="task-buttons">
+        <PyRunner code={code} fileReady={fileReady} />
 
-      {flow.error && <div className="panel error">{flow.error}</div>}
+        {flow.phase === 'working' && (
+            <div className="task-actions">
+                <button
+                      className="primary"
+                      disabled={flow.busy}
+                      onClick={() => flow.submitAttempt({ code })}
+                    >
+                
+                    {flow.busy ? 'Checker svar…' : 'Check svar'}
+                </button>
+            </div>
+        )}       
+     </div>
 
-      {flow.phase === 'working' && (
-        <div className="task-actions">
-          <button
-            className="primary"
-            disabled={flow.busy}
-            onClick={() => flow.submitAttempt({ code })}
-          >
-            {flow.busy ? 'Checker svar…' : 'Check svar'}
-          </button>
-        </div>
-      )}
+    {flow.error && <div className="panel error">{flow.error}</div>}
+      
 
       {flow.phase === 'assessing' && (
         <SelfAssessment busy={flow.busy} onSubmit={flow.submitAssessment} />
