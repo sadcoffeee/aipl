@@ -787,26 +787,66 @@ def review_feedback(
 
 
 @app.get("/api/admin/export")
-def export_everything(_: dict[str, Any] = Depends(auth.require_admin)) -> dict[str, Any]:
-    # Whole database as JSON, for analysis. Password hashes are left out
-    with db.connect() as conn:
-        def rows(query: str) -> list[dict[str, Any]]:
-            return [dict(row) for row in conn.execute(query).fetchall()]
+def export_everything(
+    codes: str | None = None, _: dict[str, Any] = Depends(auth.require_admin)
+) -> dict[str, Any]:
+    """The database as JSON, for analysis. Password hashes are left out.
 
+    With ?codes=KVT-AAAAAA,KVT-BBBBBB only those participants and everything that
+    belongs to them; without it, everything (admins included).
+    """
+    wanted = sorted({c.strip() for c in codes.split(",") if c.strip()}) if codes else None
+
+    with db.connect() as conn:
+        def rows(query: str, params: list[Any] | tuple[Any, ...] = ()) -> list[dict[str, Any]]:
+            return [dict(row) for row in conn.execute(query, params).fetchall()]
+
+        user_columns = "id, role, code, username, condition, label, active, created_at"
+
+        if wanted is None:
+            return {
+                "exportedAt": now(),
+                "codes": None,
+                "users": rows(f"SELECT {user_columns} FROM users"),
+                "submissions": rows("SELECT * FROM submissions"),
+                "selfAssessments": rows("SELECT * FROM self_assessments"),
+                "evaluations": rows("SELECT * FROM evaluations"),
+                "feedback": rows("SELECT * FROM feedback"),
+                "llmCalls": rows("SELECT * FROM llm_calls"),
+                "conversations": rows("SELECT * FROM conversations"),
+                "messages": rows("SELECT * FROM messages ORDER BY conversation_id, seq"),
+                "events": rows("SELECT * FROM events"),
+            }
+
+        marks = ", ".join("?" for _ in wanted)
+        users = rows(f"SELECT {user_columns} FROM users WHERE code IN ({marks})", wanted)
+        unknown = sorted(set(wanted) - {user["code"] for user in users})
+        if unknown:
+            raise HTTPException(status_code=404, detail=f"Unknown codes: {', '.join(unknown)}")
+
+        # Every other table hangs off a user, a submission or a conversation.
+        ids = [user["id"] for user in users]
+        by_user = f"user_id IN ({', '.join('?' for _ in ids)})"
+        by_submission = f"submission_id IN (SELECT id FROM submissions WHERE {by_user})"
+        by_conversation = f"conversation_id IN (SELECT id FROM conversations WHERE {by_user})"
         return {
             "exportedAt": now(),
-            "users": rows(
-                """SELECT id, role, code, username, condition, label, active, created_at
-                   FROM users"""
+            "codes": wanted,
+            "users": users,
+            "submissions": rows(f"SELECT * FROM submissions WHERE {by_user} ORDER BY submitted_at", ids),
+            "selfAssessments": rows(f"SELECT * FROM self_assessments WHERE {by_submission}", ids),
+            "evaluations": rows(f"SELECT * FROM evaluations WHERE {by_submission}", ids),
+            "feedback": rows(f"SELECT * FROM feedback WHERE {by_submission}", ids),
+            # Chat calls before submitting have only a conversation, not a submission.
+            "llmCalls": rows(
+                f"SELECT * FROM llm_calls WHERE {by_submission} OR {by_conversation} ORDER BY created_at",
+                ids + ids,
             ),
-            "submissions": rows("SELECT * FROM submissions"),
-            "selfAssessments": rows("SELECT * FROM self_assessments"),
-            "evaluations": rows("SELECT * FROM evaluations"),
-            "feedback": rows("SELECT * FROM feedback"),
-            "llmCalls": rows("SELECT * FROM llm_calls"),
-            "conversations": rows("SELECT * FROM conversations"),
-            "messages": rows("SELECT * FROM messages ORDER BY conversation_id, seq"),
-            "events": rows("SELECT * FROM events"),
+            "conversations": rows(f"SELECT * FROM conversations WHERE {by_user} ORDER BY created_at", ids),
+            "messages": rows(
+                f"SELECT * FROM messages WHERE {by_conversation} ORDER BY conversation_id, seq", ids
+            ),
+            "events": rows(f"SELECT * FROM events WHERE {by_user} ORDER BY id", ids),
         }
 
 

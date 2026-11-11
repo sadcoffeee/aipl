@@ -217,6 +217,8 @@ export function fetchParticipantSubmissions(userId: string): Promise<SubmissionR
   return request<SubmissionRow[]>(`/api/admin/participants/${userId}/submissions`)
 }
 
-export function fetchExport(): Promise<unknown> {
-  return request('/api/admin/export')
+/** Everything, or with `codes` only those participants and what belongs to them. */
+export function fetchExport(codes?: string[]): Promise<unknown> {
+  const query = codes?.length ? `?codes=${encodeURIComponent(codes.join(','))}` : ''
+  return request(`/api/admin/export${query}`)
 }

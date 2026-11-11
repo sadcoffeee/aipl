@@ -13,6 +13,8 @@ export default function AdminView() {
   const [justCreated, setJustCreated] = useState<string[]>([])
   const [openParticipant, setOpenParticipant] = useState<string | null>(null)
   const [submissions, setSubmissions] = useState<SubmissionRow[] | null>(null)
+  // Codes ticked for a filtered export
+  const [selected, setSelected] = useState<Set<string>>(new Set())
 
   function refresh() {
     api.fetchParticipants().then(setParticipants).catch((err) => setError(String(err)))
@@ -41,16 +43,35 @@ export default function AdminView() {
     setSubmissions(await api.fetchParticipantSubmissions(userId))
   }
 
-  async function downloadExport() {
-    const data = await api.fetchExport()
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const anchor = document.createElement('a')
-    anchor.href = url
-    anchor.download = `study-export-${new Date().toISOString().slice(0, 10)}.json`
-    anchor.click()
-    URL.revokeObjectURL(url)
+  /** Downloads the export: everything, or only the given participant codes. */
+  async function downloadExport(codes?: string[]) {
+    setError(null)
+    try {
+      const data = await api.fetchExport(codes)
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const anchor = document.createElement('a')
+      anchor.href = url
+      const date = new Date().toISOString().slice(0, 10)
+      const which = !codes ? 'all' : codes.length === 1 ? codes[0] : `${codes.length}-participants`
+      anchor.download = `study-export-${which}-${date}.json`
+      anchor.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err))
+    }
   }
+
+  function toggleSelected(code: string) {
+    setSelected((current) => {
+      const next = new Set(current)
+      if (next.has(code)) next.delete(code)
+      else next.add(code)
+      return next
+    })
+  }
+
+  const allSelected = participants !== null && participants.length > 0 && participants.every((row) => selected.has(row.code))
 
   return (
     <main className="admin">
@@ -109,7 +130,11 @@ export default function AdminView() {
       </section>
 
       <div className="task-actions">
-        <button onClick={() => void downloadExport()}>Download data export (JSON)</button>
+        <button onClick={() => void downloadExport()}>Download all data (JSON)</button>
+        <button disabled={selected.size === 0} onClick={() => void downloadExport([...selected])}>
+          Download selected ({selected.size})
+        </button>
+        {selected.size > 0 && <button onClick={() => setSelected(new Set())}>Clear selection</button>}
         <button onClick={refresh}>Refresh</button>
       </div>
 
@@ -121,6 +146,16 @@ export default function AdminView() {
         <table className="admin-table">
           <thead>
             <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  aria-label="Select all"
+                  checked={allSelected}
+                  onChange={() =>
+                    setSelected(allSelected ? new Set() : new Set(participants.map((row) => row.code)))
+                  }
+                />
+              </th>
               <th>Code</th>
               <th>Condition</th>
               <th>Label</th>
@@ -132,6 +167,14 @@ export default function AdminView() {
           <tbody>
             {participants.map((row) => (
               <tr key={row.id} className={row.active ? undefined : 'inactive'}>
+                <td>
+                  <input
+                    type="checkbox"
+                    aria-label={`Select ${row.code}`}
+                    checked={selected.has(row.code)}
+                    onChange={() => toggleSelected(row.code)}
+                  />
+                </td>
                 <td>
                   <code>{row.code}</code>
                 </td>
