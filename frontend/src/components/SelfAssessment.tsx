@@ -52,9 +52,14 @@ export default function SelfAssessment({
       </label>
 
       <button
-        className="primary"
-        disabled={confidence === null || busy}
-        onClick={() => confidence !== null && onSubmit(confidence, notes)}
+              className="primary"
+              disabled={confidence === null || notes === '' || busy}
+
+              onClick={() => {
+                  if (confidence !== null && notes !== '')
+                    { onSubmit(confidence, notes) }
+              }
+              }
       >
         {busy ? 'Sender...' : 'Fortsæt til feedback'}
       </button>
