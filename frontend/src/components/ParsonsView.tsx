@@ -19,10 +19,12 @@ export default function ParsonsView({
   lesson,
   condition,
   onFeedback,
+  onNext,
 }: {
   lesson: ParsonsLesson
   condition: Condition
   onFeedback: (feedback: Feedback | null) => void
+  onNext: () => void
 }) {
   const { lines, options, shuffleOptions } = lesson.content
 
@@ -185,7 +187,8 @@ export default function ParsonsView({
 
       {flow.phase === 'done' && (
         <div className="task-actions">
-          <button onClick={flow.restart}>Prøv igen</button>
+            <button onClick={flow.restart}>Prøv igen</button>
+            <button className="primary" onClick={onNext}> Fortsæt </button>
         </div>
       )}
     </div>

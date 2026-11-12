@@ -67,31 +67,51 @@ export default function LessonView({
   const hasSideColumn = lesson.type !== 'instruction' || hintCount > 0
 
     //function of the continue button
-  function goToNextLesson() {
-      //find the collection containing the current lesson
-        const currentCollection = collections.find(collection =>
-        collection.lessons.some(step => step.id === lessonId)
+    function goToNextLesson() {
+        //find the collection containing the current lesson
+        const currentCollectionIndex = collections.findIndex(collection =>
+            collection.lessons.some(step => step.id === lessonId)
         )
 
-      //stop if the current lesson do not belong to a collection
-        if (!currentCollection) return
+        //stop if the current lesson do not belong to a collection
+        if (currentCollectionIndex === -1) return
+
+        const currentCollection = collections[currentCollectionIndex]
+
 
         //sort lessons by their position to ensure correct order, unsure of we already have a way to keep track of this
         const sortedLessons = [...currentCollection.lessons].sort(
             (a, b) => a.position - b.position
-            )
+        )
 
         // Find the current lesson's position
         const currentIndex = sortedLessons.findIndex(
             step => step.id === lessonId
-            )
+        )
 
-        // Find the next lesson
+        // Find the next lesson in current collection
         const nextLesson = sortedLessons[currentIndex + 1]
 
         // Open the next lesson if it exists
         if (nextLesson) {
             onOpen(nextLesson.id)
+            return
+        }
+
+        //otherwise fint the next collection
+        const nextCollection = collections[currentCollectionIndex + 1]
+
+        //stop if there is no next collection
+        if (!nextCollection) return
+
+        // Sort the lessons in the next collection
+        const nextCollectionLessons = [...nextCollection.lessons].sort(
+            (a, b) => a.position - b.position
+        )
+
+        // Open the first lesson in the next collection
+        if (nextCollectionLessons.length > 0) {
+            onOpen(nextCollectionLessons[0].id)
         }
     }
 
@@ -215,11 +235,12 @@ export default function LessonView({
          {lesson.type === 'instruction' && (
             <InstructionView key={lesson.id} lesson={lesson} onCompleted={onProgressChanged} onNext={goToNextLesson} />     // Pass the navigation function to InstructionView
           )}
-        {lesson.type === 'completion' && (
-            <CompletionView key={lesson.id} lesson={lesson} condition={condition} onFeedback={receiveFeedback} />
+
+         {lesson.type === 'completion' && (
+            <CompletionView key={lesson.id} lesson={lesson} condition={condition} onFeedback={receiveFeedback} onNext={goToNextLesson} />
           )}
           {lesson.type === 'parsons' && (
-            <ParsonsView key={lesson.id} lesson={lesson} condition={condition} onFeedback={receiveFeedback} />
+            <ParsonsView key={lesson.id} lesson={lesson} condition={condition} onFeedback={receiveFeedback} onNext={goToNextLesson} />
           )}
         </div>
 

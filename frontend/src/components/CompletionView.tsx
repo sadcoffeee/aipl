@@ -16,10 +16,13 @@ export default function CompletionView({
   lesson,
   condition,
   onFeedback,
+  onNext,
 }: {
   lesson: CompletionLesson
   condition: Condition
   onFeedback: (feedback: Feedback | null) => void
+  onNext: () => void
+
 }) {
   // An earlier attempt's answers, put back into the gaps when the lesson is opened again.
   // 'raw' if they no longer fit the starter code: the code is then shown as it was, without gaps.
@@ -121,7 +124,8 @@ useEffect(() => {
 
       {flow.phase === 'done' && (
         <div className="task-actions">
-          <button onClick={flow.restart}>Prøv igen</button>
+            <button onClick={flow.restart}>Prøv igen</button>
+            <button className="primary" onClick={onNext}> Fortsæt </button>
         </div>
       )}
     </div>
