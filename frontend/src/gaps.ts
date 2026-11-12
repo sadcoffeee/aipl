@@ -1,5 +1,5 @@
-import { EditorState, StateField, type Extension } from '@codemirror/state'
-import { Decoration, EditorView, WidgetType } from '@codemirror/view'
+import { EditorState, StateField, Prec, type Extension } from '@codemirror/state'
+import { Decoration, EditorView, WidgetType, keymap } from '@codemirror/view'
 
 export interface Gap {
   from: number
@@ -41,6 +41,27 @@ const gapField = StateField.define<Gap[]>({
       : gaps,
 })
 
+/*Navigation function*/
+// Move to the next gap when Tab is pressed
+function navigateGaps(view: EditorView): boolean {
+    const gaps = view.state.field(gapField)
+    const cursor = view.state.selection.main.head
+
+    // Find the next gap after the current cursor
+    const nextGap = gaps.find(gap => gap.from > cursor)
+
+    // If there is no next gap, do nothing
+    if (!nextGap) return true
+
+    // Move cursor to the next gap
+    view.dispatch({
+        selection: { anchor: nextGap.from },
+        effects: EditorView.scrollIntoView(nextGap.from),
+    })
+
+    return true
+}
+
 /** Shown in place of an empty gap, so it is visible and clickable. */
 class EmptyGapWidget extends WidgetType {
   toDOM() {
@@ -81,6 +102,18 @@ const restrictToGaps = EditorState.transactionFilter.of((tr) => {
 
 export function gapExtensions(gaps: Gap[], lock: boolean): Extension[] {
   if (gaps.length === 0) return []
-  const base: Extension[] = [gapField.init(() => gaps), gapDecorations]
+    const base: Extension[] = [
+        gapField.init(() => gaps),
+        gapDecorations,
+        // Give our custom Tab shortcuts the highest priority
+        Prec.highest(
+            keymap.of([
+                {
+                    key: 'Tab',
+                    run: navigateGaps,
+                },
+            ])
+        ),
+    ]
   return lock ? [...base, restrictToGaps] : base
 }
