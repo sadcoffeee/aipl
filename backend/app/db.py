@@ -78,8 +78,7 @@ CREATE TABLE IF NOT EXISTS llm_calls (
 );
 
 
--- One conversation per attempt at a task. Created when feedback is first produced (restricted) or,
--- later, when the student first opens the chat (unrestricted). Linked to the submission once there is one.
+-- One conversation per attempt at a task. Created when feedback is first produced (restricted) or when the student first opens the chat (unrestricted)
 CREATE TABLE IF NOT EXISTS conversations (
     id            TEXT PRIMARY KEY,
     user_id       TEXT NOT NULL REFERENCES users(id),
@@ -87,7 +86,7 @@ CREATE TABLE IF NOT EXISTS conversations (
     condition     TEXT NOT NULL,     -- the condition in force when it started: 'restricted' | 'unrestricted'
     submission_id TEXT REFERENCES submissions(id),
     created_at    TEXT NOT NULL,
-    closed_at     TEXT               -- set when a newer attempt at the same lesson starts; no more replies after that
+    closed_at     TEXT               
 );
 
 -- Everything shown in the conversation box, in order.
@@ -154,13 +153,12 @@ def migrate(conn: sqlite3.Connection) -> None:
     """Bring a database made by an older version of the code up to date.
 
     CREATE TABLE IF NOT EXISTS adds new tables, but never changes a table that
-    already exists - so new columns on old tables are added here. Every step
-    checks first, so running this again on an up-to-date database does nothing.
+    already exists - so new columns on old tables are added here.
     """
-    # Nov 2026: chat. Model calls can belong to a conversation, not only a submission.
+    # chat. Model calls can belong to a conversation, not only a submission.
     if "conversation_id" not in _columns(conn, "llm_calls"):
         conn.execute("ALTER TABLE llm_calls ADD COLUMN conversation_id TEXT REFERENCES conversations(id)")
-    # Nov 2026: conditions renamed to say what they mean.
+    # conditions renamed to say what they mean.
     conn.execute("UPDATE users SET condition = 'restricted' WHERE condition = 'intervention'")
     conn.execute("UPDATE users SET condition = 'unrestricted' WHERE condition = 'control'")
 

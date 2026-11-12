@@ -8,7 +8,8 @@ export interface Gap {
 
 const GAP_MARKER = /\{\{gap(?::([^}]*))?\}\}/g
 
-export function parseGaps(source: string): { text: string; gaps: Gap[] } {
+
+export function parseGaps(source: string, fill?: string[]): { text: string; gaps: Gap[] } {
   const gaps: Gap[] = []
   let text = ''
   let lastIndex = 0
@@ -18,7 +19,8 @@ export function parseGaps(source: string): { text: string; gaps: Gap[] } {
   while ((match = GAP_MARKER.exec(source)) !== null) {
     text += source.slice(lastIndex, match.index)
     const from = text.length
-    text += match[1] ?? '' // pre-filled content, if the author gave any
+    // the earlier answer if there is one, else the author's pre-filled content, if any
+    text += fill?.[gaps.length] ?? match[1] ?? ''
     gaps.push({ from, to: text.length })
     lastIndex = match.index + match[0].length
   }

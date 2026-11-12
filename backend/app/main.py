@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from . import auth, chat, config, content, db, llm, grader, progress, feedback
+from .grader import gaps as gap_tools
 
 
 @asynccontextmanager
@@ -364,8 +365,7 @@ def create_self_assessment(
             ctx=feedback.context_for(lesson, LESSONS, HINTS),
         )
 
-    # Transaction 2: store the feedback, every model call behind it, and put both the
-    # self-assessment and the feedback into the conversation for this attempt.
+    # Transaction 2: store the feedback, every model call, and put both the self-assessment and the feedback into the conversation for this attempt.
     with db.connect() as conn:
         conversation_id = chat.conversation_for_submission(
             conn, user, submission["lesson_id"], submission_id
@@ -431,6 +431,75 @@ def latest_conversation(
         return chat.view(conn, row["id"]) if row else None
 
 
+@app.post("/api/lessons/{lesson_id}/resume")
+def resume_lesson(lesson_id: str, user: dict[str, Any] = Depends(auth.current_user)) -> dict[str, Any]:
+    """What a task should show when it opens. One of:
+    fresh        never attempted: a blank task
+    in_progress  an unrestricted chat that has not been submitted yet
+    assessing    submitted, but the self-assessment was never given: ask for it now
+    reviewing    the latest attempt with its feedback, read-only
+    """
+    lesson = LESSONS_BY_ID.get(lesson_id)
+    if lesson is None:
+        raise HTTPException(status_code=404, detail="Unknown lesson")
+    if lesson_id in locked_lesson_ids(user):
+        raise HTTPException(status_code=403, detail="This lesson is not unlocked yet")
+    fresh = {"state": "fresh", "submission": None, "conversation": None}
+    if lesson["type"] not in ("completion", "parsons"):
+        return fresh
+
+    with db.connect() as conn:
+        # Only possible in the unrestricted condition
+        in_progress = chat.open_unsubmitted(conn, user["id"], lesson_id)
+        if in_progress is not None:
+            return {"state": "in_progress", "submission": None,
+                    "conversation": chat.view(conn, in_progress["id"])}
+
+        row = conn.execute(
+            """SELECT * FROM submissions WHERE user_id = ? AND lesson_id = ?
+               ORDER BY submitted_at DESC LIMIT 1""",
+            (user["id"], lesson_id),
+        ).fetchone()
+        if row is None:
+            return fresh
+
+        payload = json.loads(row["payload_json"])
+        submission: dict[str, Any] = {"id": row["id"], "attemptNo": row["attempt_no"], "payload": payload}
+        if lesson["type"] == "completion":
+            # What went into each gap, so the editor can be rebuilt with its gaps intact.
+            # None if the code no longer fits the scaffold (e.g. the lesson was edited since).
+            submission["gapContents"] = gap_tools.extract(
+                lesson["content"]["starterCode"], payload.get("code") or ""
+            )
+
+        assessed = conn.execute(
+            "SELECT 1 FROM self_assessments WHERE submission_id = ?", (row["id"],)
+        ).fetchone()
+        if assessed is None:
+            return {"state": "assessing", "submission": submission, "conversation": None}
+
+        conversation = conn.execute(
+            "SELECT id, closed_at FROM conversations WHERE submission_id = ? ORDER BY created_at DESC LIMIT 1",
+            (row["id"],),
+        ).fetchone()
+        if conversation is not None and conversation["closed_at"] is None:
+            conn.execute("UPDATE conversations SET closed_at = ? WHERE id = ?", (now(), conversation["id"]))
+        conn.execute(
+            """INSERT INTO events (user_id, lesson_id, type, payload_json, created_at)
+               VALUES (?, ?, 'feedback_revisited', ?, ?)""",
+            (user["id"], lesson_id,
+             json.dumps({"submissionId": row["id"],
+                         "conversationId": conversation["id"] if conversation else None}),
+             now()),
+        )
+        return {
+            "state": "reviewing",
+            "submission": submission,
+            # None only for attempts made before conversations existed
+            "conversation": chat.view(conn, conversation["id"]) if conversation else None,
+        }
+
+
 @app.post("/api/lessons/{lesson_id}/conversations")
 def start_conversation(
     lesson_id: str, user: dict[str, Any] = Depends(auth.current_user)
@@ -462,8 +531,7 @@ def send_chat_message(
         raise HTTPException(status_code=422, detail="Empty message")
 
     # Transaction 1: check the student may send it, record it, gather what the model needs.
-    # The message is stored as counted straight away, so two quick sends cannot both
-    # slip under the cap; it stops counting if no usable answer comes back.
+    # The message is stored as counted straight away, so two quick sends cannot both slip under the cap; it stops counting if no usable answer comes back.
     with db.connect() as conn:
         conversation = own_conversation(conn, conversation_id, user)
         current = chat.view(conn, conversation_id)
@@ -527,8 +595,7 @@ def send_chat_message(
         and evaluation is not None
         and evaluation["status"] != "grader_error"
     ):
-        # After feedback: the full context with the verdict. A chat from before submitting
-        # goes into that context as a section, and the turns after the feedback follow it.
+        # After feedback: the full context with the verdict. A chat from before submitting goes into that context as a section.
         payload = json.loads(submission["payload_json"])
         before, after = chat.split_at_feedback(messages)
         ctx = feedback.context_for(lesson, LESSONS, HINTS)

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Markdown } from '../markdown'
 import type { Condition, Feedback, ParsonsLesson, ParsonsOption } from '../types'
 import { useSubmissionFlow } from '../useSubmissionFlow'
@@ -38,7 +38,13 @@ export default function ParsonsView({
   )
   const [heldOption, setHeldOption] = useState<string | null>(null)
 
-  const flow = useSubmissionFlow({ lessonId: lesson.id, condition, onFeedback })
+  const flow = useSubmissionFlow({ lessonId: lesson.id, onFeedback })
+
+  // Put an earlier attempt's lines back in their boxes when the lesson is opened again.
+  useEffect(() => {
+    const restored = flow.restored?.payload.placements
+    if (restored) setPlacements((current) => ({ ...current, ...restored }))
+  }, [flow.restored])
   const locked = flow.phase !== 'working'
 
   const usedOptionIds = new Set(Object.values(placements).filter(Boolean) as string[])

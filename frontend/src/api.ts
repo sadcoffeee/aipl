@@ -4,6 +4,7 @@ import type {
   Lesson,
   LessonHints,
   ParticipantRow,
+  ResumeState,
   SelfAssessmentResult,
   SubmissionResult,
   SubmissionRow,
@@ -143,6 +144,13 @@ export function submitSelfAssessment(
 
 export function fetchConversation(conversationId: string): Promise<Conversation> {
   return request<Conversation>(`/api/conversations/${conversationId}`)
+}
+
+/**
+ * What a task should show when it opens: blank, a chat in progress, the self-assessment, or the latest attempt with its feedback 
+ */
+export function resumeLesson(lessonId: string): Promise<ResumeState> {
+  return request<ResumeState>(`/api/lessons/${lessonId}/resume`, { method: 'POST' })
 }
 
 /** The latest conversation about a lesson, or null. */

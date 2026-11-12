@@ -240,6 +240,22 @@ export interface Conversation {
   messages: ConversationMessage[]
 }
 
+/** What a task shows when it opens */
+export interface ResumeState {
+  state: 'fresh' | 'in_progress' | 'assessing' | 'reviewing'
+  /** The latest attempt, for assessing and reviewing. */
+  submission: RestoredSubmission | null
+  conversation: Conversation | null
+}
+
+export interface RestoredSubmission {
+  id: string
+  attemptNo: number
+  payload: TaskSnapshot
+  /** Completion tasks: what was typed into each gap; null if it no longer fits the starter code. */
+  gapContents?: string[] | null
+}
+
 /** What the self-assessment endpoint returns: the feedback, and the conversation it starts. */
 export interface SelfAssessmentResult extends Feedback {
   conversationId: string

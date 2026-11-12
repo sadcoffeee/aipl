@@ -267,11 +267,7 @@ class Rejected(Exception):
 
 
 def replace_ids(text: str, ctx: dict[str, Any]) -> str:
-    """Swap any hint or lesson id the model wrote in its text for the title the student knows.
-
-    The prompt asks for titles, but a small model sometimes copies the id from the
-    list it was given. Longest ids first, so one id that starts with another is not cut short.
-    """
+    """Swap any hint or lesson id the model wrote in its text for the title the student knows."""
     items = sorted(ctx["hints"] + ctx["earlierLessons"], key=lambda item: len(item["id"]), reverse=True)
     for item in items:
         pattern = r"`?(?<![\w-])" + re.escape(item["id"]) + r"(?![\w-])`?"

@@ -76,22 +76,14 @@ def open_unsubmitted(conn, user_id: str, lesson_id: str):
 
 
 def link_to_submission(conn, user_id: str, lesson_id: str, submission_id: str) -> None:
-    """Called when an attempt is submitted: a chat started before it now belongs to it.
-
-    Doing this at submission (not at the self-assessment) closes the gap in between:
-    a conversation with a submission but no feedback yet takes no messages.
-    """
+    """Called when an attempt is submitted: a chat started before it now belongs to it."""
     row = open_unsubmitted(conn, user_id, lesson_id)
     if row is not None:
         conn.execute("UPDATE conversations SET submission_id = ? WHERE id = ?", (submission_id, row["id"]))
 
 
 def conversation_for_submission(conn, user: dict[str, Any], lesson_id: str, submission_id: str) -> str:
-    """The conversation a submission's feedback goes into.
-
-    If the student was already chatting about this attempt before submitting (only
-    possible in the unrestricted condition), that conversation continues. Otherwise
-    a new one starts.
+    """The conversation a submission's feedback goes into. If the student was already chatting about this attempt before submitting (only possible in the unrestricted condition), that conversation continues.
     """
     row = conn.execute(
         "SELECT id FROM conversations WHERE submission_id = ? ORDER BY created_at DESC LIMIT 1",
@@ -103,11 +95,7 @@ def conversation_for_submission(conn, user: dict[str, Any], lesson_id: str, subm
 
 
 def start_or_resume(conn, user: dict[str, Any], lesson_id: str) -> str:
-    """The conversation for the attempt in progress, starting one if there is none.
-
-    Resuming matters: if reloading the page started a fresh conversation, a student
-    could get round the message cap just by reloading.
-    """
+    """The conversation for the attempt in progress, starting one if there is none."""
     row = open_unsubmitted(conn, user["id"], lesson_id)
     if row is not None:
         return row["id"]
@@ -189,8 +177,7 @@ def view(conn, conversation_id: str) -> dict[str, Any]:
     messages = messages_of(conn, conversation_id)
     has_feedback = any(m["kind"] == "feedback" for m in messages)
     closed = row["closed_at"] is not None
-    # Before submitting, only the unrestricted condition may talk to the model. Between
-    # submitting and getting feedback (the self-assessment), nobody can.
+    # Before submitting, only the unrestricted condition may talk to the model. Between submitting and getting feedback (the self-assessment), nobody can.
     before_submission = row["submission_id"] is None and row["condition"] == "unrestricted"
     return {
         "id": row["id"],
@@ -233,10 +220,7 @@ def store_calls(
 
 
 def load_prompt(before_submission: bool = False) -> tuple[str, str]:
-    """The feedback prompt with the conversation rules added after it.
-
-    Before submission, a third part says what is different when there is no verdict yet.
-    """
+    """The feedback prompt with the conversation rules added after it"""
     base, _ = fb.load_prompt()
     parts = [base, pathlib.Path(config.CHAT_PROMPT_PATH).read_text(encoding="utf-8")]
     if before_submission:
@@ -261,8 +245,7 @@ def student_turn(text: str) -> str:
 def history_pairs(messages: list[dict[str, Any]], exclude_id: str | None = None) -> list[tuple[str, str]]:
     """Answered exchanges after the feedback, as (student text, assistant text).
 
-    Unanswered or refused exchanges are left out, so the model only ever sees a
-    clean back-and-forth.
+    Unanswered or refused exchanges are left out, so the model only ever sees a clean back-and-forth.
     """
     pairs: list[tuple[str, str]] = []
     for current, following in zip(messages, messages[1:]):
@@ -302,13 +285,7 @@ def build_messages(
     history: list[tuple[str, str]],
     new_text: str,
 ) -> list[dict[str, str]]:
-    """system, context, [feedback], then the back-and-forth, then the new message.
-
-    Before submission there is no feedback, so the first exchange follows the context
-    directly. The context is a user message; when there is no feedback it is merged with
-    the first student message, so user and assistant turns still alternate - some chat
-    templates (Mistral's among them) refuse anything else.
-    """
+    """system, context, [feedback], then the back-and-forth, then the new message."""
     if feedback_body is None:
         turns = [(student_turn(s), a) for s, a in history]
         first_user = context + "\n\n" + (turns[0][0] if turns else student_turn(new_text))
@@ -385,11 +362,7 @@ def presubmission_context(lesson: dict[str, Any], snapshot: dict[str, Any], ctx:
 
 
 def presubmission_secrets(lesson: dict[str, Any], snapshot: dict[str, Any]) -> list[str]:
-    """Pieces of the solution a reply must not contain, before there is a verdict.
-
-    For a Parson's problem the leak check needs to know which boxes are wrong, which
-    normally comes from the grader; here it is worked out from the placements directly.
-    """
+    """Pieces of the solution a reply must not contain, before there is a verdict."""
     evaluation: dict[str, Any] = {}
     if lesson["type"] == "parsons":
         solution = lesson["private"]["solution"]

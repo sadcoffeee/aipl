@@ -21,13 +21,17 @@ export default function CompletionView({
   condition: Condition
   onFeedback: (feedback: Feedback | null) => void
 }) {
+  // An earlier attempt's answers, put back into the gaps when the lesson is opened again.
+  // 'raw' if they no longer fit the starter code: the code is then shown as it was, without gaps.
+  const [gapFill, setGapFill] = useState<string[] | 'raw' | null>(null)
+
   const parsed = useMemo(
-    () => parseGaps(lesson.content.starterCode),
-    [lesson.id, lesson.content.starterCode],
+    () => parseGaps(lesson.content.starterCode, Array.isArray(gapFill) ? gapFill : undefined),
+    [lesson.id, lesson.content.starterCode, gapFill],
   )
   const extensions = useMemo(
-    () => gapExtensions(parsed.gaps, LOCK_SCAFFOLD_OUTSIDE_GAPS),
-    [parsed],
+    () => (gapFill === 'raw' ? [] : gapExtensions(parsed.gaps, LOCK_SCAFFOLD_OUTSIDE_GAPS)),
+    [parsed, gapFill],
   )
 
   const [code, setCode] = useState(parsed.text)
@@ -44,7 +48,20 @@ useEffect(() => {
 }, [])
 
   
-  const flow = useSubmissionFlow({ lessonId: lesson.id, condition, onFeedback })
+  const flow = useSubmissionFlow({ lessonId: lesson.id, onFeedback })
+
+  // Show the code that was submitted, so the feedback's line numbers match what is on screen.
+  useEffect(() => {
+    const restored = flow.restored
+    if (!restored) return
+    if (restored.gapContents) {
+      setGapFill(restored.gapContents)
+      setCode(parseGaps(lesson.content.starterCode, restored.gapContents).text)
+    } else if (restored.payload.code !== undefined) {
+      setGapFill('raw')
+      setCode(restored.payload.code)
+    }
+  }, [flow.restored, lesson.content.starterCode])
 
   const locked = flow.phase !== 'working'
 
@@ -55,7 +72,10 @@ useEffect(() => {
       </div>
 
       <div className={locked ? 'editor-wrapper locked' : 'editor-wrapper'}>
+        {/* A new key makes a new editor: its gap tracking is set up when it is created,
+            so it has to start over when an earlier attempt's answers are put back. */}
         <CodeEditor
+          key={gapFill === null ? 'starter' : 'restored'}
           value={code}
           onChange={setCode}
           editable={!locked}

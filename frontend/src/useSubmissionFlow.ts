@@ -1,43 +1,53 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import * as api from './api'
-import type { Condition, Conversation, Feedback } from './types'
+import type { Conversation, Feedback, RestoredSubmission } from './types'
 
-export type Phase = 'working' | 'assessing' | 'done'
+/** loading: asking the server what to show; no buttons until it answers. */
+export type Phase = 'loading' | 'working' | 'assessing' | 'done'
 
 export function useSubmissionFlow(args: {
   lessonId: string
-  condition: Condition
   onFeedback: (feedback: Feedback | null) => void
 }) {
-  const { lessonId, condition, onFeedback } = args
+  const { lessonId, onFeedback } = args
 
-  const [phase, setPhase] = useState<Phase>('working')
+  const [phase, setPhase] = useState<Phase>('loading')
   const [submissionId, setSubmissionId] = useState<string | null>(null)
   // The feedback and the replies after it. Shown in place of the self-assessment once it exists.
   const [conversation, setConversation] = useState<Conversation | null>(null)
 
-  // Unrestricted: pick up a chat about the attempt in progress, e.g. after a reload. Only an
-  // open one with no submission yet - an old, finished attempt's chat is not continued.
+  // An earlier attempt loaded when the task opened; the views put its code or placements back.
+  const [restored, setRestored] = useState<RestoredSubmission | null>(null)
+
+  // When the task opens, carry on where the student left off: a chat in progress (unrestricted), an ungiven self-assessment, or the latest attempt and its feedback.
   useEffect(() => {
-    if (condition !== 'unrestricted') return
     let cancelled = false
     api
-      .fetchLatestConversation(lessonId)
-      .then((latest) => {
-        if (!cancelled && latest && !latest.closed && latest.submissionId === null) {
-          setConversation(latest)
+      .resumeLesson(lessonId)
+      .then((resume) => {
+        if (cancelled) return
+        if (resume.submission) {
+          setRestored(resume.submission)
+          setSubmissionId(resume.submission.id)
         }
+        setConversation(resume.conversation)
+        setPhase(
+          resume.state === 'assessing' ? 'assessing' : resume.state === 'reviewing' ? 'done' : 'working',
+        )
       })
-      .catch(() => undefined)
+      .catch(() => {
+        if (!cancelled) setPhase('working')
+      })
     return () => {
       cancelled = true
     }
-  }, [lessonId, condition])
+  }, [lessonId])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   // When the student opened this task. Recorded so time-on-task can be analysed later as it is one of the study's secondary measures
-  const startedAt = useMemo(() => new Date().toISOString(), [lessonId])
+  // Reset by restart, so a new attempt is not timed from when the lesson was opened.
+  const [startedAt, setStartedAt] = useState(() => new Date().toISOString())
 
   const submitAttempt = useCallback(
     async (payload: { code?: string; placements?: Record<string, string | null> }) => {
@@ -88,6 +98,7 @@ export function useSubmissionFlow(args: {
     setPhase('working')
     setSubmissionId(null)
     setConversation(null)
+    setStartedAt(new Date().toISOString())
     onFeedback(null)
   }, [onFeedback])
 
@@ -97,6 +108,7 @@ export function useSubmissionFlow(args: {
     error,
     conversation,
     setConversation,
+    restored,
     submitAttempt,
     submitAssessment,
     restart,

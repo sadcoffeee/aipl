@@ -12,14 +12,7 @@ const CONFIDENCE_LABELS: Record<number, string> = {
 }
 
 /**
- * The feedback on an attempt, and the short conversation that can follow it.
- *
- * Takes the place of the self-assessment box once feedback exists. In the unrestricted
- * condition it is also there while the student works, before there is any conversation:
- * the first message starts one. The server is
- * the source of truth: every send returns the whole conversation, which replaces
- * the one shown. While waiting, the student's message is shown straight away
- * ("pending") so the box does not look frozen during the model call.
+ * The feedback on an attempt, and the conversation that can follow it.
  */
 export default function ConversationBox({
   conversation,
@@ -60,8 +53,7 @@ export default function ConversationBox({
       const snapshot = current.submissionId === null ? getSnapshot?.() : undefined
       onChange(await api.sendChatMessage(current.id, text, snapshot))
     } catch {
-      // Give the text back so nothing typed is lost, and fetch the conversation
-      // again in case it changed (closed, or out of messages) without us knowing.
+      // Give the text back so nothing typed is lost, and fetch the conversation again in case it changed (closed, or out of messages) without us knowing.
       setDraft(text)
       setError('Beskeden kunne ikke sendes. Prøv igen.')
       if (current) api.fetchConversation(current.id).then(onChange).catch(() => undefined)
@@ -133,7 +125,7 @@ export default function ConversationBox({
       ) : (
         <p className="muted conversation-ended">
           {conversation?.closed
-            ? 'Denne samtale er afsluttet.'
+            ? 'Dette er dit seneste forsøg. Tryk på "Prøv igen" for at starte et nyt.'
             : 'Du har brugt alle beskeder til dette forsøg.'}
         </p>
       )}
