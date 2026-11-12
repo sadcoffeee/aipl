@@ -41,12 +41,13 @@ export default function SelfAssessment({
       </div>
 
       <label className="field">
-        <span>Noget du var usikker på? (valgfri)</span>
+        <h2>Reflekter over din løsning</h2>
+              <p className="muted"> Beskriv med dine egne ord, hvordan du har forstået og løst opgaven. Du kan blandt andet komme ind på: Hvad gør din kode? hvordan fungere forskellige dele af koden? Var der noget, du fandt særligt svært? </p>
         <textarea
           rows={3}
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
-          placeholder="f.eks jeg vidste ikke hvilke paranteser jeg skulle bruge"
+          placeholder="Skriv din refleksion her....."
         />
       </label>
 
