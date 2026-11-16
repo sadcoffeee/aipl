@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 import time
 from typing import Any
 
 import httpx
 
 from . import config
-
 
 class LLMError(Exception):
     """Something went wrong talking to the inference server."""
@@ -64,14 +64,29 @@ def chat(
         raise LLMError("No model configured - set AIPL_LLM_MODEL in backend/.env")
 
     try:
+        started = time.perf_counter()  #
+
         with _client(timeout) as client:
             response = client.post("/chat/completions", json=body)
+
+            elapsed = time.perf_counter() - started  #
+
             if response.status_code >= 400:
                 raise LLMError(
                     f"The inference server returned {response.status_code}: "
                     f"{response.text[:400]}"
                 )
+
             payload = response.json()
+            usage = payload.get("usage", {})
+
+            logging.warning(
+                f"LLM model={body['model']} "
+                f"response_time={elapsed:.3f}s "
+                f"prompt_tokens={usage.get('prompt_tokens')} "
+                f"completion_tokens={usage.get('completion_tokens')} "
+                f"total_tokens={usage.get('total_tokens')}"
+            )
     except httpx.HTTPError as exc:
         raise LLMError(f"Could not reach {config.LLM_BASE_URL}: {exc}") from exc
 
