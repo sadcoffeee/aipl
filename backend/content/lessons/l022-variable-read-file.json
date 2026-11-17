@@ -1,6 +1,6 @@
 {
   "id": "l022-variable-read-file",
-  "title": "Læs indholdet af en fil",
+  "title": "3. Læs indholdet af en fil",
   "type": "instruction",
   "concepts": [
     "variable",
