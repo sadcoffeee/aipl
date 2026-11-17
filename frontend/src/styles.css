@@ -1,16 +1,63 @@
 /* Plain CSS, no framework. */
 
+/* Design tokens ----------------------------------------------------------
+   Colours, fonts and shapes used across the app. Change them here rather than in the individual rules. */
+
 :root {
-  --bg: #f6f7f9;
+  /* Surfaces */
+  --bg: #f4f3fa;
   --panel: #ffffff;
-  --ink: #1c2024;
-  --muted: #667085;
-  --line: #dfe3e8;
-  --accent: #2f5bea;
-  --accent-soft: #eaefff;
+  --panel-quiet: rgb(255 255 255 / 0.62);  /* side panels: present, but quieter than the lesson */
+  --ink: #1f1d36;
+  --ink-soft: #3d3b56;
+  --muted: #646a82;
+  --line: #e4e2f0;
+  --line-strong: #d3d0e6;
+
+  /* Main accent (buttons, links, completion lessons) */
+  --accent: #4f46e5;
+  --accent-strong: #3f37c9;
+  --accent-soft: #eceafe;
+
+  /* Supporting colours, each with a soft tint for backgrounds */
+  --teal: #0e8a7c;          /* instruction lessons, run button */
+  --teal-soft: #e2f5f1;
+  --amber: #b86a0b;         /* hints */
+  --amber-soft: #fff4df;
+  --rose: #cf3f74;          /* Parson's problems */
+  --rose-soft: #fde8ef;
+  --violet: #7346d9;        /* AI chat */
+  --violet-soft: #f1ebff;
+  --green: #15803d;
+  --green-soft: #dcfce7;
   --warn: #b42318;
-  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --warn-soft: #fdf0ef;
+
+  /* Code surfaces */
+  --code-bg: #1d1b33;
+  --code-ink: #e8e6f6;
+
+  /* Fonts: display face for headings, clean face for text, mono for code. */
+  --font-display: 'Bricolage Grotesque Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Figtree Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Shapes */
+  --radius-lg: 18px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-stage: 0 1px 2px rgb(31 29 54 / 0.05), 0 18px 40px -18px rgb(49 40 140 / 0.28);
+  --shadow-soft: 0 1px 2px rgb(31 29 54 / 0.05), 0 6px 18px -10px rgb(31 29 54 / 0.18);
+
+  /* Colour of the lesson type currently open (set per type below) */
+  --type-color: var(--accent);
+  --type-soft: var(--accent-soft);
 }
+
+/* Each lesson type gets its own colour, used for the stripe on the lesson card, the label above the title and the highlighted lesson in the sidebar. */
+[data-lesson-type='instruction'] { --type-color: var(--teal);   --type-soft: var(--teal-soft); }
+[data-lesson-type='completion']  { --type-color: var(--accent); --type-soft: var(--accent-soft); }
+[data-lesson-type='parsons']     { --type-color: var(--rose);   --type-soft: var(--rose-soft); }
 
 * {
   box-sizing: border-box;
@@ -18,21 +65,29 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  min-height: 100vh;
   color: var(--ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.55;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  /* Two soft colour washes behind everything, so the page is not flat grey. */
+  background:
+    radial-gradient(1100px 520px at 105% -10%, #e4e0ff 0%, transparent 62%),
+    radial-gradient(900px 520px at -10% 105%, #dcf2ec 0%, transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.25rem 4rem;
+  padding: 0 1.5rem 4rem;
 }
 
 .app-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 0;
@@ -40,23 +95,60 @@ body {
   margin-bottom: 1.5rem;
 }
 
+/* App name with a small "py" logo in front of it. */
 .app-title {
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+}
+
+.app-title::before {
+  content: 'py';
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--violet) 55%, var(--rose) 100%);
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px -4px rgb(79 70 229 / 0.6);
 }
 
 .participant {
   font-family: var(--mono);
   font-size: 0.75rem;
   color: var(--muted);
+  background: var(--panel-quiet);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  color: var(--ink);
 }
 
 h1 {
-  font-size: 1.5rem;
+  font-size: 1.85rem;
+  line-height: 1.2;
+  font-weight: 700;
   margin: 0 0 0.25rem;
 }
 
 h2 {
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 650;
   margin: 0 0 0.5rem;
 }
 
@@ -68,15 +160,20 @@ h2 {
 .panel {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius);
   padding: 1rem;
 }
 
 .error {
   border-color: #f3c6c2;
-  background: #fdf3f2;
+  background: var(--warn-soft);
   color: var(--warn);
   white-space: pre-wrap;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 
@@ -85,17 +182,54 @@ h2 {
 .lesson-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  min-height: 3.6rem;
+}
+
+/* Label for the lesson type, above the title. */
+.lesson-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  margin-left: 0.4rem;
+}
+
+.lesson-title-block h1 {
+  margin: 0;
+}
+
+.lesson-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--type-color);
+  background: var(--type-soft);
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
 }
 
 .back-button {
-  background: none;
+  background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
   cursor: pointer;
   font: inherit;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.back-button:hover {
+  border-color: var(--line-strong);
+  background: var(--accent-soft);
 }
 
 .lesson-body {
@@ -105,7 +239,7 @@ h2 {
 .lesson-body.with-side {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 1.25rem;
+  gap: 1.5rem;
   align-items: start;
 }
 
@@ -119,6 +253,28 @@ h2 {
   min-width: 0;
 }
 
+/* The lesson itself: one solid, raised card on the page, with a stripe in the lesson type's colour. Everything else around it is deliberately quieter. */
+.lesson-stage {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-stage);
+  padding: 1.6rem 1.75rem 1.5rem;
+}
+
+.lesson-stage::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 6px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: linear-gradient(90deg, var(--type-color), color-mix(in srgb, var(--type-color) 35%, var(--violet)));
+}
+
+/* Side panels: lighter, translucent, no shadow, so they support the lesson without distracting from it */
 .side-column {
   position: sticky;
   top: 1rem;
@@ -126,53 +282,71 @@ h2 {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
-.hint-panel {
-  background: var(--panel);
+.hint-panel,
+.output-panel {
+  background: var(--panel-quiet);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius);
   padding: 1rem;
+  backdrop-filter: blur(6px);
 }
 
-.output-panel{
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 1rem;
+.hint-panel h2,
+.output-panel h2 {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 
 
 /* Instruction content ---------------------------------------------------- */
 
+.instruction {
+  font-size: 1.05rem;
+}
+
 .content-row {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
 }
 
 .content-row.split {
   display: flex;
-  gap: 1.25rem;
+  gap: 1.5rem;
   align-items: flex-start;
   flex-wrap: wrap;
 }
 
 .content-cell {
-  min-width: 260px;
-  flex: 1 1 260px;
+  min-width: 220px;
+  flex: 1 1 220px;
 }
 
 .markdown :first-child {
   margin-top: 0;
 }
 
+.markdown :last-child {
+  margin-bottom: 0;
+}
+
+.markdown strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 .markdown code {
   font-family: var(--mono);
-  font-size: 0.9em;
-  background: #eef0f3;
-  padding: 0.1em 0.3em;
-  border-radius: 4px;
+  font-size: 0.86em;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  padding: 0.1em 0.35em;
+  border-radius: 5px;
 }
 
 .media {
@@ -182,26 +356,28 @@ h2 {
 .media img,
 .media video {
   max-width: 100%;
-  border-radius: 8px;
+  border-radius: var(--radius);
   border: 1px solid var(--line);
   background: var(--panel);
 }
 
 .media figcaption {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--muted);
-  margin-top: 0.35rem;
+  margin-top: 0.4rem;
 }
 
 .code-sample {
   font-family: var(--mono);
-  font-size: 0.85rem;
-  background: #1e232b;
-  color: #e6e9ef;
-  padding: 0.85rem 1rem;
-  border-radius: 8px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--radius);
   overflow-x: auto;
   margin: 0;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
 }
 
 .code-sample code {
@@ -212,19 +388,48 @@ h2 {
 
 /* Tasks ------------------------------------------------------------------ */
 
+/* Inside the lesson card the description needs no box of its own. */
 .task-description {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  margin-bottom: 1.25rem;
 }
 
 .editor-wrapper {
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
   overflow: hidden;
   background: var(--panel);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.editor-wrapper:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Code editor (CodeMirror) fonts and gutter */
+.editor-wrapper .cm-editor {
+  font-size: 0.92rem;
+}
+
+.editor-wrapper .cm-scroller {
+  font-family: var(--mono);
+  line-height: 1.65;
+}
+
+.editor-wrapper .cm-gutters {
+  background: #f7f6fc;
+  border-right: 1px solid var(--line);
+  color: #a3a1bd;
+}
+
+.editor-wrapper .cm-activeLine {
+  background: rgb(79 70 229 / 0.045);
+}
+
+.editor-wrapper .cm-activeLineGutter {
+  background: rgb(79 70 229 / 0.08);
+  color: var(--accent);
 }
 
 .editor-wrapper.locked,
@@ -241,69 +446,111 @@ h2 {
   flex-wrap: wrap;
 }
 
+/* In an instruction lesson the continue button gets a line above it. */
+.instruction > .task-actions {
+  margin-top: 1.5rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+}
+
 button.primary {
-  background: var(--accent);
+  background: linear-gradient(180deg, #5b53ee 0%, var(--accent) 100%);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 0.55rem 1.1rem;
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
   font: inherit;
+  font-weight: 650;
   cursor: pointer;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.25) inset, 0 4px 12px -4px rgb(79 70 229 / 0.55);
+  transition: transform 120ms ease, box-shadow 150ms ease, filter 150ms ease;
+}
+
+button.primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.25) inset, 0 6px 16px -4px rgb(79 70 229 / 0.6);
+}
+
+button.primary:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 button.primary:disabled {
-  background: #aab4cc;
+  background: #b9b6d9;
+  box-shadow: none;
   cursor: not-allowed;
 }
 
 .task-actions button:not(.primary) {
   background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 0.55rem 1.1rem;
   font: inherit;
+  font-weight: 600;
+  color: var(--ink-soft);
   cursor: pointer;
+}
+
+.task-actions button:not(.primary):hover {
+  background: var(--accent-soft);
 }
 
 /* Parson's problems ------------------------------------------------------ */
 
 .parsons-code {
-  background: #1e232b;
-  border-radius: 10px;
-  padding: 0.85rem;
+  background: var(--code-bg);
+  border-radius: var(--radius);
+  padding: 0.9rem;
   font-family: var(--mono);
-  font-size: 0.85rem;
-  color: #e6e9ef;
+  font-size: 0.88rem;
+  color: var(--code-ink);
 }
 
 .parsons-line {
   margin: 0;
-  padding: 0.2rem 0.5rem;
+  padding: 0.25rem 0.55rem;
   white-space: pre;
   overflow-x: auto;
+  font-family: var(--mono);
+}
+
+.parsons-line code {
+  font-family: inherit;
 }
 
 .parsons-line.slot {
-  border: 1px dashed #6d7890;
-  border-radius: 6px;
-  color: #9aa3b5;
+  border: 1.5px dashed #6e6a96;
+  border-radius: var(--radius-sm);
+  color: #a5a2c7;
   cursor: pointer;
-  margin: 0.2rem 0;
+  margin: 0.25rem 0;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.parsons-line.slot:hover {
+  border-color: #f18bb0;
+  background: rgb(241 139 176 / 0.08);
 }
 
 .parsons-line.slot.filled {
   border-style: solid;
-  border-color: #4d81ff;
-  color: #e6e9ef;
-  background: #262d38;
+  border-color: #f18bb0;
+  color: var(--code-ink);
+  background: rgb(207 63 116 / 0.16);
 }
 
 .option-bank {
   margin-top: 1rem;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  background: var(--rose-soft);
+  border: 1px solid #f7d2df;
+  border-radius: var(--radius);
   padding: 1rem;
+}
+
+.option-bank h2 {
+  color: var(--rose);
+  font-size: 0.95rem;
 }
 
 .option-bank ul {
@@ -311,24 +558,37 @@ button.primary:disabled {
   margin: 0.75rem 0 0;
   padding: 0;
   display: grid;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .option {
   width: 100%;
   text-align: left;
   font-family: var(--mono);
-  font-size: 0.85rem;
-  background: #f1f3f7;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 0.45rem 0.7rem;
+  font-size: 0.86rem;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid #efc6d6;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
   cursor: grab;
+  box-shadow: 0 1px 0 rgb(207 63 116 / 0.08);
+  transition: border-color 150ms ease, transform 120ms ease;
+}
+
+.option code {
+  font-family: inherit;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--rose);
+  transform: translateX(2px);
 }
 
 .option.held {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  border-color: var(--rose);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(207 63 116 / 0.18);
 }
 
 .option.used {
@@ -339,24 +599,41 @@ button.primary:disabled {
 /* Self-assessment -------------------------------------------------------- */
 
 .self-assessment {
-  margin-top: 1rem;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 1rem;
+  margin-top: 1.25rem;
+  background: var(--violet-soft);
+  border: 1px solid #e0d5fb;
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+}
+
+.self-assessment h2 {
+  color: var(--violet);
 }
 
 .confidence-options {
   display: grid;
   gap: 0.35rem;
-  margin: 0.75rem 0;
+  margin: 0.75rem 0 1rem;
 }
 
 .confidence-option {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   cursor: pointer;
+  background: var(--panel);
+  border: 1px solid #e6defb;
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.7rem;
+}
+
+.confidence-option:has(input:checked) {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 2px rgb(115 70 217 / 0.15);
+}
+
+.confidence-option input {
+  accent-color: var(--violet);
 }
 
 .field {
@@ -373,9 +650,10 @@ button.primary:disabled {
 .field textarea {
   width: 100%;
   font: inherit;
-  padding: 0.5rem;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
   resize: vertical;
 }
 
@@ -388,13 +666,21 @@ button.primary:disabled {
   padding: 0;
 }
 
+.hint-panel h2 {
+  color: var(--amber);
+}
+
 .hint {
   border-bottom: 1px solid var(--line);
 }
 
+.hint:last-child {
+  border-bottom: none;
+}
+
 .hint.highlighted {
-  background: var(--accent-soft);
-  border-radius: 8px;
+  background: var(--amber-soft);
+  border-radius: var(--radius-sm);
 }
 
 .hint-title {
@@ -403,25 +689,43 @@ button.primary:disabled {
   background: none;
   border: none;
   font: inherit;
-  padding: 0.55rem 0;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  padding: 0.5rem 0.35rem;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
   gap: 0.5rem;
 }
 
+.hint-title:hover {
+  background: var(--amber-soft);
+  color: var(--ink);
+}
+
+.hint-title[aria-expanded='true'] {
+  color: var(--ink);
+  font-weight: 650;
+}
+
 .chevron {
-  color: var(--muted);
+  color: var(--amber);
 }
 
 .hint-body {
-  padding: 0 0 0.75rem 1.25rem;
-  font-size: 0.9rem;
+  padding: 0 0.35rem 0.85rem 1.6rem;
+  font-size: 0.92rem;
+}
+
+.hint-body .code-sample {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
 }
 
 .badge {
   display: inline-block;
   font-size: 0.75rem;
-  background: #fff4e5;
+  background: var(--amber-soft);
   color: #92400e;
   border-radius: 999px;
   padding: 0.15rem 0.6rem;
@@ -429,21 +733,36 @@ button.primary:disabled {
 }
 
 .verdict {
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.15rem 0.75rem;
+  margin: 0 0 0.6rem;
 }
 
 .verdict.solved {
-  color: #16794c;
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.verdict.solved::before {
+  content: '✓';
 }
 
 .verdict.unsolved {
   color: var(--warn);
+  background: var(--warn-soft);
 }
 
 .feedback-points li {
   border-top: 1px solid var(--line);
   padding: 0.6rem 0;
-  font-size: 0.9rem;
+  font-size: 0.93rem;
   display: flex;
   gap: 0.5rem;
   align-items: baseline;
@@ -451,15 +770,16 @@ button.primary:disabled {
 
 .line-ref {
   font-family: var(--mono);
-  font-size: 0.7rem;
-  background: #eef0f3;
-  border-radius: 4px;
-  padding: 0.1rem 0.35rem;
+  font-size: 0.72rem;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  border-radius: 5px;
+  padding: 0.1rem 0.4rem;
   white-space: nowrap;
 }
 
 .revisit {
-  font-size: 0.9rem;
+  font-size: 0.92rem;
 }
 
 /* Login ------------------------------------------------------------------ */
@@ -472,16 +792,27 @@ button.primary:disabled {
 }
 
 .login-card {
+  position: relative;
   width: 100%;
   max-width: 420px;
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-stage);
+  padding: 1.75rem;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--accent), var(--violet), var(--rose));
 }
 
 .login-card h1 {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-bottom: 1rem;
 }
 
@@ -493,8 +824,8 @@ button.primary:disabled {
   display: flex;
   gap: 0.25rem;
   margin-bottom: 1rem;
-  background: #eef0f3;
-  border-radius: 8px;
+  background: #ecebf5;
+  border-radius: 10px;
   padding: 0.2rem;
 }
 
@@ -502,7 +833,7 @@ button.primary:disabled {
   flex: 1;
   background: none;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 0.4rem 0.8rem;
   font: inherit;
   cursor: pointer;
@@ -512,6 +843,7 @@ button.primary:disabled {
 .tab.active {
   background: var(--panel);
   color: var(--ink);
+  font-weight: 600;
   box-shadow: 0 1px 2px rgb(16 24 40 / 0.08);
 }
 
@@ -519,9 +851,9 @@ button.primary:disabled {
 .field select {
   width: 100%;
   font: inherit;
-  padding: 0.5rem;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
   background: var(--panel);
 }
 
@@ -542,8 +874,14 @@ button.primary:disabled {
   color: var(--accent);
   font: inherit;
   font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
   padding: 0.2rem 0.35rem;
+  border-radius: 6px;
+}
+
+.link-button:hover {
+  background: var(--accent-soft);
 }
 
 .lesson-button:disabled {
@@ -554,23 +892,25 @@ button.primary:disabled {
 .lesson-button:disabled:hover {
   border-color: var(--line);
   background: var(--panel);
+  transform: none;
+  box-shadow: var(--shadow-soft);
 }
 
 /* Gaps in the editor ----------------------------------------------------- */
 
 .cm-gap {
-  background: #fff3cd;
+  background: #fff1c7;
   border-radius: 3px;
-  box-shadow: inset 0 -1px 0 #e0b33a;
+  box-shadow: inset 0 -2px 0 #e9a93a;
 }
 
 .cm-gap-empty {
   display: inline-block;
   min-width: 2.2rem;
   text-align: center;
-  background: #fff3cd;
-  border: 1px dashed #e0b33a;
-  border-radius: 3px;
+  background: #fff1c7;
+  border: 1.5px dashed #e9a93a;
+  border-radius: 4px;
   color: #92400e;
 }
 
@@ -581,9 +921,10 @@ button.primary:disabled {
 /* Reference panel groups -------------------------------------------------- */
 
 .group-label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   color: var(--muted);
   margin: 0.5rem 0 0.2rem;
 }
@@ -595,13 +936,17 @@ button.primary:disabled {
   border: none;
   border-top: 1px solid var(--line);
   font: inherit;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--muted);
-  padding: 0.6rem 0 0.4rem;
+  padding: 0.6rem 0.35rem 0.4rem;
   cursor: pointer;
   display: flex;
   gap: 0.5rem;
   margin-top: 0.5rem;
+}
+
+.group-toggle:hover {
+  color: var(--ink);
 }
 
 /* Admin ------------------------------------------------------------------ */
@@ -634,7 +979,7 @@ button.primary:disabled {
   border-collapse: collapse;
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius);
   overflow: hidden;
   margin-top: 1rem;
   font-size: 0.9rem;
@@ -648,11 +993,11 @@ button.primary:disabled {
 }
 
 .admin-table th {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--muted);
-  background: #f9fafb;
+  background: #f8f7fd;
 }
 
 .admin-table tr.inactive {
@@ -684,20 +1029,20 @@ button.primary:disabled {
 }
 
 .status-passed {
-  background: #e6f6ee;
-  color: #16794c;
+  background: var(--green-soft);
+  color: var(--green);
 }
 
 .status-failed,
 .status-runtime_error,
 .status-syntax_error,
 .status-timeout {
-  background: #fdf3f2;
+  background: var(--warn-soft);
   color: var(--warn);
 }
 
 .status-incomplete {
-  background: #fff4e5;
+  background: var(--amber-soft);
   color: #92400e;
 }
 
@@ -708,15 +1053,35 @@ button.primary:disabled {
 /* consol panel -------------------------------------------------- */
 /* The run button similair to submit*/
 .run-button {
-  background: #16804a;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: linear-gradient(180deg, #14a090 0%, var(--teal) 100%);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 0.55rem 1.1rem;
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
   cursor: pointer;
   font: inherit;
-  margin-top:0.7rem;
+  font-weight: 650;
+  margin-top: 0.7rem;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.25) inset, 0 4px 12px -4px rgb(14 138 124 / 0.55);
+  transition: filter 150ms ease, transform 120ms ease;
 }
+
+.run-button::before {
+  content: '▶';
+  font-size: 0.7em;
+}
+
+.run-button:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.run-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
 /* When its running to give visual feedback*/
 .run-button:disabled {
   opacity: 0.6;
@@ -725,16 +1090,19 @@ button.primary:disabled {
 /* the console itself + if error happens*/
 .py-console {
   white-space: pre-wrap;
+  margin: 0;
+  font-family: var(--mono);
 }
 
 .py-console-error {
-  color: #f04c3d;
+  color: #ff8a7a;
 }
 
 .task-buttons {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
 }
 
 .task-buttons .task-actions {
@@ -743,11 +1111,24 @@ button.primary:disabled {
 
 /* consol panel -------------------------------------------------- */
 
+/* Heading shown above the console when the plot tab is switched off. */
+.output-title {
+  margin-bottom: 0;
+}
+
+.output-title-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 3px var(--teal-soft);
+}
+
 .plot-panel{
-  background:  #11161c;
+  background: var(--code-bg);
   color: white;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius);
   padding: 1rem;
   font-family: var(--mono);
   font-size: 0.9rem;
@@ -772,45 +1153,56 @@ button.primary:disabled {
 .output-tabs{
   display: flex;
   gap: 4px;
-
+  background: #ecebf5;
+  border-radius: 10px;
+  padding: 0.2rem;
 }
 .output-tabs .tab{
   padding: 6px 12px;
- border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #ecedf0;
+  border: none;
+  border-radius: 8px;
+  background: none;
   cursor: pointer;
 }
 
 .output-tabs .tab.active {
-  background: #e9e9e9;
-  font-weight: bold;
+  background: var(--panel);
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .output-tab-content {
   margin-top: 0.75rem;
-  background: #11161c;
-  color: white;
+  background: var(--code-bg);
+  color: var(--code-ink);
   font-family: var(--mono);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   padding: 0.9rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   height: 300px;
   overflow-y: auto;
   white-space: pre-wrap;
 }
+
+.output-tab-content .muted {
+  color: #8f8cae;
+}
 /* Conversation (feedback + replies) ------------------------------------- */
 
 .conversation {
-  margin-top: 1rem;
-  background: var(--panel);
+  margin-top: 1.25rem;
+  background: var(--panel-quiet);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 1rem;
+  border-left: 3px solid var(--violet);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  backdrop-filter: blur(6px);
 }
 
 .conversation h2 {
   margin-top: 0;
+  font-size: 0.95rem;
+  color: var(--violet);
 }
 
 /* Scrolls on its own, so a long exchange never pushes the buttons off-screen. */
@@ -825,9 +1217,9 @@ button.primary:disabled {
 
 .message {
   max-width: 85%;
-  padding: 0.55rem 0.75rem;
-  border-radius: 10px;
-  font-size: 0.925rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 14px;
+  font-size: 0.94rem;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -835,11 +1227,13 @@ button.primary:disabled {
 .message.student {
   align-self: flex-end;
   background: var(--accent-soft);
+  border-bottom-right-radius: 4px;
 }
 
 .message.assistant {
   align-self: flex-start;
-  background: #f2f4f7;
+  background: var(--violet-soft);
+  border-bottom-left-radius: 4px;
 }
 
 /* The first feedback is the main event: full width, panel-like. */
@@ -847,8 +1241,10 @@ button.primary:disabled {
   max-width: 100%;
   width: 100%;
   background: var(--panel);
-  border: 1px solid var(--line);
+  border: 1px solid #e0d5fb;
+  border-radius: var(--radius);
   white-space: normal;
+  padding: 0.9rem 1rem;
 }
 
 .message.assistant.fallback,
@@ -875,10 +1271,17 @@ button.primary:disabled {
 .conversation-input textarea {
   width: 100%;
   font: inherit;
-  padding: 0.5rem;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
   resize: vertical;
+}
+
+.conversation-input textarea:focus {
+  outline: none;
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px var(--violet-soft);
 }
 
 .conversation-input-row {
@@ -888,6 +1291,18 @@ button.primary:disabled {
   gap: 0.75rem;
   margin-top: 0.4rem;
   font-size: 0.85rem;
+}
+
+/* The chat's send button uses the AI colour rather than the main action colour. */
+.conversation-input-row button.primary {
+  background: var(--violet);
+  box-shadow: 0 4px 12px -6px rgb(115 70 217 / 0.6);
+  padding: 0.45rem 1rem;
+}
+
+.conversation-input-row button.primary:disabled {
+  background: #cfc6ea;
+  box-shadow: none;
 }
 
 .conversation-ended {
@@ -910,5 +1325,11 @@ button.primary:disabled {
 
 /* Shown when code ran without errors but printed nothing */
 .py-console-ok {
-  color: #7ee2a8;
+  color: #7ee2b8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }

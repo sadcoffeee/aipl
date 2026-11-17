@@ -12,7 +12,7 @@
 /* Make room for the menu when it opens. */
 .lesson-view.goals-open {
   grid-template-columns: 250px minmax(0, 1fr);
-  column-gap: 1rem;
+  column-gap: 1.25rem;
 }
 
 /* Put the buttons and title above the lesson. */
@@ -30,14 +30,96 @@
 }
 
 
-/* Goals bar */
+/* Sidebar ------------------------------------------------------------------- */
 
-/* Navigation panel appearance.  -> menu BG */
-.goals-bar {
-  background: #e9e9e9;
+/* Size, position and border of the whole sidebar. */
+.goals-wrapper {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  min-width: 0;
+  align-self: start;
+  /* Stay in view while the lesson scrolls; scroll inside when needed. */
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100dvh - 2rem);
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--panel-quiet);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(8px);
+  padding: 0.5rem;
+}
+
+/* Hide the sidebar when closed. */
+.goals-wrapper[hidden] {
+  display: none;
+}
+
+/* The sidebar's own header: title and close button. */
+.goals-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.35rem 0.6rem 0.65rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.goals-header-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Close button inside the sidebar. */
+.goals-close {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: 10px;
-  overflow: hidden;
+  background: var(--panel);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.goals-close:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Navigation panel appearance. */
+.goals-bar {
+  background: none;
+}
+
+.goals-wrapper .goals-bar {
+  width: 100%;
+}
+
+.goals-bar[hidden] {
+  display: none;
+}
+
+/* Each collection */
+.goals-bar details {
+  border-radius: var(--radius);
+  margin: 0.15rem 0;
+}
+
+/* The collection that holds the open lesson gets a white card behind it. */
+.goals-bar details[open] {
+  background: var(--panel);
+  box-shadow: var(--shadow-soft);
+  padding-bottom: 0.35rem;
 }
 
 /* Collection title. Click to show or hide its lessons. */
@@ -46,13 +128,20 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  background: white;
-  padding: 1rem;
+  padding: 0.7rem 0.75rem;
+  border-radius: var(--radius);
   cursor: pointer;
   list-style: none;
-  font-size: 1.1rem;
-  font-weight: 600;
-  padding: 1.1rem 1rem;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  transition: background-color 150ms ease;
+}
+
+.goals-heading:hover {
+  background: rgb(79 70 229 / 0.06);
 }
 
 /* Hide the browser's arrow so we can use our own. */
@@ -64,16 +153,18 @@
 .goals-heading::after {
   content: '';
   flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-  border-right: 1px solid currentColor;
-  border-bottom: 1px solid currentColor;
-  transform: rotate(45deg);
+  width: 7px;
+  height: 7px;
+  margin-right: 0.25rem;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 150ms ease;
 }
 
 /* Rotate the arrow when the collection is open. */
 .goals-bar details[open] > .goals-heading::after {
-  transform: rotate(225deg);
+  transform: rotate(225deg) translate(-2px, -2px);
 }
 
 /* Outline when selected using the keyboard. */
@@ -86,33 +177,47 @@
 .goals-list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0.35rem;
 }
 
 /* Lesson buttons and their colours when hovered or active. */
 .goal-step {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   width: 100%;
   /* Indent lessons under their collection. */
-  padding: 0.75rem 0.75rem 0.75rem 2.3rem;
+  padding: 0.5rem 0.6rem 0.5rem 0.8rem;
+  margin: 1px 0;
   border: none;
-  border-bottom: 1px solid var(--line);
+  border-radius: 10px;
   background: transparent;
-  color: var(--ink);
+  color: var(--ink-soft);
   font: inherit;
+  font-size: 0.92rem;
+  line-height: 1.35;
   text-align: left;
   cursor: pointer;
+  transition: background-color 150ms ease;
 }
 
 .goal-step:hover:not(:disabled) {
-  background: #dceef3;
+  background: #f3f2fb;
+  color: var(--ink);
 }
 
+/* The open lesson: tinted in its lesson type's colour, with a bar on the left. */
 .goal-step.active {
-  background: #b8dce8;
+  --step-color: var(--accent);
+  --step-soft: var(--accent-soft);
+  background: var(--step-soft);
+  color: var(--ink);
+  font-weight: 650;
+  box-shadow: inset 3px 0 0 var(--step-color);
 }
+
+.goal-step.active[data-type='instruction'] { --step-color: var(--teal); --step-soft: var(--teal-soft); }
+.goal-step.active[data-type='parsons'] { --step-color: var(--rose); --step-soft: var(--rose-soft); }
 
 /* Circle around the lesson number or icon. */
 .goal-number {
@@ -122,19 +227,16 @@
   flex-shrink: 0;
   width: 24px;
   height: 24px;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   border-radius: 50%;
-  background: #ccc;
+  background: #ecebf5;
+  color: var(--muted);
   font-weight: 700;
-}
-
-.goal-step.active .goal-number {
-  background: #65c3df;
 }
 
 /* Make locked lesson buttons look faded. */
 .goal-step:disabled {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -144,55 +246,25 @@
   outline-offset: -2px;
 }
 
-/* Size, position and border of the whole sidebar. */
-.goals-wrapper {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  min-width: 0;
-  /*overflow: hidden;
-  min-height: calc(100dvh - 120px); */
-  background: #e9e9e9;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  /* Keep the sidebar within the screen. Scroll inside when needed. */
-  height: calc(100dvh - 120px);
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  align-self: start;
-}
-
-/* Hide the sidebar when closed. */
-.goals-wrapper[hidden] {
-  display: none;
-}
-
-/* Menu width. The sidebar already has a border. */
-.goals-wrapper .goals-bar {
-  width: 100%;
-  border: none;
-  border-radius: 0;
-}
-
-.goals-bar[hidden] {
-  display: none;
-}
-
-/* Burger button. */
+/* Button that opens the sidebar again (only shown while it is closed). */
 .goals-toggle {
   flex-shrink: 0;
-  width: 32px;
-  padding: 0;
+  gap: 0.45rem;
+  padding: 0 0.85rem;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: none;
-  color: var(--ink);
-  font-size: 1.25rem;
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 150ms ease;
 }
 
 .goals-toggle:hover {
   background: var(--accent-soft);
+  color: var(--accent);
 }
 
 /* Same height for both buttons. Centre the text and icon. */
@@ -206,39 +278,40 @@
 
 /* Text showing how many lessons are completed. */
 .goals-progress {
-  margin: 0;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.8rem;
+  margin: -0.35rem 0 0.25rem;
+  padding: 0 0.75rem 0 2.75rem;
+  font-size: 0.78rem;
   color: var(--muted);
 }
 
-/* Line between collections. */
-.goals-bar details + details {
-  border-top: 1px solid var(--line);
-}
-
-
 /* Colours for completed, attempted and locked lessons. - data statuses */
 .goal-step .goal-number[data-status='completed'] {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--green-soft);
+  color: var(--green);
 }
 
 .goal-step .goal-number[data-status='attempted'] {
-  background: #fff0d9;
-  color: #9a6725;
+  background: var(--amber-soft);
+  color: var(--amber);
   padding-bottom: 2.5px;
 }
 
 .goal-step .goal-number[data-status='locked'] {
-  background: #e5e7eb;
+  background: #ecebf5;
+}
+
+/* The open lesson's circle takes its type colour. */
+.goal-step.active .goal-number[data-status='in_progress'],
+.goal-step.active .goal-number[data-status='available'] {
+  background: var(--step-color);
+  color: white;
 }
 
 /* Place the collection icon beside its title. */
 .collection-heading-text {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   min-width: 0;
 }
 
@@ -248,36 +321,42 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #eef0f3;
-  color: var(--muted);
-  font-size: 0.9rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
   line-height: 1;
 }
 
 .collection-status[data-state='completed'] {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--green-soft);
+  color: var(--green);
 }
 
 .collection-status[data-state='in_progress'] {
-  background: #fff0d9;
-  color: #9a6725;
-  padding-bottom: 2px; /* Moves the icon slightly upwards. */}
+  background: var(--amber-soft);
+  color: var(--amber);
+}
 
-  /* Move collection play icons slightly to the right. */
+.collection-status[data-state='locked'] {
+  background: #ecebf5;
+  color: var(--muted);
+}
+
+/* Move collection play icons slightly to the right. */
 .collection-status[data-state='in_progress'],
 .collection-status[data-state='not_started'] {
-  padding-left: 2.5px;
+  padding-left: 2px;
 }
 
 
 /* Orange play icon for the current lesson before submission. */
 .goal-step .goal-number[data-status='in_progress'] {
-  background: #fff0d9;
-  color: #9a6725;
+  background: var(--amber-soft);
+  color: var(--amber);
 }
 
 /* Move lesson play icons slightly to the right. */

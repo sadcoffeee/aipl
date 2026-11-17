@@ -37,13 +37,6 @@ export default function CollectionList({
     return (
         <main className="lesson-list">
             <h1>Lektioner</h1>
-            <p className="muted">
-                {
-                    //display a message for admins
-                }
-                {isAdmin
-                    ? 'Researcher view. Every lesson is available, and the reference panel shows every hint.' : ''}
-            </p>
             <ul>
                 {
                     //generates the list of lessons
@@ -68,7 +61,7 @@ export default function CollectionList({
 
                             title={
                                 collection.state === 'locked'
-                                    ? 'Finish the previous collection first'
+                                    ? 'Færdiggør tidligere lektioner først.'
                                     : undefined
                             }                        >
                             {
@@ -161,7 +154,7 @@ export default function CollectionList({
                                             : collection.state === 'not_started'
                                                 ? 'Påbegynd opgaven →'
                                                 : collection.state === 'locked'
-                                                    ? 'færdiggør tideligere opgaver'
+                                                    ? 'Færdiggør tidligere opgaver'
                                                     : 'Fortsæt med nuværende opgave →'}
                                 </span>
                             </span>

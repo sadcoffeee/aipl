@@ -9,6 +9,13 @@ import '../styles_collection-bar.css'
 import { PyodideProvider } from '../usePyodide'
 import OutputPanel from './OutputPanel'
 
+// Short label and icon for each kind of lesson, shown above the lesson title.
+const TYPE_LABEL: Record<Lesson['type'], { icon: string; label: string }> = {
+  instruction: { icon: '📖', label: 'Læs og forstå' },
+  completion: { icon: '⌨️', label: 'Udfyld koden' },
+  parsons: { icon: '🧩', label: 'Sæt koden sammen' },
+}
+
 
 export default function LessonView({
   lessonId,
@@ -116,9 +123,29 @@ export default function LessonView({
     }
 
   return (
-    <main className={goalsOpen ? 'lesson-view goals-open' : 'lesson-view'}>
+    <main
+      className={goalsOpen ? 'lesson-view goals-open' : 'lesson-view'}
+      data-lesson-type={lesson.type}
+    >
 
-              <div className="goals-wrapper" hidden={!goalsOpen}>
+              <div className="goals-wrapper" id="goals-wrapper" hidden={!goalsOpen}>
+            {/* The sidebar's own header, with the button that closes it. */}
+            <div className="goals-header">
+              <span className="goals-header-title">Lektioner</span>
+              <button
+                type="button"
+                className="goals-close"
+                onClick={onToggleGoals}
+                aria-controls="goals-wrapper"
+                aria-expanded={goalsOpen}
+                aria-label="Skjul lektionsoversigten"
+                title="Skjul lektionsoversigten"
+              >
+                <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+                  <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
             <nav
               id='goals-navigation'
               className='goals-bar'
@@ -166,6 +193,7 @@ export default function LessonView({
                             className={
                               step.id === lessonId ? 'goal-step active' : 'goal-step'
                             }
+                            data-type={step.type}
                             disabled={
                               collection.state === 'locked' || step.status === 'locked'
                             }
@@ -212,19 +240,32 @@ export default function LessonView({
 
       <div className="lesson-header">
         
+        {/* Only shown while the sidebar is closed; the sidebar has its own close button. */}
+        {!goalsOpen && (
           <button
             type='button'
             className='goals-toggle'
             onClick={onToggleGoals}
+            aria-controls="goals-wrapper"
+            aria-expanded={goalsOpen}
+            title="Vis lektionsoversigten"
           >
-          <span aria-hidden="true">☰</span>
+            <span aria-hidden="true">☰</span>
+            <span>Lektioner</span>
           </button>
+        )}
         
         <button className="back-button" onClick={onBack}>
           ← Tilbage
         </button>
 
-        <h1>{lesson.title}</h1>
+        <div className="lesson-title-block">
+          <span className="lesson-type">
+            <span aria-hidden="true">{TYPE_LABEL[lesson.type].icon}</span>
+            {TYPE_LABEL[lesson.type].label}
+          </span>
+          <h1>{lesson.title}</h1>
+        </div>
       </div>
 
     <PyodideProvider>    

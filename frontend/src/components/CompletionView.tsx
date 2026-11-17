@@ -70,6 +70,8 @@ useEffect(() => {
 
   return (
     <div className="task">
+      {/* The task itself (description, code, check button, self-assessment) sits in one card, so it stands out from the chat and side panels. */}
+      <section className="lesson-stage">
       <div className="task-description">
         <Markdown source={lesson.content.description} />
       </div>
@@ -109,6 +111,8 @@ useEffect(() => {
       {flow.phase === 'assessing' && (
         <SelfAssessment busy={flow.busy} onSubmit={flow.submitAssessment} />
       )}
+
+      </section>
 
       {/* Restricted: the box appears with the feedback. Unrestricted: it is there from the
           start, and only steps aside while the self-assessment is being filled in. */}

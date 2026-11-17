@@ -33,7 +33,7 @@ DB_PATH = pathlib.Path(os.getenv("AIPL_DB_PATH", str(BACKEND_DIR / "data" / "stu
 
 
 # Gating: should a student have to submit an attempt at a lesson before the next one unlocks? Admins are never gated, whatever this says.
-GATING_ENABLED = _flag("AIPL_GATING", False)
+GATING_ENABLED = _flag("AIPL_GATING", True)
 
 # How long a login lasts before the person has to log in again.
 SESSION_HOURS = int(os.getenv("AIPL_SESSION_HOURS", "12"))

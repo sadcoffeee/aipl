@@ -61,7 +61,7 @@ export default function InstructionView({
   }
 
   return (
-    <article className="instruction">
+    <article className="instruction lesson-stage">
       {lesson.content.rows.map((row, rowIndex) => (
         <div
           className={row.items.length > 1 ? 'content-row split' : 'content-row'}

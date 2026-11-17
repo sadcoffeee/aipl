@@ -25,20 +25,20 @@ export default function LoginView({ onLoggedIn }: { onLoggedIn: (user: User) => 
   return (
     <div className="app login-screen">
       <div className="login-card">
-        <h1>Python for biomedical data</h1>
+        <h1>Python 101</h1>
 
         <nav className="tabs">
           <button
             className={mode === 'student' ? 'tab active' : 'tab'}
             onClick={() => setMode('student')}
           >
-            Participant
+            Deltager
           </button>
           <button
             className={mode === 'admin' ? 'tab active' : 'tab'}
             onClick={() => setMode('admin')}
           >
-            Researcher
+            Forsker
           </button>
         </nav>
 
@@ -50,7 +50,7 @@ export default function LoginView({ onLoggedIn }: { onLoggedIn: (user: User) => 
             }}
           >
             <label className="field">
-              <span>Your participation code</span>
+              <span>Deltagerkode</span>
               <input
                 autoFocus
                 value={code}
@@ -59,9 +59,9 @@ export default function LoginView({ onLoggedIn }: { onLoggedIn: (user: User) => 
                 autoCapitalize="characters"
               />
             </label>
-            <p className="muted">You should have received one of these from researchers.</p>
+            <p className="muted">Du bør have modtaget en af disse fra forskerne.</p>
             <button className="primary" disabled={busy || code.trim().length < 3}>
-              {busy ? 'Checking...' : 'Start'}
+              {busy ? 'Checker...' : 'Start'}
             </button>
           </form>
         ) : (
@@ -72,7 +72,7 @@ export default function LoginView({ onLoggedIn }: { onLoggedIn: (user: User) => 
             }}
           >
             <label className="field">
-              <span>Username</span>
+              <span>Brugernavn</span>
               <input
                 autoFocus
                 value={username}
@@ -80,7 +80,7 @@ export default function LoginView({ onLoggedIn }: { onLoggedIn: (user: User) => 
               />
             </label>
             <label className="field">
-              <span>Password</span>
+              <span>Kodeord</span>
               <input
                 type="password"
                 value={password}
@@ -88,7 +88,7 @@ export default function LoginView({ onLoggedIn }: { onLoggedIn: (user: User) => 
               />
             </label>
             <button className="primary" disabled={busy || !username || !password}>
-              {busy ? 'Checking...' : 'Log in'}
+              {busy ? 'Checker...' : 'Log ind'}
             </button>
           </form>
         )}

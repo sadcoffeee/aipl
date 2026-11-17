@@ -42,7 +42,7 @@ export default function SelfAssessment({
 
       <label className="field">
         <h2>Reflekter over din løsning</h2>
-              <p className="muted"> Beskriv med dine egne ord, hvordan du har forstået og løst opgaven. Du kan blandt andet komme ind på: Hvad gør din kode? hvordan fungere forskellige dele af koden? Var der noget, du fandt særligt svært? </p>
+              <p className="muted"> Beskriv med dine egne ord, hvordan du har forstået og løst opgaven. Du kan blandt andet komme ind på: Hvad gør din kode? Hvordan fungerer forskellige dele af koden? Var der noget, du fandt særligt svært? </p>
         <textarea
           rows={3}
           value={notes}

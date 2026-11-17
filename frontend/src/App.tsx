@@ -83,7 +83,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <span className="app-title">Python for biomedical data</span>
+        <span className="app-title">Python 101</span>
 
         <div className="header-right">
           {user.role === 'admin' && openLessonId === null && (
@@ -92,13 +92,13 @@ export default function App() {
                 className={adminTab === 'participants' ? 'tab active' : 'tab'}
                 onClick={() => setAdminTab('participants')}
               >
-                Participants
+                Deltagere
               </button>
               <button
                 className={adminTab === 'lessons' ? 'tab active' : 'tab'}
                 onClick={() => setAdminTab('lessons')}
               >
-                Lessons
+                Lektioner
               </button>
             </nav>
           )}
@@ -111,7 +111,7 @@ export default function App() {
               void api.logout().finally(signOut)
             }}
           >
-            Log out
+            Log ud
           </button>
         </div>
       </header>
@@ -123,7 +123,7 @@ export default function App() {
       {showLessons &&
         (openLessonId === null ? (
           course === null ? (
-            <div className="panel">Loading course...</div>
+            <div className="panel">Henter lektioner...</div>
           ) : (
             <CollectionList
        //course.collrection -> retrives all collections

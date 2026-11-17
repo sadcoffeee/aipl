@@ -5,7 +5,7 @@ export default function FeedbackPanel({ feedback }: { feedback: Feedback }) {
   return (
     <div className="feedback-body">
       {feedback.source === 'placeholder' && (
-        <p className="badge">placeholder - ingen model forbundet</p>
+        <p className="badge">placeholder</p>
       )}
       {feedback.source === 'rules' && <p className="badge">automatisk tjek</p>}
 
