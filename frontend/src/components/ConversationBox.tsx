@@ -69,7 +69,7 @@ export default function ConversationBox({
 
   return (
     <section className="conversation">
-      <h2>{hasFeedback ? 'Feedback' : 'Spørg om opgaven'}</h2>
+      <h2>{hasFeedback ? 'Feedback' : '💬 Spørg AI om opgaven'}</h2>
 
       {messages.length === 0 && pending === null && (
         <p className="muted conversation-empty">
@@ -93,6 +93,8 @@ export default function ConversationBox({
 
       {canReply ? (
         <div className="conversation-input">
+          {hasFeedback && (<h2>💬 Spørg AI om opgaven</h2>)}
+          
           <textarea
             rows={2}
             value={draft}
