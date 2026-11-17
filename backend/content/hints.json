@@ -18,14 +18,14 @@
     {
       "id": "h-string",
       "title": "Gem tekst",
-      "markdown": "Husk citationstegn omkring tekst.",
+      "markdown": "Husk citationstegn omkring tekst for at lave en tekststreng (string).",
       "code": "filnavn = \"EKG_data\"",
       "tags": [ "string" ]
     },
     {
       "id": "h-float",
       "title": "Gem et decimaltal",
-      "markdown": "Decimaltal skrives med punktum, ikke komma.",
+      "markdown": "Decimaltal (også kaldet float) skrives med punktum, ikke komma.",
       "code": "ekg = 1.2",
       "tags": [ "float" ]
     },
