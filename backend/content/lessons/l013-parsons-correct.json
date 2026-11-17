@@ -11,7 +11,7 @@
   "estimatedMinutes": 2,
   "selfAssessment": true,
   "content": {
-    "description": "Placer de to linje koder i den rigtige rækkefølge.\nFørst skal vi assign en variabel med decimaltallet `0.8`. Næste linje assign teksen `min fil hedder: EGK_data` til variablen ekg_tekst",
+    "description": "Placer de to linje koder i den rigtige rækkefølge.\nFørst skal vi assign en variabel med decimaltallet `0.8`. Næste linje assign teksen `min fil hedder: EKG_data` til variablen ekg_tekst",
     "language": "python",
     "shuffleOptions": true,
     "lines": [

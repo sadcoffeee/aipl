@@ -25,7 +25,6 @@ const TYPE_LABEL: Record<LessonType, string> = {
 export default function CollectionList({
     //props
     collections, //array of collections to display
-    isAdmin,
     onOpen, //a function to call when a collection button is clicked
 
 }: { //defining the types of the props

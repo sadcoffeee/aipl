@@ -34,7 +34,7 @@
     "options": [
       {
         "id": "o1",
-        "code": "EKG_data = (\"EKG_data.txt\",\"r\")"
+        "code": "EKG_data = open(\"EKG_data.txt\",\"r\")"
       },
       {
         "id": "o2",
