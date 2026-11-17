@@ -26,7 +26,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "En variabel fungerer som en navngivet beholder. Når vi bruger tegnet `=`, gemmer vi værdien der står til højre for tegnet i variablen som er navngivet det der står til venstre for tegnet. Dette kaldes at **assigne** en værdi til en variabel."
+            "markdown": "En variabel fungerer som en navngivet beholder. Når vi bruger tegnet `=`, gemmes værdien til højre for tegnet i variablen til venstre. Dette kaldes at gemme en værdi i en variabel. I programmering kaldes dette også at **assigne** en værdi."
           },
           {
             "type": "code",

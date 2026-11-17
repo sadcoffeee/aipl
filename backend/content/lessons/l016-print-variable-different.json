@@ -26,20 +26,20 @@
             "type": "code",
             "language": "python",
             "code": "print(42)",
-            "caption": "Print et tal"
+            "caption": "Printer tallet 42"
           },
 
           {
             "type": "code",
             "language": "python",
             "code": "print(\"EKG-data indlæst\")",
-            "caption": "Print en tekst"
+            "caption": "Printer teksten \"EKG-data indlæst\"."
           },
           {
             "type": "code",
             "language": "python",
             "code": "ekg = 0.8\nprint(ekg)",
-            "caption": "Print en variabel"
+            "caption": "Printer værdien gemt i variablen 'ekg', som er 0.8."
           }
         ]
       },

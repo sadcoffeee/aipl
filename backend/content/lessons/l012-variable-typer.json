@@ -26,7 +26,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Tal med decimaler bruges ofte til målinger. Decimal tal er altid i punktum når vi skriver kode. I eksemplet gemmes en EKG-måling i variablen `ekg`."
+            "markdown": "Tal med decimaler bruges ofte til målinger. Decimaltal skrives med punktum når vi skriver kode. I eksemplet gemmes en EKG-måling i variablen `ekg`."
           },
           {
             "type": "code",
@@ -44,13 +44,13 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Tekst gemmes mellem citationstegn. Dette kaldes en **string**. Alt inde i citationstegnene behandles som tekst selv hvis det er tal. "
+            "markdown": "Tekst gemmes mellem citationstegn. Dette kaldes en **string**. Alt inde i citationstegnene behandles som tekst, selv hvis det er tal. "
           },
           {
             "type": "code",
             "language": "python",
-            "code": "filnavn = \"min fil hedder: EGK_data\"",
-            "caption": "Variablen  `ekg` indeholder teksen `min fil hedder: EGK_data`."
+            "code": "filnavn = \"min fil hedder: EKG_data\"",
+            "caption": "Variablen  `filnavn` indeholder teksten `min fil hedder: EKG_data`."
           }
         ]
       }
