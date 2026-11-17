@@ -15,7 +15,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Nu har vi åbnet filen, men vi skal også fortælle Python, at vi gerne vil læse det, der står i den.​"
+            "markdown": "Nu har vi åbnet filen, men filens indhold er endnu ikke blevet læst. Derfor skal vi også fortælle Python, at vi gerne vil læse det, der står i filen. Det gør vi med funktionen `.read()`."
           }
         ]
       },
@@ -23,7 +23,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Vi laver variabel `indhold`, denne variabel skal gemme det, som står inde i filen."
+            "markdown": "Vi laver variabel `indhold`. Denne variabel skal gemme det, som står inde i filen."
           }
         ]
       },
@@ -33,7 +33,7 @@
             "type": "code",
             "language": "python",
             "code": "EKG_data = open(\"EKG_data.txt\",\"r\")\nindhold = EKG_data.read()",
-            "caption": "Tekstfilen ´EKG_data.txt´ åbnes og indholdet læses og gemmes i variablen ´indhold´"
+            "caption": "Filen `EKG_data.txt` åbnes, og dens indhold læses og gemmes i variablen `indhold`."
           }
         ]
       },
@@ -41,7 +41,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "`.read()` er en funktion der læser hele indholdet af filen.\n-  Punktummet er vigtigt og bruges til at fortælle at man vil bruge `read()` på den fil som ligger i vores variabel `EKG_data`​"
+            "markdown": "`.read()` er en funktion, der læser hele indholdet af den åbne fil.\n-  Punktummet er vigtigt, da det bruges til at fortælle, at man vil bruge `read()` på den fil som ligger i vores variabel `EKG_data`."
           }
         ]
       },
@@ -49,7 +49,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Efter denne linje kode indeholder variablen `indhold` teksten fra EKG-filen​"
+            "markdown": "Efter denne linje kode indeholder variablen `indhold` teksten fra EKG-filen.​"
           }
         ]
       }

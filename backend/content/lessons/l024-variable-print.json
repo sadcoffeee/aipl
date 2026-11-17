@@ -15,7 +15,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Nu har vi indholdet af en fil gemt i variabelen `indhold` , og nu skal det visualiseres så vi kan se hvad indholdet er. Til dette bruger vi `print()` funktionen"
+            "markdown": "Nu har vi læst indholdet af filen og gemt det i variabelen `indhold`. Nu skal det vises i konsollen, så vi kan se indholdet. Til dette bruger vi funktionen `print()`."
           }
         ]
       },
@@ -25,7 +25,7 @@
             "type": "code",
             "language": "python",
             "code": "EKG_data = open(\"EKG_data.txt\",\"r\") \nindhold = EKG_data.read() \nprint(indhold)",
-            "caption": "Åbner filen ´EKG_data.txt´, læser filens indhold og viser det i konsollen ved at bruge ´print()´."
+            "caption": "Åbner filen 'EKG_data.txt', læser filens indhold og viser det i konsollen ved at bruge 'print()'."
 
           }
         ]
@@ -34,7 +34,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "`print()` er en funktion det bruges til at vise noget i konsollen. Konsollen er det område, hvor Python viser resultaterne fra programmet. Når programmet kører, vil teksten fra filen blive vist her.​"
+            "markdown": "`print()` er en funktion, der bruges til at vise noget i konsollen. Konsollen er det område, hvor Python viser resultaterne fra programmet. Når programmet kører, vil teksten fra filen blive vist her.​"
           }
         ]
       },

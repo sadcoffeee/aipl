@@ -15,7 +15,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Når et Python-program kører, læses koden fra toppen mod bunden. Python udfører én linje ad gangen i den rækkefølge, de står i koden"
+            "markdown": "Når et Python-program kører, læses koden fra toppen mod bunden. Python udfører én linje ad gangen i den rækkefølge, de står i koden."
           }
         ]
       },

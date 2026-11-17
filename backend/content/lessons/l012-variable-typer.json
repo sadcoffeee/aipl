@@ -32,7 +32,7 @@
             "type": "code",
             "language": "python",
             "code": "ekg = 0.8",
-            "caption": "Variablen `ekg` indeholder decimaltallet `0.8` ."
+            "caption": "Variablen `ekg` indeholder decimaltallet `0.8`."
           }
         ]
       },
