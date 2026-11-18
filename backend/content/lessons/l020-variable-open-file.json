@@ -52,7 +52,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "`open()` er en funktion som bruges til at åbne en fil.\n-  En funktion er en kommando, der udfører en bestemt opgave. Funktionens navn efterfølges altid af parenteser, som kan indeholde de oplysninger, funktionen skal bruge. \n-  Filen der bruges skal stå imellem to citations tegn. \n-  Filens navn skal være præcis som filen er navngivet på din computer. Hvis filen hedder EKG_10Hz.txt virker EKG10Hz.txt ikke. \n-  Det lille `r` står for `read` og fortæller Python, at filen skal åbnes til læsning. Det betyder ikke, at filens indhold vises i konsollen, dette gør vi senere ved hjælp af funktionen `print()`."
+            "markdown": "`open()` er en funktion som bruges til at åbne en fil. \n-  Filen der bruges skal stå imellem to citations tegn. \n-  Filens navn skal være præcis som filen er navngivet på din computer. Hvis filen hedder EKG_10Hz.txt virker EKG10Hz.txt ikke. \n-  Det lille `r` står for `read` og fortæller Python, at filen skal åbnes til læsning. Det betyder ikke, at filens indhold vises i konsollen, dette gør vi senere ved hjælp af funktionen `print()`."
           }
         ]
       }

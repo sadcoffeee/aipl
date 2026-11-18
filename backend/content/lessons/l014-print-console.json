@@ -15,7 +15,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Indtil nu har vi gemt værdier i variabler, men vi har endnu ikke set dem i konsollen. Til dette bruger vi funktionen `print()`. Når vi skriver en værdi eller en variabel inde i parenteserne, bliver den vist i konsollen."
+            "markdown": "Indtil nu har vi gemt værdier i variabler, men vi har endnu ikke set dem i konsollen. Til dette bruger vi funktionen `print()`. En funktion er en kommando, der udfører en bestemt opgave. Funktionens navn efterfølges altid af parenteser, som kan indeholde de oplysninger, funktionen skal bruge. Når vi skriver en værdi eller en variabel inde i parenteserne, bliver den vist i konsollen."
           }
         ]
       },
