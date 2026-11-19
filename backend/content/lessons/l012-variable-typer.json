@@ -26,7 +26,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Tal med decimaler bruges ofte til målinger. Decimaltal skrives med punktum når vi skriver kode. I eksemplet gemmes en EKG-måling i variablen `ekg`."
+            "markdown": "Tal med decimaler bruges ofte til målinger. Decimaltal skrives med punktum, når vi skriver kode. I eksemplet gemmes en EKG-måling i variablen `ekg`."
           },
           {
             "type": "code",

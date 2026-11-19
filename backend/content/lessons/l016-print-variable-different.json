@@ -1,6 +1,6 @@
 {
   "id": "l016-print-variable-different",
-  "title": "3. Print forskellige typer variabler",
+  "title": "3. Print forskellige typer værdier",
   "type": "instruction",
   "concepts": [
     "variable",
@@ -47,7 +47,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Vi kan have flere `print()` funktioner i samme program. Hver gang Python møder en `print()`, vises værdien på en ny linje i konsollen."
+            "markdown": "Vi kan have flere `print()`-funktioner i samme program. Hver gang Python møder en `print()`-funktion, vises værdien på en ny linje i konsollen."
           }
         ]
       }

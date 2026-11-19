@@ -26,7 +26,7 @@
             "type": "code",
             "language": "python",
             "code": "ekg = 0.8 \nprint(ekg)",
-            "caption": "Værdien '0.8' gemmes i variablen 'ekg' og vises derefter med 'print()' funktionen"
+            "caption": "Værdien '0.8' gemmes i variablen 'ekg' og vises derefter med funktionen 'print()'."
           }
         ]
       },
@@ -34,7 +34,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Når et Python-program kører, bliver resultatet fra `print()` vist i konsollen. \n-  Konsollen er et område, hvor programmet kan skrive beskeder, værdier og resultater. Den bruges ofte til at kontrollere om programmet arbejder som forventet. Den kan også vise fejlmeddelelser."
+            "markdown": "Når et Python-program kører, bliver resultatet fra `print()` vist i konsollen.\n-  Konsollen er et område, hvor programmet kan skrive beskeder, værdier og resultater. Den bruges ofte til at kontrollere, om programmet arbejder som forventet. Den kan også vise fejlmeddelelser."
           }
         ]
       },
@@ -42,7 +42,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Husk at navnet på variablen er case sensitiv, det skal derfor altid skrives præcis på samme måde når man skal bruge variablen."
+            "markdown": "Husk, at navnet på variablen er case-sensitiv. Det skal derfor altid skrives præcis på samme måde, hver gang man skal bruge variablen."
           }
         ]
       }

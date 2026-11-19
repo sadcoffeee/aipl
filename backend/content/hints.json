@@ -39,7 +39,7 @@
     {
       "id": "h-read",
       "title": "Læs filens indhold",
-      "markdown": "Brug `.read()` til at læse filen `fil` og gem resultatet i variablen `indhold`.",
+      "markdown": "Brug `.read()` til at læse filens indhold og gem resultatet i variablen `indhold`.",
       "code": "indhold = fil.read()",
       "tags": [ "file" ]
     },

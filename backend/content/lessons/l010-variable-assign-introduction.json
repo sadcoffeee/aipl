@@ -48,7 +48,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Det er vigtigt at huske at navnet på variablen er **case sensitiv**, derfor skal man skrive det præcise navn når man skal bruge variablen. Hvis variablen er kaldt EKG_data, kan man ikke bruge ekg_data til at kalde variablen. Dette vil give fejl."
+            "markdown": "Det er vigtigt at huske at navnet på variablen er **case sensitiv**, hvilket betyder, at Python skelner mellem store og små bogstaver. Derfor skal man skrive det på samme måde, hver gang man skal bruge variablen. Hvis variablen er kaldt EKG_data, kan man ikke bruge ekg_data til at kalde variablen. Dette vil give fejl."
           }
         ]
       },

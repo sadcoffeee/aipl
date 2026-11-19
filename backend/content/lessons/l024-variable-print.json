@@ -15,7 +15,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Nu har vi læst indholdet af filen og gemt det i variabelen `indhold`. Nu skal det vises i konsollen, så vi kan se indholdet. Til dette bruger vi funktionen `print()`."
+            "markdown": "Nu har vi læst indholdet af filen og gemt det i variablen `indhold`. Nu skal det vises i konsollen, så vi kan se indholdet. Til dette bruger vi funktionen `print()`."
           }
         ]
       },
@@ -42,7 +42,7 @@
         "items": [
           {
             "type": "text",
-            "markdown": "Konsollen bruges både til at vise resultater fra programmet og at vise fejlmeddelelser, hvis noget går galt.​"
+            "markdown": "Konsollen bruges både til at vise resultater fra programmet og at vise fejlmeddelelser, hvis noget går galt."
           }
         ]
       }
